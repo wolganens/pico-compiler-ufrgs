@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "tokens.h"
+#define END_TESTS -500
+
+
+typedef struct test_struct
+{
+	char lexeme [50];
+	int token;
+}test_struct;
+
+FILE *file;
+
+int main ()
+{
+	int returned_token;
+	int i = 0;
+	
+	test_struct test [] = {
+	{"int\0",	INT},
+	{"double\0",	DOUBLE},
+	{"real\0",	REAL},
+	{"char\0",	CHAR},
+	{"string\0",	STRING},
+	{"*\0",		'*'},
+	{"+\0",		'+'},
+	{"-\0",		'-'},
+	{"/\0",		'/'},
+	{",\0",		','},
+	{";\0",		';'},
+	{":\0",		':'},
+	{"'\0",		QUOTE},
+	{"(\0",		'('},
+	{")\0",		')'},
+	{"[\0",		'['},
+	{"]\0",		']'},
+	{"{\0",		'{'},
+	{"}\0",		'}'},
+	{"<\0",		'<'},
+	{">\0",		'>'},
+	{"=\0",		'='},
+	{"<=\0",	LE},
+	{">=\0",	GE},
+	{"==\0",	EQ},
+	{"<>\0",	NE},
+	{"&\0",		AND},
+	{"|\0",		OR},
+	{"if\0",	IF},
+	{"then\0",	THEN},
+	{"else\0",	ELSE},
+	{"for\0",	FOR},
+	{"next\0",	NEXT},
+	{"while\0",	WHILE},
+	{"end\0",	END},
+	{"true\0",	TRUE},
+	{"false\0",	FALSE},
+
+	{"aijASdIjASdji",	IDF},
+	{"has1asd456asd",	IDF},	
+	{"asd_dsad_12315__",	IDF},
+	{"_dsa__dsa51351",	IDF},
+	{"_5864asd_ds",		IDF},
+	{"__A5SD_",		IDF},
+	
+	{"A5SD",	CONST},
+	{"A_5SD",	CONST},
+	{"A__DFD",	CONST},
+	{"A5SD_",	CONST},
+	{"A545SD",	CONST},
+	{"A_5_SD",	CONST},
+	{"A__5__S__D_",	CONST},
+		
+	{"\"ahduiasdsds\"",	STR_LIT},
+	{"\" asdsad Asd asd\"",	STR_LIT},
+	{"\"4564adsa5  64\"",	STR_LIT},
+	{"\"1ASd 5456ASdd\"",	STR_LIT},
+	{"\" ASd asd5645  \"",	STR_LIT},
+	
+	{"1542131",	INT_LIT},
+	{"0",		INT_LIT},
+	{"00015",	INT_LIT},
+	
+	{"4.1",		F_LIT},
+	{"4.02E4",	F_LIT},
+	{"0.1E5",	F_LIT},
+	{".1e-4",	F_LIT},
+	{".1e+65",	F_LIT},
+	{"151.4564e-46",F_LIT},
+	{"3.14e+0",	F_LIT},
+	{"0.0",		F_LIT},
+	{"0.0e+0",	F_LIT},
+	{".0e0",	F_LIT},
+	{".0e-0",	F_LIT},
+		
+	{"\0",		END_TESTS},	
+	};
+
+	
+	while (test[i].token != END_TESTS)
+	{
+		file = fopen("tests.txt", "w+");
+		fputs(test[i].lexeme, file);
+		fclose(file);
+		
+		system("./pico tests.txt");
+		
+		file = fopen("results.txt", "r");
+		fread(&returned_token, sizeof(returned_token), 1, file);
+		fclose(file);
+		
+		if (returned_token == test[i].token)
+			printf("Test %2.0d : SUCCESS!\n", i+1);
+		else
+		{
+			printf("Test %d : ERROR!\n", i+1);
+			printf("Expecting %d, received %d\n\n\n", test[i].token, returned_token);
+		}
+		i++;
+	}
+	return 0;
+}		

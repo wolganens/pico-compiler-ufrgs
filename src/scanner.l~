@@ -72,6 +72,8 @@ false  { return( FALSE );}
 ["]({letra}|{LETRA}|{digito}|[ ])*["]		{ printf( "%s\n", yytext ); return( STR_LIT ); }
 {digito}+					{ VAL_INT = atoi(yytext); return( INT_LIT ); }
 {digito}*\.{digito}+(([eE])([+-])?{digito}+)?   { VAL_DOUBLE = atof(yytext); return( F_LIT ); }
+"print" 					{ return(PRINTF); }
+
 
   /* Tratamento dos erros lexicais: a regra seguinte pega tudo o que nao
    * fechou com uma Regexp anterior.

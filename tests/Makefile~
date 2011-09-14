@@ -1,0 +1,20 @@
+CC      = gcc
+LDFLAGS = -g
+
+all: tests 
+
+## Etapa 1
+tests: runtests
+
+lex.yy.c: scanner.l
+	flex scanner.l;
+	
+pico: lex.yy.c
+	gcc -o pico lex.yy.c -lfl
+		
+runtests: test.c pico
+	gcc -Wall -o runtests test.c
+
+clean:
+	rm -f *.o lex.yy.?
+	./runtests
