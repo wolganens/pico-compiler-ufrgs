@@ -1,20 +1,20 @@
  /* Secao das declaracoes */
 
 %option noyywrap
-  /* Sera copiado no .c final */
+ /* Sera copiado no .c final */
 %{
     #include <stdlib.h>
     #include <string.h>
    
     /* este include eh importante... */
-    #include "tokens.h"
+    #include "../src/tokens.h"
     
     int VAL_INT;
     double VAL_DOUBLE;
 %}
  
 
-  /* Definicoes regulares (A COMPLETAR conforme a especificacao) */
+ /* Definicoes regulares (A COMPLETAR conforme a especificacao) */
 
 digito     [0-9]
 letra      [a-z]
@@ -66,20 +66,18 @@ end    { return( END );  }
 true   { return( TRUE ); }
 false  { return( FALSE );}
 
-
-[' '|'\t'|'\n']+ 					{ printf("SPACE\n"); }
-({letra}|['_'])+({letra}|{LETRA}|['_']|{digito})*  	{ return( IDF ); printf( "%s\n", yytext ); }
-{LETRA}+(['_']|{LETRA}|{digito})*	                { return( CONST ); printf( "%s\n", yytext ); }
-['"']({letra}|{LETRA}|{digito}|[' '])*['"']		{ return( STR_LIT ); printf( "%s\n", yytext ); }
-['+'|'-']?{digito}+					{ return( INT_LIT ); VAL_INT = atoi(yytext); }
-{digito}*\.{digito}+((['e']|['E'])(['+']|['-'])?{digito}+)?     { return( F_LIT ); VAL_DOUBLE; }
-
+[ \t\n]+					{ return 5; }
+({letra}|[_])+({letra}|{LETRA}|[_]|{digito})*  	{ return( IDF ); }
+{LETRA}+([_]|{LETRA}|{digito})*	        	{ return( CONST ); }
+["]({letra}|{LETRA}|{digito}|[ ])*["]		{ return( STR_LIT ); }
+{digito}+					{ return( INT_LIT ); }
+{digito}*\.{digito}+(([eE])([+-])?{digito}+)?   { return( F_LIT ); }
 
   /* Tratamento dos erros lexicais: a regra seguinte pega tudo o que nao
    * fechou com uma Regexp anterior.
    */
 . { printf("Erro lexical - caractere nao reconhecido: %c.\n", yytext[0]);
-    exit(-1); }
+    return -1; }
 %%
  /* Secao dos  Procedimentos auxiliares  */
 
@@ -92,30 +90,30 @@ false  { return( FALSE );}
   */
 
 extern FILE *yyin;
+FILE *output;
+
 int main(int argc, char* argv[]) {
+
    int token;
+   
    if (argc != 2) {
      printf("uso: %s <input_file>. Try again!\n", argv[0]);
      exit(-1);
    }
-   yyin = 0; //fopen(argv[1], "r");
-
-   /*if (!yyin) {
-     printf("Uso: %s <input_file>. Could not find %s. Try again!\n", 
-         argv[0], argv[1]);
+   
+   yyin = fopen(argv[1], "r");
+   
+   output = fopen("results.txt", "w+");
+   
+   if (!yyin) {
+     printf("Uso: %s <input_file>. Could not find %s. Try again!\n", argv[0], argv[1]);
      exit(-1);
-   }*/
-
-  /* agora a entrada padrao eh o arquivo especificado como 1o argumento ao
-   * executavel (argv[1]).
-   * Soh chama o analisador lexical default fornecido pelo output do Flex:
-   */
-  while (token=yylex()) { 
-     /* neste laco, obtem-se "palavra por palavra" os tokens reconhecidos
-      * pelo scanner fornecido pelo Lex. Poderia ser feita a analise
-      * sintatica... Sera feito depois!
-      */
-     printf("Meu analisador lexical reconheceu o token %d\n", token);
-  }
-  return(0);
+   }
+   
+   token = yylex();
+   
+   fwrite(&token, sizeof(token), 1, output);
+   fclose(output);
+   
+   return 0;
 }
