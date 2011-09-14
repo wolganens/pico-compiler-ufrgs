@@ -1,0 +1,30 @@
+identifier
+_identifier
+_0identifier
+_01identifier
+_0ide_ntifier
+a12345678910
+CONST
+CoNST
+COnsT
+CONST_1
+CONST_A1_A
+"STRING literal"
+"STRING literal1"
+"STRING 51 literal"
+" string literal"
+" string literal 1"
+1234
+12345
++12345
+-123451
+.0001
+.1065412
+5645864.45645
+15641.0156
+0.41564000
+3.14E0
+3.14E-01410
+3.14E+01410
+3.14e-01410
+3.14E01410
