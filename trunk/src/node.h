@@ -34,8 +34,13 @@ typedef struct _node {
     * A seguir, completar essa estrutura de dados com o necessário para
     * a implementacao dos metodos especificados.
     */
-
+   Nodelist *children;   
 } Node;
+
+typedef _nodelist {
+	_nodelist* next_node;
+	Node* node;
+} Nodelist;
 
 extern Node * syntax_tree;
 
@@ -52,8 +57,7 @@ extern Node * syntax_tree;
  * To create a leaf, use NULL as last argument to create_node().
  * @return a pointer to a new Node.
  */
-Node* create_node(int nl, Node_type t,
-        char* lexeme, Node* child0, ...);
+Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...);
 
 /** accessor to the number of children of a Node.
  *  Must abort the program if 'n' is NULL.
