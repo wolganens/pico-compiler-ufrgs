@@ -51,6 +51,7 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	if ((nl != code_node)  && (nl != declaracoes_node)  && (nl != declaracao_node)  && (nl != tipo_node)  && (nl != int_node))
 	{
 		exit(-1);
+		printf("\nPrograma não foi escrito corretamente.\n");
 	}
 	
 	if ((new_node = (new_node *) malloc(sizeof(new_node))) == NULL)
@@ -109,8 +110,26 @@ int deep_free_node(Node* n)
 		deep_free_node(backward->node);
 		free(backward);
 		backward = forward;
-		forward = fordard->next;
+		forward = forward->next;
 	}
 	
 	return 1;
 }
+
+/** returns the height of the tree rooted by 'n'.
+ *  The height of a leaf is 1. 
+ */
+int height(Node *n) 
+{
+	if (n == NULL)
+		return 0;
+
+	Nodelist *backward = n->children;
+	Nodelist *forward = backward->next;
+	int node_height = 1;
+	
+	/*acho que melhor maneira de calcular a altura do nodo é primeiro transformar a árvore em binária*/
+
+	return node_height;
+}
+

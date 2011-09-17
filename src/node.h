@@ -9,6 +9,13 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+#ifdef __GNUC__
+    /* If using gcc, warn about missing NULLs */
+    #define NULL_TERMINATED __attribute__((sentinel))
+#else
+    #define NULL_TERMINATED
+#endif
+
 typedef int Node_type;
 
 /* Serie de constantes que servirao para definir tipos de nos (na arvore). 
@@ -18,7 +25,60 @@ typedef int Node_type;
 #define declaracoes_node      299
 #define declaracao_node       300
 #define tipo_node             301
+#define acoes_node            302
+#define listadeclaracao_node  303
+#define tipounico_node        304
+#define tipolista_node        305
+#define listadupla_node       306
+#define comando_node          307
+#define lvalue_node           308
+#define listaexpr_node        309
+#define expr_node             310
+#define chamadaproc_node      311
+#define enunciado_node        312
+#define fiminstcontrole_node  313
+#define expbool_node          314
+
 #define int_node              501
+#define double_node           502
+#define real_node             503
+#define char_node             504
+#define le_node               505 
+#define ge_node               506
+#define eq_node               507
+#define ne_node               508
+#define and_node              509
+#define or_node               510
+#define not_node              511
+#define if_node               512
+#define then_node             513
+#define else_node             514
+#define for_node              515
+#define next_node             516
+#define while_node            517
+#define end_node              518
+#define true_node             519
+#define false_node            520
+#define quote_node            521
+#define idf_node              522
+#define const_node            523
+#define str_lit               524
+#define int_lit               525
+#define f_lit                 526
+
+#define semicolon_node        527    // ;
+#define colon_node            528    // :
+#define comma_node            529    // ,
+#define div_node              530    // /
+#define minus_node            531    // -
+#define plus_node             532    // +
+#define mul_node              533    // *
+#define attr_node             534    // =
+#define lower_node            535    // <
+#define greater_node          536    // >
+#define leftbracket_node      537    // (
+#define rightbracket_node     538    // )
+
 /* A completar */
 
 /** Estrutura de dados parcial para o no da arvore.
@@ -38,7 +98,7 @@ typedef struct _node {
 } Node;
 
 typedef _nodelist {
-	_nodelist* next_node;
+	_nodelist* next;
 	Node* node;
 } Nodelist;
 
@@ -57,6 +117,7 @@ extern Node * syntax_tree;
  * To create a leaf, use NULL as last argument to create_node().
  * @return a pointer to a new Node.
  */
+NULL_TERMINATED
 Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...);
 
 /** accessor to the number of children of a Node.
