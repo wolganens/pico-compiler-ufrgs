@@ -201,41 +201,5 @@ void uncompile(FILE* outfile, Node *n)
 
 }
 
-void visita (Node *n)
-{
-	if (n->children != NULL)
-	{
-
-		visita(n->chilren);
-		visita(n->next);
-		
-	}
-	if (n != NULL && n->children == NULL)		//é uma folha
-	{
-
-		outfile = n->lexeme;
-		visita(n->next);
-
-	}
-
-}
-
-void pos_ordem(tipoNo *pt) {
-    if (pt) {
-        pos_ordem(pt->esq);
-        pos_ordem(pt->dir);
-        visita(pt);
-void visita (tNo *p) {
-     int alt1, alt2;
-     if (p->esq) alt1 = p->esq->altura;
-     else alt1 = 0;
-     if (p->dir) alt2 = p->dir->altura;
-     else alt2 = 0;
-     if (alt1>alt2) p->altura = alt1 + 1;
-     else p->altura = alt2 + 1;
-     printf("info = %d ", p->info);
-     printf("altura = %d\n", p->altura);
-}
-
 
 
