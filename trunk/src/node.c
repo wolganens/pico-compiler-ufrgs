@@ -46,9 +46,10 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	va_start(ap, child0);
 	
 	/**
-	 * Verifica se parametro n1 está correto
+	 * Verifica se parametro n1 está correto			TEM QUE ACRESCENTAR TODOS
 	 */
-	if ((nl != code_node)  && (nl != declaracoes_node)  && (nl != declaracao_node)  && (nl != tipo_node)  && (nl != int_node))
+	//if ((t != code_node)  && (t != declaracoes_node)  && (t != declaracao_node)  && (t != tipo_node)  && (t != int_node))
+	if ((t < code_node) || (t > expbool_node && t < int_node) || (t > rightbracket_node))
 	{
 		exit(-1);
 		printf("\nPrograma não foi escrito corretamente.\n");
@@ -67,7 +68,41 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	{
 		add_list(child, children);
 	}
+	return new_node;
 }
+
+
+/** accessor to the i'th child of a Node.
+ * @param n : the node to be consulted. Must abort the program if 'n' is NULL.
+ * @param i : the number of the child that one wants. Must be lower 
+ *       than the degree of the node and larger than 0. 
+ *       Must abort the program if i is not correct.
+ * @return a pointer on a Node.
+ */
+Node* child(Node* n, int i) 
+{
+	Nodelist *backward = n->children;
+	int number, k;
+
+	if(n == NULL)
+		exit(-1);
+
+	number = nb_of_children(n);
+
+	if(i == 0 || i > number)
+		exit(-1);
+
+	
+	for (k = 0; k != i; k++)
+	{
+		backward = backward->next;
+	}
+	
+	return n->backward;
+}
+
+
+
 
 int nb_of_children(Node* n)
 {
@@ -132,4 +167,75 @@ int height(Node *n)
 
 	return node_height;
 }
+
+/** Prints into a file the lexemes contained in the node rooted by 'n'.
+ *  The impression must follow a depth-first order.
+ *  @param outfile : the file to which the lexemes are printed.
+ *  @param n : the root node of the tree. Must abort the program if 'n' is NULL.
+ *
+ */
+void uncompile(FILE* outfile, Node *n) 
+{
+
+	fopen(outfile, "a+");
+	if (n != NULL)
+		{
+
+		if (n->children != NULL)
+		{
+
+			uncompile(outfile, n->chilren);
+			uncompile(outfile, n->next);
+		
+		}
+		if (n->children == NULL)		//é uma folha (deve ser colocada no arquivo)
+		{
+
+			fwrite(n->lexeme, 1, strlen(n->lexeme), outfile);
+			uncompile(outfile, n->next);
+
+		}
+	
+	}
+
+
+}
+
+void visita (Node *n)
+{
+	if (n->children != NULL)
+	{
+
+		visita(n->chilren);
+		visita(n->next);
+		
+	}
+	if (n != NULL && n->children == NULL)		//é uma folha
+	{
+
+		outfile = n->lexeme;
+		visita(n->next);
+
+	}
+
+}
+
+void pos_ordem(tipoNo *pt) {
+    if (pt) {
+        pos_ordem(pt->esq);
+        pos_ordem(pt->dir);
+        visita(pt);
+void visita (tNo *p) {
+     int alt1, alt2;
+     if (p->esq) alt1 = p->esq->altura;
+     else alt1 = 0;
+     if (p->dir) alt2 = p->dir->altura;
+     else alt2 = 0;
+     if (alt1>alt2) p->altura = alt1 + 1;
+     else p->altura = alt2 + 1;
+     printf("info = %d ", p->info);
+     printf("altura = %d\n", p->altura);
+}
+
+
 
