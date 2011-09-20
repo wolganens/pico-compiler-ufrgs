@@ -85,6 +85,13 @@ typedef int Node_type;
  *
  */
 
+typedef struct _nodelist {
+	//struct _nodelist* next;
+	struct Nodelist* next;
+	struct Node* node;
+} Nodelist;
+
+
 typedef struct _node {
    int num_line;   /**< numero de linha. */
    char* lexeme;   /**< o lexema retornado pelo analizador lexical. */
@@ -97,12 +104,14 @@ typedef struct _node {
    Nodelist *children;   
 } Node;
 
-typedef _nodelist {
-	_nodelist* next;
-	Node* node;
-} Nodelist;
+
 
 extern Node * syntax_tree;
+
+
+void add_list (Node *node, Nodelist *root);
+
+
 
 /**
  *  * Node constructor.

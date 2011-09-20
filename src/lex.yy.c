@@ -2096,18 +2096,18 @@ void yyfree (void * ptr )
   * O default eh ler da entrada standard (o teclado).
   */
 extern FILE *yyin;
-int main(int argc, char* argv[]) {
+int old_main(int argc, char* argv[]) {
    int token;
    if (argc != 2) {
      printf("uso: %s <input_file>. Try again!\n", argv[0]);
      exit(-1);
    }
    yyin = fopen(argv[1], "r");
- /*  if (!yyin) {
+    if (!yyin) {
      printf("Uso: %s <input_file>. Could not find %s. Try again!\n", 
          argv[0], argv[1]);
      exit(-1);
-   }*/
+   }
   /* agora a entrada padrao eh o arquivo especificado como 1o argumento ao
    * executavel (argv[1]).
    * Soh chama o analisador lexical default fornecido pelo output do Flex:

@@ -55,7 +55,7 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 		printf("\nPrograma não foi escrito corretamente.\n");
 	}
 	
-	if ((new_node = (new_node *) malloc(sizeof(new_node))) == NULL)
+	if ((new_node = (Node *) malloc(sizeof(Node))) == NULL)
 	{
 		exit(-1);
 	}		
@@ -63,6 +63,8 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	new_node->num_line = nl;
 	new_node->lexeme = lexeme;
 	new_node->type = t;
+	
+	Node* child;
 	
 	for (child = child0; child != NULL; child = va_arg(ap, Node *))
 	{
@@ -98,7 +100,9 @@ Node* child(Node* n, int i)
 		backward = backward->next;
 	}
 	
-	return n->backward;
+	n->children = backward;	
+
+	return n;
 }
 
 
@@ -107,6 +111,8 @@ Node* child(Node* n, int i)
 int nb_of_children(Node* n)
 {
 	Nodelist *backward = n->children;
+
+	//Nodelist *forward;
 	
 	int i;
 	
@@ -114,8 +120,10 @@ int nb_of_children(Node* n)
 		exit(-1);
 	
 	for (i = 0; backward != NULL; i++)
-	{
-		backward = backward->next;
+	{	
+		//forward = backward->next;
+		backward = backward->next;		
+		//backward = forward;
 	}
 	
 	return i;
@@ -179,20 +187,22 @@ void uncompile(FILE* outfile, Node *n)
 
 	fopen(outfile, "a+");
 	if (n != NULL)
-		{
+	{
 
 		if (n->children != NULL)
 		{
 
-			uncompile(outfile, n->chilren);
-			uncompile(outfile, n->next);
+			uncompile(outfile, n->children->node);
+
+			n->children = n->children->next;
+
+			uncompile(outfile, n->children->node);
 		
 		}
 		if (n->children == NULL)		//é uma folha (deve ser colocada no arquivo)
 		{
 
 			fwrite(n->lexeme, 1, strlen(n->lexeme), outfile);
-			uncompile(outfile, n->next);
 
 		}
 	
