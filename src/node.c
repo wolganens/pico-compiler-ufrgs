@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include "node.h"
 
 Node * syntax_tree;
@@ -70,6 +71,10 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	{
 		add_list(child, children);
 	}
+	va_end(ap);
+
+	new_node->children = children;
+
 	return new_node;
 }
 

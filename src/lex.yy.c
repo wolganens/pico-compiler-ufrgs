@@ -1044,7 +1044,7 @@ case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
 #line 69 "scanner.l"
-{ printf("SPACE\n"); }
+
 	YY_BREAK
 case 40:
 YY_RULE_SETUP

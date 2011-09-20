@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "../src/tokens.h"
-#define END_TESTS -500
-
 
 typedef struct test_struct
 {

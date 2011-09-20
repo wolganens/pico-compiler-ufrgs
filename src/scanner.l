@@ -66,7 +66,7 @@ end    { return( END );  }
 true   { return( TRUE ); }
 false  { return( FALSE );}
 
-[ \t\n]+					{ printf("SPACE\n"); }
+[ \t\n]+					
 ({letra}|[_])+({letra}|{LETRA}|[_]|{digito})*  	{ printf( "%s\n", yytext ); return( IDF ); }
 {LETRA}+([_]|{LETRA}|{digito})*	        	{ printf( "%s\n", yytext ); return( CONST ); }
 ["]({letra}|{LETRA}|{digito}|[ ])*["]		{ printf( "%s\n", yytext ); return( STR_LIT ); }
