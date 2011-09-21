@@ -3,6 +3,7 @@
 %option noyywrap
  /* Sera copiado no .c final */
 %{
+
     #include <stdlib.h>
     #include <string.h>
    
@@ -12,7 +13,7 @@
     int VAL_INT;
     double VAL_DOUBLE;
 %}
- 
+
 
  /* Definicoes regulares (A COMPLETAR conforme a especificacao) */
 
@@ -21,6 +22,8 @@ letra      [a-z]
 LETRA      [A-Z]
 
 %%
+
+
 
  /* Secao das Regras de traducao */
  /* O que consta aqui eh puramente ilustrativo... A COMPLETAR ! 
