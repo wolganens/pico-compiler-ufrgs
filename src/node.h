@@ -34,7 +34,7 @@ typedef int Node_type;
 #define lvalue_node           308
 #define listaexpr_node        309
 #define expr_node             310
-#define chamadaproc_node      311
+#define chamaproc_node      311
 #define enunciado_node        312
 #define fiminstcontrole_node  313
 #define expbool_node          314
@@ -62,9 +62,9 @@ typedef int Node_type;
 #define quote_node            521
 #define idf_node              522
 #define const_node            523
-#define str_lit               524
-#define int_lit               525
-#define f_lit                 526
+#define str_lit_node          524
+#define int_lit_node          525
+#define f_lit_node            526
 
 #define semicolon_node        527    // ;
 #define colon_node            528    // :

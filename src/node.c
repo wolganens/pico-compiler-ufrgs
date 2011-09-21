@@ -78,6 +78,10 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	
 	va_end(ap);
 	
+	//fwrite(n->lexeme, 1, strlen(n->lexeme), outfile2);
+	//height(syntax_tree);
+	//printf("oiiii");
+	
 	return new_node;
 }
 
@@ -188,7 +192,7 @@ int height(Node *n)
 
 void uncompile(FILE* outfile, Node *n) 
 {
-	fopen(outfile, "a+");
+	outfile = fopen("arq", "a+");
 	if (n != NULL)
 	{
 
@@ -211,7 +215,7 @@ void uncompile(FILE* outfile, Node *n)
 	}
 }
 
-int main()
+/*int main()
 {
 	Node *node[17];	
 		
@@ -242,4 +246,4 @@ int main()
 	
 	return 0;
 		
-}
+}*/
