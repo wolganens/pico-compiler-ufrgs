@@ -84,33 +84,22 @@ typedef int Node_type;
 /** Estrutura de dados parcial para o no da arvore.
  *
  */
-
+ 
 typedef struct _nodelist {
-	//struct _nodelist* next;
-	struct Nodelist* next;
-	struct Node* node;
+	struct _nodelist *next;
+	struct _node *node;
 } Nodelist;
 
-
 typedef struct _node {
-   int num_line;   /**< numero de linha. */
-   char* lexeme;   /**< o lexema retornado pelo analizador lexical. */
-   Node_type type; /**< Um dos valores definidos acima pelos # defines. */
-   void* attribute;/**< Qualquer coisa por enquanto. */
-   /* Fim das informacoes armazenadas em cada no.
-    * A seguir, completar essa estrutura de dados com o necessário para
-    * a implementacao dos metodos especificados.
-    */
-   Nodelist *children;   
+   int num_line;   	/**< numero de linha. */
+   char* lexeme;   	/**< o lexema retornado pelo analizador lexical. */
+   Node_type type; 	/**< Um dos valores definidos acima pelos # defines. */
+   void* attribute;	/**< Qualquer coisa por enquanto. */
+   Nodelist *children;
+   int height;
 } Node;
 
-
-
 extern Node * syntax_tree;
-
-
-void add_list (Node *node, Nodelist *root);
-
 
 
 /**
@@ -166,6 +155,5 @@ int height(Node *n) ;
  *
  */
 void uncompile(FILE* outfile, Node *n) ;
-
 
 #endif
