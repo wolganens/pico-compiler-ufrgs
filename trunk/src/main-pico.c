@@ -27,18 +27,12 @@ int main(int argc, char* argv[])
       printf("OKAY.\n");
    else 
       printf("ERROR.\n");
+      
    if (syntax_tree->type == int_node) 
-     printf("A AST se limita a uma folha rotulada por: %s\n", 
-        syntax_tree->lexeme);
+     printf("A AST se limita a uma folha rotulada por: %s\n", syntax_tree->lexeme);
    else
      printf("Something got wrong in the AST.\n");
-
-	int w;
-	w = height(syntax_tree);
-	printf("%d", w);
-	
-	//uncompile(yyin, syntax_tree);
-
+     
    return(0);
 }
 	
