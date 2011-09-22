@@ -193,6 +193,8 @@ void uncompile(FILE* outfile, Node *n)
 {
 	char *space = " ";
 	
+	outfile = fopen("output", "a+");
+	
 	if (outfile == NULL)
 	{
 		perror("Error on FILE: ");
@@ -249,7 +251,7 @@ void uncompile(FILE* outfile, Node *n)
 	
 	printf("A altura da arvore eh: %d\n", height(node[16]));	
 
-	file = fopen("output.txt", "w+");
+	
 	uncompile(file, node[16]);
 	
 	return 0;

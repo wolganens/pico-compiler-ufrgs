@@ -105,7 +105,6 @@ typedef struct _node {
 
 extern Node * syntax_tree;
 
-
 /**
  *  * Node constructor.
  *
@@ -157,6 +156,6 @@ int height(Node *n) ;
  *  @param outfile : the file to which the lexemes are printed.
  *  @param n : the root node of the tree. Must abort the program if 'n' is NULL.
  */
-void uncompile(FILE* outfile, Node *n) ;
+void uncompile(FILE* outfile, Node *n);
 
 #endif

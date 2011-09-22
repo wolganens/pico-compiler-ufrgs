@@ -6,7 +6,6 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include "node.h"
-
 %}
 
 %error-verbose
@@ -295,8 +294,6 @@ expbool: TRUE   { $$ = $1 ;}
 				       $$ = create_node( @1.first_line, expbool_node, "expbool", filho1, filho2, filho3, NULL);  }
        ;
 %%
- /* A partir daqui, insere-se qlqer codigo C necessario.
-  */
-//uncompile("arq", &syntax_tree);
-
-
+   /* A partir daqui, insere-se qlqer codigo C necessario.
+   */
+  //uncompile(file, syntax_tree);  
