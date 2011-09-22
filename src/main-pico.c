@@ -32,8 +32,17 @@ int main(int argc, char* argv[])
         syntax_tree->lexeme);
    else
      printf("Something got wrong in the AST.\n");
+
+	int w;
+	w = height(syntax_tree);
+	printf("%d", w);
+	
+	//uncompile(yyin, syntax_tree);
+
    return(0);
 }
+	
+	
 
 yyerror(char* s) {
   fprintf(stderr, "%s: %s", progname, s);
