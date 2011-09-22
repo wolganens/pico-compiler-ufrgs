@@ -6,6 +6,7 @@
 #include "node.h"
 
 Node * syntax_tree;
+FILE * file;
 
 void add_list (Node *node, Nodelist **root)
 {
@@ -78,10 +79,6 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	
 	va_end(ap);
 	
-	//fwrite(n->lexeme, 1, strlen(n->lexeme), outfile2);
-	//height(syntax_tree);
-	//printf("oiiii");
-	
 	return new_node;
 }
 
@@ -131,8 +128,9 @@ int is_leaf(Node* n)
 
 int deep_free_node(Node* n)
 {
-	if (n == NULL)
+	if (nb_of_children(n) == 0)
 	{
+		free(n);
 		return 1;
 	}
 	
@@ -142,11 +140,12 @@ int deep_free_node(Node* n)
 	while(backward != NULL)
 	{
 		deep_free_node(backward->node);
-		free(backward);
 		backward = forward;
-		forward = forward->next;		
-	}
 		
+		if (forward != NULL)
+			forward = forward->next;		
+	}
+	
 	free(n);
 	
 	return 1;
@@ -192,50 +191,56 @@ int height(Node *n)
 
 void uncompile(FILE* outfile, Node *n) 
 {
-	outfile = fopen("arq", "a+");
-	if (n != NULL)
+	char *space = " ";
+	
+	if (outfile == NULL)
 	{
-
-		if (n->children != NULL)
-		{
-
-			uncompile(outfile, n->children->node);
-
-			n->children = n->children->next;
-
-			uncompile(outfile, n->children->node);
-		
-		}
-		else //é uma folha (deve ser colocada no arquivo)
-		{
-
-			fwrite(n->lexeme, 1, strlen(n->lexeme), outfile);
-
-		}	
+		perror("Error on FILE: ");
+		exit(-1);
 	}
+	
+	if (nb_of_children(n) == 0)
+	{
+		fwrite(n->lexeme, 1, strlen(n->lexeme), outfile);
+		fwrite(space, 1, strlen(space), outfile);
+		return;
+	}
+	
+	Nodelist *backward = n->children;
+	Nodelist *forward = backward->next;
+	
+	while(backward != NULL)
+	{
+		uncompile(outfile, backward->node);
+		backward = forward;
+		
+		if (forward != NULL)
+			forward = forward->next;
+	}
+	return;
 }
 
-/*int main()
+int main()
 {
 	Node *node[17];	
 		
-	node[0] = create_node(0, expbool_node , NULL, NULL);
+	node[0] = create_node(0, expbool_node , "abc", NULL);
 	node[1] = create_node(0, expbool_node , NULL, node[0], NULL);
-	node[2] = create_node(0, expbool_node , NULL, NULL);
-	node[3] = create_node(0, expbool_node , NULL, NULL);
+	node[2] = create_node(0, expbool_node , "bdsa", NULL);
+	node[3] = create_node(0, expbool_node , "casd", NULL);
 	node[4] = create_node(0, expbool_node , NULL, node[1], node[2], node[3], NULL);
 	
-	node[5] = create_node(0, expbool_node , NULL, NULL);
-	node[6] = create_node(0, expbool_node , NULL, NULL);
+	node[5] = create_node(0, expbool_node , "dfas", NULL);
+	node[6] = create_node(0, expbool_node , "easf", NULL);
 	node[7] = create_node(0, expbool_node , NULL, node[5], NULL);
 	node[8] = create_node(0, expbool_node , NULL, node[6], node[7], NULL);
 	
-	node[9] = create_node(0, expbool_node , NULL, NULL);
-	node[10] = create_node(0, expbool_node , NULL, NULL);
-	node[11] = create_node(0, expbool_node , NULL, NULL);
+	node[9] = create_node(0, expbool_node , "fafs", NULL);
+	node[10] = create_node(0, expbool_node , "gasf", NULL);
+	node[11] = create_node(0, expbool_node , "hasf", NULL);
 	node[12] = create_node(0, expbool_node , NULL, node[9], node[10], node[11], NULL);
 	
-	node[13] = create_node(0, expbool_node , NULL, NULL);
+	node[13] = create_node(0, expbool_node , "iafs", NULL);
 	node[14] = create_node(0, expbool_node , NULL, node[13], node[12], NULL);
 	
 	node[15] = create_node(0, expbool_node , NULL, node[8], node[14], NULL);
@@ -243,7 +248,9 @@ void uncompile(FILE* outfile, Node *n)
 	node[16] = create_node(0, expbool_node , NULL, node[4], node[15], NULL);
 	
 	printf("A altura da arvore eh: %d\n", height(node[16]));	
+
+	file = fopen("output.txt", "w+");
+	uncompile(file, node[16]);
 	
 	return 0;
-		
-}*/
+}

@@ -34,7 +34,7 @@ typedef int Node_type;
 #define lvalue_node           308
 #define listaexpr_node        309
 #define expr_node             310
-#define chamaproc_node      311
+#define chamaproc_node        311
 #define enunciado_node        312
 #define fiminstcontrole_node  313
 #define expbool_node          314
@@ -99,8 +99,8 @@ typedef struct _node {
    char* lexeme;   	/**< o lexema retornado pelo analizador lexical. */
    Node_type type; 	/**< Um dos valores definidos acima pelos # defines. */
    void* attribute;	/**< Qualquer coisa por enquanto. */
-   Nodelist *children;
-   int height;
+   Nodelist *children;  /**< Lista de filhos da arvore. */
+   int height;		/**< Altura do nó. */
 } Node;
 
 extern Node * syntax_tree;
@@ -156,7 +156,6 @@ int height(Node *n) ;
  *  The impression must follow a depth-first order.
  *  @param outfile : the file to which the lexemes are printed.
  *  @param n : the root node of the tree. Must abort the program if 'n' is NULL.
- *
  */
 void uncompile(FILE* outfile, Node *n) ;
 
