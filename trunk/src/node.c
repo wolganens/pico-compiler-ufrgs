@@ -51,7 +51,7 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	/**
 	 * Verifica se parametro n1 está correto
 	 */
-	if ((t < code_node) || (t > expbool_node && t < int_node) || (t > rightbracket_node))
+	if ((t < code_node) || (t > expbool_node && t < int_node) || (t > rightbracket3_node))
 	{
 		printf("\nPrograma não foi escrito corretamente.\n");
 		exit(-1);		
@@ -220,7 +220,7 @@ void uncompile(FILE* outfile, Node *n)
 	return;
 }
 
-int main()
+/*int main()
 {
 	Node *node[17];	
 		
@@ -253,4 +253,4 @@ int main()
 	uncompile(file, node[16]);
 	
 	return 0;
-}
+}*/
