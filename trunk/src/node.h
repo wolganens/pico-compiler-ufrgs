@@ -78,6 +78,10 @@ typedef int Node_type;
 #define greater_node          536    // >
 #define leftbracket_node      537    // (
 #define rightbracket_node     538    // )
+#define leftbracket2_node     539    // {
+#define rightbracket2_node    540    // }
+#define leftbracket3_node     541    // {
+#define rightbracket3_node    542    // }
 
 /* A completar */
 
