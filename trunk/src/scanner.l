@@ -13,6 +13,11 @@
     double VAL_DOUBLE;
 %}
 
+%option yylineno
+%{
+#define YY_USER_ACTION yylloc.first_line = yylineno;
+%}
+
 
  /* Definicoes regulares (A COMPLETAR conforme a especificacao) */
 
