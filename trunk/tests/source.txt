@@ -1,0 +1,19 @@
+int: i, n ;
+double : x, tmp_1;
+real: x, y;
+real : z1t2,i;
+double(10:20, 30:10, 0:5): tmp;
+
+x = (45-a)+((2 + 3) * x / 0);
+
+x = 1;
+
+if ( x <= 10 ) then
+y = 1;
+f(asd, asasf, asdad, gh(asd,asd), (45-a)+((2 + 3) * x / 0), y [1,s]);
+else
+while (i >= j & a <> b & !(k <j)) {
+	s = 0;
+	
+	};
+end;
