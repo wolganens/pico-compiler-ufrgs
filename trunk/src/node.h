@@ -83,12 +83,6 @@ typedef int Node_type;
 #define leftbracket3_node     541    // {
 #define rightbracket3_node    542    // }
 
-/* A completar */
-
-/** Estrutura de dados parcial para o no da arvore.
- *
- */
- 
 typedef struct _nodelist {
 	struct _nodelist *next;
 	struct _node *node;
@@ -96,9 +90,9 @@ typedef struct _nodelist {
 
 typedef struct _node {
    int num_line;   	/**< numero de linha. */
-   char* lexeme;   	/**< o lexema retornado pelo analizador lexical. */
+   char *lexeme;   	/**< o lexema retornado pelo analizador lexical. */
    Node_type type; 	/**< Um dos valores definidos acima pelos # defines. */
-   void* attribute;	/**< Qualquer coisa por enquanto. */
+   void *attribute;	/**< Qualquer coisa por enquanto. */
    Nodelist *children;  /**< Lista de filhos da arvore. */
    int height;		/**< Altura do nó. */
 } Node;

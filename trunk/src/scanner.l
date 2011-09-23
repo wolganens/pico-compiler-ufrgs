@@ -3,10 +3,9 @@
 %option noyywrap
  /* Sera copiado no .c final */
 %{
-
     #include <stdlib.h>
     #include <string.h>
-   
+  
     /* este include eh importante... */
     #include "tokens.h"
     
@@ -29,52 +28,52 @@ LETRA      [A-Z]
  /* O que consta aqui eh puramente ilustrativo... A COMPLETAR ! 
   * Ver tambem "tokens.h".
   */
-
-int    { return(INT);    }
-double { return(DOUBLE); }
-real   { return(REAL);   }
-char   { return(CHAR);   }
-string { return(STRING); }
-"*"    { return('*');    }
-"+"    { return('+');    }
-"-"    { return('-');    }
-"/"    { return('/');    }
-","    { return(',');    }
-";"    { return(';');    }
-":"    { return(':');    }
-"'"    { return(QUOTE);  }
-"("    { return('(');    }
-")"    { return(')');    }
-"["    { return('[');    }
-"]"    { return(']');    }
-"{"    { return('{');    }
-"}"    { return('}');    }
-"<"    { return('<');    }
-">"    { return('>');    }
-"="    { return('=');    }
-"<="   { return(LE);     }
-">="   { return(GE);     }
-"=="   { return(EQ);     }
-"<>"   { return(NE);     }
-"&"    { return(AND);    }
-"|"    { return(OR);     }
-"!"    { return(NOT);    }
-if     { return( IF );   }
-then   { return( THEN ); }
-else   { return( ELSE ); }
-for    { return( FOR );  }
-next   { return( NEXT ); }
-while  { return( WHILE );}
-end    { return( END );  }
-true   { return( TRUE ); }
-false  { return( FALSE );}
+  
+int    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(INT); }
+double { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(DOUBLE); }
+real   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(REAL);   }
+char   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(CHAR);   }
+string { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(STRING); }
+"*"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('*');    }
+"+"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('+');    }
+"-"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('-');    }
+"/"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('/');    }
+","    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(',');    }
+";"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(';');    }
+":"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(':');    }
+"'"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(QUOTE);  }
+"("    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('(');    }
+")"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(')');    }
+"["    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('[');    }
+"]"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(']');    }
+"{"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('{');    }
+"}"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('}');    }
+"<"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('<');    }
+">"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('>');    }
+"="    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('=');    }
+"<="   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(LE);     }
+">="   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(GE);     }
+"=="   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(EQ);     }
+"<>"   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(NE);     }
+"&"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(AND);    }
+"|"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(OR);     }
+"!"    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(NOT);    }
+if     { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(IF);     }
+then   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(THEN);   }
+else   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(ELSE);   }
+for    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(FOR);    }
+next   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(NEXT);   }
+while  { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(WHILE);  }
+end    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(END);    }
+true   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(TRUE);   }
+false  { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(FALSE);  }
 
 [ \t\n]+					
-({letra}|[_])+({letra}|{LETRA}|[_]|{digito})*  	{ printf( "%s\n", yytext ); return( IDF ); }
-{LETRA}+([_]|{LETRA}|{digito})*	        	{ printf( "%s\n", yytext ); return( CONST ); }
-["]({letra}|{LETRA}|{digito}|[ ])*["]		{ printf( "%s\n", yytext ); return( STR_LIT ); }
-{digito}+					{ VAL_INT = atoi(yytext); return( INT_LIT ); }
-{digito}*\.{digito}+(([eE])([+-])?{digito}+)?   { VAL_DOUBLE = atof(yytext); return( F_LIT ); }
+({letra}|[_])+({letra}|{LETRA}|[_]|{digito})*  	{ yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return( IDF ); }
+{LETRA}+([_]|{LETRA}|{digito})*	        	{ yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext);  return( CONST ); }
+["]({letra}|{LETRA}|{digito}|[ ])*["]		{ yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext);  return( STR_LIT ); }
+{digito}+					{ VAL_INT = atoi(yytext); yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return( INT_LIT ); }
+{digito}*\.{digito}+(([eE])([+-])?{digito}+)?   { VAL_DOUBLE = atof(yytext); yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return( F_LIT ); }
 
   /* Tratamento dos erros lexicais: a regra seguinte pega tudo o que nao
    * fechou com uma Regexp anterior.

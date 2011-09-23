@@ -21,6 +21,6 @@ y.tab.c: pico.y
 
 node.o: node.c node.h
 	$(CC) $(LDFLAGS) -c node.c
-
+	
 clean:
 	rm -f *.o lex.yy.? y.tab.? tokens.h pico
