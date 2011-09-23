@@ -6,7 +6,6 @@
 #include "node.h"
 
 Node * syntax_tree;
-FILE * file;
 
 void add_list (Node *node, Nodelist **root)
 {
@@ -87,14 +86,14 @@ Node* child(Node* n, int i)
 	if (n == NULL)
 		exit(-1);
 
-	if (i == 0 || i > nb_of_children(n))
+	if (i < 0 || i > nb_of_children(n))
 		exit(-1);
 
 	Nodelist *backward = n->children;
 	
 	int k;
 	
-	for (k = 1; k != i; k++)
+	for (k = 0; k != i-1; k++)
 	{
 		backward = backward->next;
 	}
@@ -192,16 +191,14 @@ int height(Node *n)
 void uncompile(FILE* outfile, Node *n) 
 {
 	char *space = " ";
-	
-	outfile = fopen("output", "a+");
-	
+
 	if (outfile == NULL)
 	{
 		perror("Error on FILE: ");
 		exit(-1);
 	}
 	
-	if (nb_of_children(n) == 0)
+	if (is_leaf(n))
 	{
 		fwrite(n->lexeme, 1, strlen(n->lexeme), outfile);
 		fwrite(space, 1, strlen(space), outfile);
