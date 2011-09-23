@@ -86,7 +86,7 @@ Node* child(Node* n, int i)
 	if (n == NULL)
 		exit(-1);
 
-	if (i < 0 || i > nb_of_children(n))
+	if (i <= 0 || i > nb_of_children(n))
 		exit(-1);
 
 	Nodelist *backward = n->children;
@@ -248,8 +248,8 @@ void uncompile(FILE* outfile, Node *n)
 	
 	printf("A altura da arvore eh: %d\n", height(node[16]));	
 
-	
-	uncompile(file, node[16]);
+	child(node[12], 0);
+	//uncompile(file, node[16]);
 	
 	return 0;
 }*/
