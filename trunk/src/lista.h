@@ -11,7 +11,7 @@
 
 /** 
  * Estrutura de dados (que implementa uma intrucao TAC, ver Etapa 4), a ser
- * encadeada na lista. Por enquanto, o que representa é irrelevante.
+ * encadeada na lista.
  */
 struct tac {
    char* op;   /* "+", "-", ":=", "if", etc... */
