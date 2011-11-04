@@ -26,6 +26,8 @@
 %token<cadeia> EQ
 %token<cadeia> NE
 
+%token<cadeia> PRINTF
+
 %token<cadeia> '+'
 %token<cadeia> '-'
 %token<cadeia> '*'
@@ -63,6 +65,12 @@
 %token<cadeia> STR_LIT
 %token<cadeia> FOR
 %token<cadeia> NEXT
+
+%left OR
+%left AND
+%left NOT
+%left ’+’ ’-’
+%left ’*’ ’/’
 
 %type<no> code 
 %type<no> declaracoes
@@ -219,7 +227,10 @@ enunciado: expr { $$ = $1 ;}
  						    Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
          					    Node* filho5 = create_node( @5.first_line, rightbracket2_node, $5, NULL, NULL);
  						    Node* filho7 = create_node( @7.first_line, leftbracket2_node, $7, NULL, NULL);
-    	 $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, filho7, NULL);  } 
+    	 $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, filho7, NULL);  }
+    	 
+    	 | PRINTF ’(’ expr ’)’ { return (PRINTF); }
+ 
          ;
 
 fiminstcontrole: END  { $$ = create_node(@1.first_line, end_node, $1, NULL, NULL); } 
