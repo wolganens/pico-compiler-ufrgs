@@ -25,12 +25,14 @@ void cat_tac(struct node_tac ** code_a, struct node_tac ** code_b)
 	if (code_b == NULL) //lista b vazia
 		code_b = code_a;
   
-	for(new_a = code_a; new_a->next != NULL; new_a = new_a->next);
+	for(*new_a = *code_a; *new_a->next != NULL; *new_a = *new_a->next);
 	
-	new_a->next = code_b;
+	*new_a->next = *code_b;
+	*code_a = *new_a;
 
-	for(new_b = code_b; new_b->next != NULL; new_b = new_b->next);
+	for(*new_b = *code_b; *new_b->next != NULL; *new_b = *new_b->next);
 	
-	new_b->next = code_a;
+	*new_b->next = code_a;
+	*code_b = *new_b;
 	
 }
