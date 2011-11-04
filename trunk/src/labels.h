@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdio.h>
 
-void new_temp (int * temp_counter, char * temp_string);
+char * new_temp (int temp_counter);
 
-void new_label (int * label_counter, char * label_string);
+char * new_label (int label_counter);
