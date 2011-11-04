@@ -96,9 +96,7 @@
 #define STR_LIT 282
 #define FOR 283
 #define NEXT 284
-
-
-
+#define PRINTF 285
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
