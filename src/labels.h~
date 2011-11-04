@@ -1,0 +1,6 @@
+#include <stdlib.h>
+#include <string.h>
+
+char * new_temp (int temp_counter);
+
+char * new_label (int label_counter);

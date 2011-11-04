@@ -6,6 +6,7 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include "node.h"
+  #include "symbol_table.h"
 %}
 
 %error-verbose
@@ -200,9 +201,9 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			Node* filho3 = create_node( @3.first_line, leftbracket_node, $3, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, filho1, $2, filho3, NULL); }
 
-    | INT_LIT        { $$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); } 
+    | INT_LIT        { $$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); }
 
-    | F_LIT          { $$ = create_node(@$.first_line, f_lit_node, $1, NULL, NULL); } 
+    | F_LIT          { $$ = create_node(@$.first_line, f_lit_node, $1, NULL, NULL); }
 
     | lvalue         { $$ = $1; }
 

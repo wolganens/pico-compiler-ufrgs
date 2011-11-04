@@ -45,8 +45,6 @@ typedef struct {
     struct table_node_entry * entries[PRIME];
 } symbol_t ;
 
-symbol_t symbol_table;
-
 /** \brief Inicializar a tabela de Hash.
  *
  * @param table, uma referencia sobre uma tabela de simbolos.
