@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 /** 
  * Estrutura de dados (que implementa uma intrucao TAC, ver Etapa 4), a ser
  * encadeada na lista.
