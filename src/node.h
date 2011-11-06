@@ -100,6 +100,11 @@ typedef struct _node {
 
 extern Node * syntax_tree;
 
+struct attr_E {
+   char* local;
+   char* code;
+};
+
 /**
  *  * Node constructor.
  *

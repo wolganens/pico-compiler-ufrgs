@@ -7,6 +7,7 @@
   #include <stdlib.h>
   #include "node.h"
   #include "symbol_table.h"
+  #include "labels.h"
 %}
 
 %error-verbose
@@ -187,6 +188,11 @@ listaexpr: expr   { $$ = $1; }
 
 expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
+			
+			//novo (acao semantica):
+			$$.attribute = (struct attr_E)malloc(sizeof(struct attr_E));
+			$$.attribute.local = new_temp(t_counter++);
+			$$.attribute.code = create_inst_tac($$.attribute.local, $1.attribute.local, "AND", $3.attribute.local); } 
 
 			$$.size = 1; } 
 
