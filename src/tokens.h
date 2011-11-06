@@ -65,7 +65,8 @@
      CONST = 281,
      STR_LIT = 282,
      FOR = 283,
-     NEXT = 284
+     NEXT = 284,
+     PRINTF = 285
    };
 #endif
 /* Tokens.  */

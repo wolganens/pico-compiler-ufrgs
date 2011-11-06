@@ -38,6 +38,7 @@ typedef int Node_type;
 #define enunciado_node        312
 #define fiminstcontrole_node  313
 #define expbool_node          314
+#define print_node	      315
 
 #define int_node              501
 #define double_node           502

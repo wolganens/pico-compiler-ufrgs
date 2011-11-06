@@ -186,7 +186,9 @@ listaexpr: expr   { $$ = $1; }
 	   ;
 
 expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2, NULL, NULL);
-    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); } 
+    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
+
+			$$.size = 1; } 
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); }
@@ -230,7 +232,10 @@ enunciado: expr { $$ = $1 ;}
  						    Node* filho7 = create_node( @7.first_line, leftbracket2_node, $7, NULL, NULL);
     	 $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, filho7, NULL);  }
     	 
-    	 | PRINTF ’(’ expr ’)’ { return (PRINTF); }
+    	 | PRINTF '(' expr ')' {   Node* filho1 = create_node( @1.first_line, print_node, $1, NULL, NULL);
+				   Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
+				   Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
+    			$$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, NULL);  }
  
          ;
 
@@ -274,4 +279,5 @@ expbool: TRUE   { $$ = create_node(@1.first_line, true_node, $1, NULL, NULL); }
        | expr NE expr    	   {   Node* filho2 = create_node( @2.first_line, ne_node, $2, NULL, NULL);
 				       $$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL);  }
        ;
+
 %%
