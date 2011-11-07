@@ -49,24 +49,24 @@
      GE = 265,
      EQ = 266,
      NE = 267,
-     AND = 268,
-     OR = 269,
-     NOT = 270,
-     IF = 271,
-     THEN = 272,
-     ELSE = 273,
-     WHILE = 274,
-     INT_LIT = 275,
-     F_LIT = 276,
-     END = 277,
-     TRUE = 278,
-     FALSE = 279,
-     STRING = 280,
-     CONST = 281,
-     STR_LIT = 282,
-     FOR = 283,
-     NEXT = 284,
-     PRINTF = 285
+     PRINTF = 268,
+     AND = 269,
+     OR = 270,
+     NOT = 271,
+     IF = 272,
+     THEN = 273,
+     ELSE = 274,
+     WHILE = 275,
+     INT_LIT = 276,
+     F_LIT = 277,
+     END = 278,
+     TRUE = 279,
+     FALSE = 280,
+     STRING = 281,
+     CONST = 282,
+     STR_LIT = 283,
+     FOR = 284,
+     NEXT = 285
    };
 #endif
 /* Tokens.  */
@@ -80,31 +80,34 @@
 #define GE 265
 #define EQ 266
 #define NE 267
-#define AND 268
-#define OR 269
-#define NOT 270
-#define IF 271
-#define THEN 272
-#define ELSE 273
-#define WHILE 274
-#define INT_LIT 275
-#define F_LIT 276
-#define END 277
-#define TRUE 278
-#define FALSE 279
-#define STRING 280
-#define CONST 281
-#define STR_LIT 282
-#define FOR 283
-#define NEXT 284
-#define PRINTF 285
+#define PRINTF 268
+#define AND 269
+#define OR 270
+#define NOT 271
+#define IF 272
+#define THEN 273
+#define ELSE 274
+#define WHILE 275
+#define INT_LIT 276
+#define F_LIT 277
+#define END 278
+#define TRUE 279
+#define FALSE 280
+#define STRING 281
+#define CONST 282
+#define STR_LIT 283
+#define FOR 284
+#define NEXT 285
+
+
+
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 13 "pico.y"
+#line 16 "pico.y"
 
   char* cadeia;
   struct _node * no;
@@ -112,7 +115,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 117 "y.tab.h"
+#line 119 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
