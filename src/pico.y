@@ -8,6 +8,7 @@
   #include "node.h"
   #include "symbol_table.h"
   #include "labels.h"
+  #include "lista.h"
 %}
 
 %error-verbose
@@ -193,8 +194,9 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			$$.attribute = (struct attr_E)malloc(sizeof(struct attr_E));
 			$$.attribute.local = new_temp(t_counter++);
 			$$.attribute.code = create_inst_tac($$.attribute.local, $1.attribute.local, "AND", $3.attribute.local); } 
+			//tem q concatenar as listas...
 
-			$$.size = 1; } 
+			//$$.size = 1; } 
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); }
@@ -209,7 +211,13 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			Node* filho3 = create_node( @3.first_line, leftbracket_node, $3, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, filho1, $2, filho3, NULL); }
 
-    | INT_LIT        { $$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); }
+    | INT_LIT        { $$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); 
+			
+			//novo (acao semantica):
+			$$.attribute = (struct attr_E)malloc(sizeof(struct attr_E));
+			$$.attribute.local = $1;
+			$$.attribute.code = " "; }
+			
 
     | F_LIT          { $$ = create_node(@$.first_line, f_lit_node, $1, NULL, NULL); }
 
