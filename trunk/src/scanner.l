@@ -72,7 +72,7 @@ while  { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy
 end    { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(END);    }
 true   { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(TRUE);   }
 false  { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(FALSE);  }
-print  { return(PRINTF); }
+print  { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(PRINTF); }
 
 [ \t\n]+					
 ({letra}|[_])+({letra}|{LETRA}|[_]|{digito})*  	{ yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return( IDF ); }

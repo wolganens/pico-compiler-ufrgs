@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <lista.h>
 
 #ifdef __GNUC__
     /* If using gcc, warn about missing NULLs */
@@ -103,6 +104,7 @@ extern Node * syntax_tree;
 struct attr_E {
    char* local;
    char* code;
+   //struct node_tac* code;
 };
 
 /**
