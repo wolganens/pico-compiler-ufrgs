@@ -8,11 +8,14 @@ etapa2: pico
 doc: Doxyfile $(HEAD1)
 	doxygen Doxyfile
 
-pico: lex.yy.c y.tab.c tokens.h node.o lista.o symbol_table.o main-pico.c
-	$(CC) $(LDFLAGS) -o pico lex.yy.c y.tab.c main-pico.c node.o lista.o symbol_table.o -lfl
+pico: lex.yy.c y.tab.c tokens.h node.o lista.o symbol_table.o labels.o main-pico.c
+	$(CC) $(LDFLAGS) -o pico lex.yy.c y.tab.c main-pico.c node.o labels.o lista.o symbol_table.o -lfl
 
 lex.yy.c: scanner.l tokens.h
 	flex scanner.l;
+
+labels.o: labels.c labels.h
+	$(CC) $(LDFLAGS) -c labels.c
 
 tokens.h: y.tab.c
 
