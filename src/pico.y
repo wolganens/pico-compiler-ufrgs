@@ -102,8 +102,10 @@
 
 %%
 inicio: inicializa code
+	;
 
-inicializa:          { 	init_table(*symbol_table); }   
+inicializa:          	{ 	init_table(*symbol_table); }   
+	;
 
 
 code: declaracoes acoes { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);  syntax_tree = $$; }
