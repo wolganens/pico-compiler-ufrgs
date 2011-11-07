@@ -1,8 +1,9 @@
 #include <string.h>
 #include <stdio.h>
 
-int t_counter = 0;
-int l_counter = 0;
+
+int t_counter;
+int l_counter;
 
 char * new_temp (int temp_counter);
 

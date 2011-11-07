@@ -9,6 +9,9 @@
   #include "symbol_table.h"
   #include "labels.h"
   #include "lista.h"
+
+//int t_counter = 0;
+//int l_counter = 0;
 %}
 
 %error-verbose
@@ -104,7 +107,7 @@
 inicio: inicializa code
 	;
 
-inicializa:          	{ 	init_table(*symbol_table); }   
+inicializa:          	{ init_table(&symbol_table); }   
 	;
 
 code: declaracoes acoes { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);  syntax_tree = $$; }
@@ -209,12 +212,10 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
 			
 			//novo (acao semantica):
-			$$.attribute = (struct attr_E)malloc(sizeof(struct attr_E));
-			$$.attribute.local = new_temp(t_counter++);
-			$$.attribute.code = create_inst_tac($$.attribute.local, $1.attribute.local, "AND", $3.attribute.local); } 
+			//$$->attribute = (struct attr_E *)malloc(sizeof(struct attr_E));
+			$$->attribute->local = new_temp(t_counter++);
+			$$->attribute->code = create_inst_tac($$->attribute->local, $1->attribute->local, "AND", $3->attribute->local); }
 			//tem q concatenar as listas...
-
-			//$$.size = 1; } 
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); }
@@ -232,9 +233,9 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     | INT_LIT        { $$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); 
 			
 			//novo (acao semantica):
-			$$.attribute = (struct attr_E)malloc(sizeof(struct attr_E));
-			$$.attribute.local = $1;
-			$$.attribute.code = " "; }
+			//$$->attribute = (struct attr_E*)malloc(sizeof(struct attr_E));
+			$$->attribute->local = $1;
+			$$->attribute->code = NULL; }
 			
 
     | F_LIT          { $$ = create_node(@$.first_line, f_lit_node, $1, NULL, NULL); }

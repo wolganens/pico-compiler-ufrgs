@@ -96,22 +96,23 @@ typedef struct _nodelist {
 	struct _node *node;
 } Nodelist;
 
+struct attr_E {
+   char* local;
+   char* code;
+   //struct node_tac* code;
+};
+
 typedef struct _node {
    int num_line;   	/**< numero de linha. */
    char *lexeme;   	/**< o lexema retornado pelo analizador lexical. */
    Node_type type; 	/**< Um dos valores definidos acima pelos # defines. */
-   void *attribute;	/**< Qualquer coisa por enquanto. */
+   struct attr_E *attribute;	/**< Qualquer coisa por enquanto. */
    Nodelist *children;  /**< Lista de filhos da arvore. */
    int height;		/**< Altura do nó. */
 } Node;
 
 extern Node * syntax_tree;
 
-struct attr_E {
-   char* local;
-   char* code;
-   //struct node_tac* code;
-};
 
 /**
  *  * Node constructor.
