@@ -85,6 +85,12 @@ typedef int Node_type;
 #define leftbracket3_node     541    // {
 #define rightbracket3_node    542    // }
 
+#define SIZE_INT      4
+#define SIZE_REAL     4
+#define SIZE_DOUBLE   8
+#define SIZE_CHAR     1
+
+
 typedef struct _nodelist {
 	struct _nodelist *next;
 	struct _node *node;
