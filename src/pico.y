@@ -93,11 +93,19 @@
 %type<no> fiminstcontrole
 %type<no> expbool
 
-%start code
+%type<no> inicio
+%type<no> inicializa
+
+%start inicio
 
  /* A completar com seus tokens - compilar com 'yacc -d' */
 
 %%
+inicio: inicializa code
+
+inicializa:          { 	init_table(*symbol_table); }   
+
+
 code: declaracoes acoes { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);  syntax_tree = $$; }
     | acoes 		{ $$ = $1; syntax_tree = $$; }
     ;
@@ -174,7 +182,16 @@ comando: lvalue '=' expr         {   Node* filho2 = create_node( @2.first_line, 
        | enunciado { $$ = $1; }
        ;
 
-lvalue: IDF    			  { $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL); } 
+lvalue: IDF    			  { $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL); 
+			            entry_t identify;
+				    identify.name = $$.attribute.local;
+				    identify.type = $$.type;
+   				    identify.size = 
+				    identify.desloc = 
+				    identify.extra = NULL;
+				    insert(symbol_table, identify);
+
+				} 
 
       | IDF '[' listaexpr ']'     {  Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
 			             Node* filho2 = create_node( @2.first_line, rightbracket3_node, $2, NULL, NULL);
