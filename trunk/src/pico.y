@@ -142,11 +142,12 @@ declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semic
     			    		    $$ = create_node( @1.first_line, declaracoes_node, NULL, $1, $2, filho3, NULL);  }
        	   ;
 
-declaracao: { node->size = $1->size; node->type = $1->type; } tipo ':' listadeclaracao {   Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
+declaracao: tipo ':' listadeclaracao {   Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
 					 $$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL);  }
 	   ;
 
-listadeclaracao: IDF    		   {   $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL); }
+listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);  }			 
+
                | IDF ',' listadeclaracao   {   Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
 					       Node* filho2 = create_node( @2.first_line, comma_node, $2, NULL, NULL);
 					       $$ = create_node( @$.first_line, listadeclaracao_node, NULL, filho1, filho2, $3, NULL);  }
@@ -213,28 +214,33 @@ acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node,
     			      $$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); }
     ;
 
-comando: lvalue '=' expr         {   Node* filho2 = create_node( @2.first_line, attr_node, $2, NULL, NULL);
-				     $$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);  }
+comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_node, $2, NULL, NULL);
+			     $$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);
+			     $$->attribute = (attr_E *) malloc(sizeof(attr_E));
+			     
+			     struct tac* new_instruction = create_inst_tac($1->attribute->local, ":=", $3->attribute->local, NULL, NULL);
+			     append_tac(&($3->attribute->code), new_instruction);
+			     
+			     cat_tac(&($$->attribute->code), &($3->attribute->code));
+			 }
        | enunciado { $$ = $1; }
        ;
 
-lvalue: IDF 	{ 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
-			
-			entry_t identify;
-			identify.name = $1; //ou $$.lexeme
-			identify.type = node->type;
-			identify.size = node->size;
-			deslocamento = identify.desloc = deslocamento + node->size;
-			identify.extra = NULL;
-			
-			insert(&symbol_table, &identify);
-
-			/*print_table(symbol_table); //TESTANDO TABELA HASH
-			entry_t *search;
-			search = lookup(symbol_table, "variavel1");
-			printf("Nome: %s\n\n", search->name);
-			*/
+lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
+		
+		entry_t * variable;
+		
+		if ((variable = lookup(symbol_table, $1)) == NULL)
+		{
+			printf("Error (%d). The variable %s was not declared.\n"), $$->num_line, $$->lexeme);
+			exit(1);
 		}
+		
+		$$->attribute = (attr_E *) malloc(sizeof(attr_E));
+		
+		$$->attribute->local = variable->name;
+		$$->attribute->code = NULL;
+	    }
 
       | IDF '[' listaexpr ']'     {  Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
 			             Node* filho2 = create_node( @2.first_line, rightbracket3_node, $2, NULL, NULL);
@@ -249,36 +255,71 @@ listaexpr: expr   { $$ = $1; }
 
 expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
+    			$$->attribute = (attr_E *) malloc(sizeof(attr_E));
 			
-			cat_tac(&($$->attribute->code), &($1->attribute->code));
-			cat_tac(&($$->attribute->code), &($3->attribute->code));
-
-			//novo (acao semantica):
-			//$$->attribute = (struct attr_E *)malloc(sizeof(struct attr_E));
 			$$->attribute->local = new_temp(t_counter++);
-			append_tac(&($$->attribute->code),create_inst_tac($$->attribute->local, $1->attribute->local, "AND", $3->attribute->local)); 
-			//tem q concatenar as listas...
+
+			struct tac* new_instruction = create_inst_tac($$->attribute->local, ":=", $1->attribute->local, "ADD", $3->attribute->local);
+			append_tac(&($3->attribute->code), new_instruction); 
+
+			cat_tac(&($1->attribute->code), &($3->attribute->code));
+			cat_tac(&($$->attribute->code), &($1->attribute->code));
 		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
-    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); }
+    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL);
+    			
+    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
+    			$$->attribute = (attr_E *) malloc(sizeof(attr_E));
+			
+			$$->attribute->local = new_temp(t_counter++);
+
+			struct tac* new_instruction = create_inst_tac($$->attribute->local, ":=", $1->attribute->local, "SUB", $3->attribute->local);
+			append_tac(&($3->attribute->code), new_instruction); 
+
+			cat_tac(&($1->attribute->code), &($3->attribute->code));
+			cat_tac(&($$->attribute->code), &($1->attribute->code));
+		     }
 
     | expr '*' expr  {  Node* filho2 = create_node( @2.first_line, mul_node, $2, NULL, NULL);
-    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); } 
+    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL);
+    			
+			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
+    			$$->attribute = (attr_E *) malloc(sizeof(attr_E));
+			
+			$$->attribute->local = new_temp(t_counter++);
+
+			struct tac* new_instruction = create_inst_tac($$->attribute->local, ":=", $1->attribute->local, "MUL", $3->attribute->local);
+			append_tac(&($3->attribute->code), new_instruction); 
+
+			cat_tac(&($1->attribute->code), &($3->attribute->code));
+			cat_tac(&($$->attribute->code), &($1->attribute->code));
+		     } 
 
     | expr '/' expr  {  Node* filho2 = create_node( @2.first_line, div_node, $2, NULL, NULL);
-    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); } 
+    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL);
+    			
+    			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
+    			$$->attribute = (attr_E *) malloc(sizeof(attr_E));
+			
+			$$->attribute->local = new_temp(t_counter++);
+
+			struct tac* new_instruction = create_inst_tac($$->attribute->local, ":=", $1->attribute->local, "DIV", $3->attribute->local);
+			append_tac(&($3->attribute->code), new_instruction); 
+
+			cat_tac(&($1->attribute->code), &($3->attribute->code));
+			cat_tac(&($$->attribute->code), &($1->attribute->code));
+		      } 
 
     | '(' expr ')'   {  Node* filho1 = create_node( @1.first_line, rightbracket_node, $1, NULL, NULL);
 			Node* filho3 = create_node( @3.first_line, leftbracket_node, $3, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, filho1, $2, filho3, NULL); }
 
     | INT_LIT        { $$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); 
-			
-			//novo (acao semantica):
-			//$$->attribute = (struct attr_E*)malloc(sizeof(struct attr_E));
-			$$->attribute->local = $1;
-			$$->attribute->code = NULL; }
+  		       
+  		       $$->attribute = (attr_E *)malloc(sizeof(struct attr_E));
+		       $$->attribute->local = $1;
+		       $$->attribute->code = NULL; }
 			
 
     | F_LIT          { $$ = create_node(@$.first_line, f_lit_node, $1, NULL, NULL); }
