@@ -85,10 +85,10 @@ typedef int Node_type;
 #define leftbracket3_node     541    // {
 #define rightbracket3_node    542    // }
 
-#define SIZE_INT      4
-#define SIZE_REAL     4
-#define SIZE_DOUBLE   8
-#define SIZE_CHAR     1
+#define INT_SIZE      4
+#define REAL_SIZE     4
+#define DOUBLE_SIZE   8
+#define CHAR_SIZE     1
 
 
 typedef struct _nodelist {
@@ -96,23 +96,19 @@ typedef struct _nodelist {
 	struct _node *node;
 } Nodelist;
 
-typedef struct attr_E {
-   char* local;
-   char* code;
-   //struct node_tac* code;
-};
-
 typedef struct _node {
-   int num_line;   	/**< numero de linha. */
-   char *lexeme;   	/**< o lexema retornado pelo analizador lexical. */
-   Node_type type; 	/**< Um dos valores definidos acima pelos # defines. */
-   attr_E *attribute;	/**< Qualquer coisa por enquanto. */
-   Nodelist *children;  /**< Lista de filhos da arvore. */
-   int height;		/**< Altura do nó. */
+   int 		num_line;   	/**< numero de linha. */
+   char 	*lexeme;   	/**< o lexema retornado pelo analizador lexical. */
+   Node_type 	type; 		/**< Um dos valores definidos acima pelos # defines. */
+   char		*local;		
+   struct node_tac * code;
+   int 		size;
+   Nodelist 	*children;  	/**< Lista de filhos da arvore. */
+   int 		height;		/**< Altura do nó. */
+   int 		desloc;
 } Node;
 
 extern Node * syntax_tree;
-
 
 /**
  *  * Node constructor.

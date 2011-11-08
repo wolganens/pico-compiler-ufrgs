@@ -20,7 +20,7 @@ void append_inst_tac (struct node_tac ** code, struct tac * inst)
 			forward = forward->next;
 			i++;
 		}
-		forward->next = (struct node_tac *)malloc (sizeof(struct node_tac));
+		forward->next = (struct node_tac *) malloc (sizeof(struct node_tac));
 		forward->next->number = i;
 		forward->next->inst = inst;
 		forward->next->next = NULL;
@@ -61,25 +61,13 @@ struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, c
 {
 	struct tac * new_tac;
 	
-	new_tac = (struct tac *)malloc(sizeof(struct tac));
+	new_tac = (struct tac *) malloc(sizeof(struct tac));
 
-	new_tac->res = (char*)res;
-	new_tac->arg1 = (char*)arg1;
-	new_tac->op = (char*)op;
-	new_tac->arg2 = (char*)arg2;
+	new_tac->res  = (char*) res;
+	new_tac->arg1 = (char*) arg1;
+	new_tac->op   = (char*) op;
+	new_tac->arg2 = (char*) arg2;
 
-/*	static struct tac new_tac;
-		
-	new_tac.res 	= (char *) malloc (sizeof(char)*strlen(res));
-	new_tac.arg1 	= (char *) malloc (sizeof(char)*strlen(arg1));
-	new_tac.op 	= (char *) malloc (sizeof(char)*strlen(op));
-	new_tac.arg2 	= (char *) malloc (sizeof(char)*strlen(arg2));
-	
-	strcpy(new_tac.res, res);
-	strcpy(new_tac.arg1, arg1); 
-	strcpy(new_tac.op, op);
-	strcpy(new_tac.arg2, arg2); 
-	*/
 	return new_tac;
 }
 
@@ -104,22 +92,3 @@ void print_tac (FILE * out, struct node_tac * code)
 	}
 	printf("===============================================\n\n");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
