@@ -1,6 +1,5 @@
 /* Programa principal do pico. */
 #include <stdio.h>
-#include <stdlib.h>
 #include "node.h"
 
 char* progname;
@@ -12,7 +11,7 @@ int main(int argc, char* argv[])
 {
 	if (argc != 2)
 	{
-		printf("uso: %s <input_file>. Try again!\n", argv[0]);
+		printf("Try: %s <input_file>. Try again!\n", argv[0]);
 		exit(-1);
 	}
 	
@@ -20,7 +19,7 @@ int main(int argc, char* argv[])
 	
 	if (!yyin)
 	{
-		printf("Uso: %s <input_file>. Could not find %s. Try again!\n", argv[0], argv[1]);
+		printf("Error: Could not find %s. Try again!\n", argv[1]);
 		exit(-1);
 	}
 
@@ -31,10 +30,10 @@ int main(int argc, char* argv[])
 	else 
 		printf("ERROR.\n");
 	
-	//file = fopen("uncompiled.txt", "w+");
+	file = fopen("uncompiled.txt", "w+");
 
-	//uncompile(file, syntax_tree);
-
+	uncompile(file, syntax_tree);
+	
 	return 0;
 }
 

@@ -1,9 +1,9 @@
 CC      = gcc
 LDFLAGS = -g
 
-all: etapa2 
+all: etapa3 
 
-etapa2: pico
+etapa3: pico
 
 doc: Doxyfile $(HEAD1)
 	doxygen Doxyfile
