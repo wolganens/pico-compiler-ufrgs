@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	}
 
 	progname = argv[0];
-
+	
 	if (!yyparse()) 
 		printf("OKAY.\n");
 	else 

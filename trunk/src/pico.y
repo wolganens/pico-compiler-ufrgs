@@ -107,7 +107,25 @@
 inicio: inicializa code
 	;
 
-inicializa:          	{ init_table(&symbol_table); }   
+inicializa:          	{
+			/*FUNÇÕES DE TESTE DA LISTA.C
+
+			struct node_tac * teste = (struct node_tac *)malloc(sizeof(struct node_tac));
+			teste->inst = create_inst_tac("res", "arg1", "op", "arg2");
+			struct node_tac * teste2 = (struct node_tac *)malloc(sizeof(struct node_tac));
+			teste2->inst = create_inst_tac("res'", "arg1'", "op'", "arg2'");
+
+			//append_inst_tac(&teste, teste2->inst); //NAO SEI EXATAMENTE PARA QUE SERVE, ATÉ AGORA ELA INSERE INST NO FINAL DA LISTA DO 1º ARGUMENTO.
+			//cat_tac(&teste, &teste2);		
+
+			FILE * out;
+			out = fopen ("teste.txt","w");
+			print_tac(out, teste);
+			fclose(out);
+			*/
+
+			init_table(&symbol_table); 
+			}   
 	;
 
 code: declaracoes acoes { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);  syntax_tree = $$; }
@@ -186,16 +204,21 @@ comando: lvalue '=' expr         {   Node* filho2 = create_node( @2.first_line, 
        | enunciado { $$ = $1; }
        ;
 
-lvalue: IDF    			  { $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL); 
-			           /* entry_t identify;
-				    identify.name = $$.attribute.local;
-				    identify.type = $$.type;
-   				    identify.size = 
-				    identify.desloc = 
-				    identify.extra = NULL;
-				    insert(symbol_table, identify);
-*/
-				} 
+lvalue: IDF 	{ 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
+			entry_t identify;
+			identify.name = $1; //ou $$.lexeme
+			identify.type = 0; //ONDE PEGAR ESSAS INFORMAÇOES?
+			identify.size = 0;
+			identify.desloc = 0;
+			identify.extra = NULL;
+			insert(&symbol_table, &identify);
+
+			/*print_table(symbol_table); //TESTANDO TABELA HASH
+			entry_t *search;
+			search = lookup(symbol_table, "variavel1");
+			printf("Nome: %s\n\n", search->name);
+			*/
+		}
 
       | IDF '[' listaexpr ']'     {  Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
 			             Node* filho2 = create_node( @2.first_line, rightbracket3_node, $2, NULL, NULL);
@@ -214,8 +237,9 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			//novo (acao semantica):
 			//$$->attribute = (struct attr_E *)malloc(sizeof(struct attr_E));
 			$$->attribute->local = new_temp(t_counter++);
-			$$->attribute->code = create_inst_tac($$->attribute->local, $1->attribute->local, "AND", $3->attribute->local); }
+			//$$->attribute->code = create_inst_tac($$->attribute->local, $1->attribute->local, "AND", $3->attribute->local); 
 			//tem q concatenar as listas...
+		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); }
