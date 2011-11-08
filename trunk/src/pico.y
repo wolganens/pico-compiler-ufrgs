@@ -10,6 +10,9 @@
   #include "labels.h"
   #include "lista.h"
 
+  Node * node = (Node *) malloc (sizeof(Node));
+  int deslocamento = 0;
+
 //int t_counter = 0;
 //int l_counter = 0;
 %}
@@ -139,7 +142,7 @@ declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semic
     			    		    $$ = create_node( @1.first_line, declaracoes_node, NULL, $1, $2, filho3, NULL);  }
        	   ;
 
-declaracao: tipo ':' listadeclaracao {   Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
+declaracao: { node->size = $1->size; node->type = $1->type; } tipo ':' listadeclaracao {   Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
 					 $$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL);  }
 	   ;
 
@@ -153,10 +156,21 @@ tipo: tipounico { $$ = $1; }
     | tipolista { $$ = $1; }
     ;
 
-tipounico: INT      { $$ = create_node(@1.first_line, int_node, $1, NULL, NULL); } 
-         | DOUBLE   { $$ = create_node(@1.first_line, double_node, $1, NULL, NULL); } 
-         | REAL     { $$ = create_node(@1.first_line, real_node, $1, NULL, NULL); } 
-         | CHAR     { $$ = create_node(@1.first_line, char_node, $1, NULL, NULL); } 
+tipounico: INT      { $$ = create_node(@1.first_line, int_node, $1, NULL, NULL);
+		      $$->type = int_node;
+	              $$->size = SIZE_INT; }
+
+         | DOUBLE   { $$ = create_node(@1.first_line, double_node, $1, NULL, NULL);
+		      $$->type = double_node;
+		      $$->size = SIZE_DOUBLE; } 
+
+         | REAL     { $$ = create_node(@1.first_line, real_node, $1, NULL, NULL);
+		      $$->type = real_node;
+		      $$->size = SIZE_REAL; } 
+
+         | CHAR     { $$ = create_node(@1.first_line, char_node, $1, NULL, NULL);
+		      $$->type = char_node;
+		      $$->size = SIZE_CHAR; } 
          ;
 
 tipolista: INT '(' listadupla ')'     {  Node* filho1 = create_node( @1.first_line, int_node, $1, NULL, NULL);
@@ -172,7 +186,7 @@ tipolista: INT '(' listadupla ')'     {  Node* filho1 = create_node( @1.first_li
          | REAL '(' listadupla ')'    {  Node* filho1 = create_node( @1.first_line, real_node, $1, NULL, NULL);
 					 Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
 					 Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
-    			    		 $$ = create_node( @$.first_line, tipolista_node, NULL, filho1, filho2, $3, filho4, NULL);  }
+    			    		 $INT_LIT$ = create_node( @$.first_line, tipolista_node, NULL, filho1, filho2, $3, filho4, NULL);  }
 
          | CHAR '(' listadupla ')'    {  Node* filho1 = create_node( @1.first_line, char_node, $1, NULL, NULL);
 					 Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
@@ -205,12 +219,14 @@ comando: lvalue '=' expr         {   Node* filho2 = create_node( @2.first_line, 
        ;
 
 lvalue: IDF 	{ 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
+			
 			entry_t identify;
 			identify.name = $1; //ou $$.lexeme
-			identify.type = 0; //ONDE PEGAR ESSAS INFORMAÇOES?
-			identify.size = 0;
-			identify.desloc = 0;
+			identify.type = node->type;
+			identify.size = node->size;
+			deslocamento = identify.desloc = deslocamento + node->size;
 			identify.extra = NULL;
+			
 			insert(&symbol_table, &identify);
 
 			/*print_table(symbol_table); //TESTANDO TABELA HASH
@@ -234,10 +250,13 @@ listaexpr: expr   { $$ = $1; }
 expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
 			
+			cat_tac(&($$->attribute->code), &($1->attribute->code));
+			cat_tac(&($$->attribute->code), &($3->attribute->code));
+
 			//novo (acao semantica):
 			//$$->attribute = (struct attr_E *)malloc(sizeof(struct attr_E));
 			$$->attribute->local = new_temp(t_counter++);
-			//$$->attribute->code = create_inst_tac($$->attribute->local, $1->attribute->local, "AND", $3->attribute->local); 
+			append_tac(&($$->attribute->code),create_inst_tac($$->attribute->local, $1->attribute->local, "AND", $3->attribute->local)); 
 			//tem q concatenar as listas...
 		     }
 
