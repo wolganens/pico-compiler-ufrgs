@@ -111,9 +111,9 @@
  /* A completar com seus tokens - compilar com 'yacc -d' */
 
 %%
-inicio: inicializa code 	{  $$ = $2; 
+inicio: inicializa code 	{ $$ = $2; 
 				FILE * out;
-				out = fopen ("teste.txt","a+");
+				out = fopen ("teste.txt","w+");
 				print_tac(out, $$->code);
 				//print_tac(out, NULL);
 				fclose(out);
@@ -227,29 +227,11 @@ listadupla: INT_LIT ':' INT_LIT		{  Node* filho1 = create_node( @1.first_line, i
 
 acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);
- 
-			//cat_tac(&($$->code), &($1->code));
-
-			/*FILE * out;
-			out = fopen ("teste.txt","a+");
-			print_tac(out, $$->code);
-			//print_tac(out, NULL);
-			fclose(out);*/
 
 		    }
 
      | comando ';' acoes   {  Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			      $$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); 
-
-				//cat_tac(&($1->code), &($3->code));
-				//cat_tac(&($$->code), &($1->code));
-
-				/*FILE * out;
-				out = fopen ("teste.txt","a+");
-				print_tac(out, $$->code);
-				//print_tac(out, NULL);
-				fclose(out);*/
-
 
 		    	   }
     ;
@@ -261,17 +243,6 @@ comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_nod
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
-			
-				/*cat_tac(&($1->code), &($3->code));
-				cat_tac(&($$->code), &($1->code)); */
-
-			/*FILE * out;
-			out = fopen ("teste.txt","a+");
-			print_tac(out, $$->code);
-			//print_tac(out, NULL);
-			fclose(out);*/
-
-
 			 }
        | enunciado { $$ = $1; }
        ;
@@ -294,12 +265,6 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		$$->desloc = variable->desloc;
 	    }
 
-			  		/*print_table(symbol_table);	//TESTANDO TABELA HASH
-			  		entry_t *search;
-			  		search = lookup(symbol_table, "variavel1");
-			  		printf("Nome: %s\n\n", search->name);
-					*/
-				   	//} 
 
       | IDF '[' listaexpr ']'     {  Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
 			             Node* filho2 = create_node( @2.first_line, rightbracket3_node, $2, NULL, NULL);
@@ -321,13 +286,7 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			append_inst_tac(&($3->code), new_instruction); 
 
 			cat_tac(&($1->code), &($3->code));
-			cat_tac(&($$->code), &($1->code));	
-			
-			/*FILE * out;
-			out = fopen ("teste.txt","a+");
-			print_tac(out, $$->code);
-			//print_tac(out, NULL);
-			fclose(out); */		
+			cat_tac(&($$->code), &($1->code));		
 		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
