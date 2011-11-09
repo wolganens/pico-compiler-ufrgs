@@ -85,8 +85,12 @@ void print_inst_tac (FILE * out, struct tac i)
 
 void print_tac (FILE * out, struct node_tac * code)
 {
+	int a;
 	int i = 1;
-	struct node_tac *aux = code;	
+	struct node_tac *aux = code;
+
+
+	fprintf(out, "%d\n%d\n", desloc, desloc_temp);	
 	
 	printf("\n\nPrograma Compilado:\n");
 	printf("===============================================\n");

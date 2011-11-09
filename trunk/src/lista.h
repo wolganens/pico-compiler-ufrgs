@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern int desloc;
+extern int desloc_temp;
+
 /** 
  * Estrutura de dados (que implementa uma intrucao TAC, ver Etapa 4), a ser
  * encadeada na lista.

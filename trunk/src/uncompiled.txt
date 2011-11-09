@@ -1,1 +1,1 @@
-int : i , f , l , m ; double : j ; char : k ; real : res ; i = 10 ; j = 9 ; k = i + j ; f = l * m ; l = k - i ; j = l / f ; i = ( ( j + k - l ) * m ) / f ; 
+int : i , f , l , m , j , k ; i = 10 ; j = 9 ; k = i + j ; f = l * m ; l = k - i ; j = l / f ; i = ( ( j + k - l ) * m ) / f ; 
