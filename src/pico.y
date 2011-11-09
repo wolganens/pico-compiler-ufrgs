@@ -142,8 +142,14 @@ inicializa:          	{
 			}   
 	;
 
-code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);  syntax_tree = $$; }
-    | acoes			 { $$ = $1; syntax_tree = $$; }
+code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);  syntax_tree = $$; 
+
+				  cat_tac(&($$->code), &($2->code));
+				 }
+    | acoes			 { $$ = $1; syntax_tree = $$; 
+
+				 cat_tac(&($$->code), &($2->code));
+				 }
     ;
 
 declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
@@ -228,10 +234,15 @@ listadupla: INT_LIT ':' INT_LIT		{  Node* filho1 = create_node( @1.first_line, i
 acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);
 
+			cat_tac(&($$->code), &($1->code));
+
 		    }
 
      | comando ';' acoes   {  Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			      $$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); 
+
+			cat_tac(&($1->code), &($3->code));
+			cat_tac(&($$->code), &($1->code));
 
 		    	   }
     ;
