@@ -1,1 +1,1 @@
-int : i , n ; double : x ; x = 2 ; i = 0 ; n = 10 ; while ( i <= n ) { x = x * 2 ; i = i + 1 ; } ; 
+int : a , b , c , d , i , n ; double : x , y ; x = 1 ; y = 1 ; a = 10 ; b = 100 ; c = 105 ; d = 103 ; a = a + b ; b = a - c ; c = 5 * d ; d = d / d ; a = ( ( a + b + c ) * a ) / b ; while ( i <= n ) { x = x * 2 ; i = i + 1 ; } ; 
