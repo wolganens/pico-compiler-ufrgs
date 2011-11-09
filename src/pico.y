@@ -108,11 +108,11 @@
  /* A completar com seus tokens - compilar com 'yacc -d' */
 
 %%
-inicio: inicializa code 	{  /* FILE * out;
-				    out = fopen ("teste.txt","w");
-				    
-				    //print_tac(out, $$->code);
-				    fclose(out); */
+inicio: inicializa code 	{  
+				FILE * out;
+				out = fopen ("teste.txt","w");
+				print_tac(out, $$->code);
+				fclose(out);
 				}
 	;
 
@@ -253,22 +253,21 @@ listadupla: INT_LIT ':' INT_LIT		{  Node* filho1 = create_node( @1.first_line, i
           ;
 
 acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
-    			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);  }
+    			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);  
+		    }
 
      | comando ';' acoes   {  Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
-    			      $$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); }
+    			      $$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); 
+		    	   }
     ;
 
 comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_node, $2, NULL, NULL);
 			     $$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);
 			      
-				printf("feito");
 			     struct tac* new_instruction = create_inst_tac($1->local, $3->local, NULL, NULL);
 			     append_inst_tac(&($3->code), new_instruction);
 			     
 			     cat_tac(&($$->code), &($3->code));
-				
-				
 			 }
        | enunciado { $$ = $1; }
        ;
@@ -302,13 +301,12 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
 
     			$$->local = new_temp(t_counter++);
-			
+
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "ADD", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
 
 			cat_tac(&($1->code), &($3->code));
-			cat_tac(&($$->code), &($1->code));
-		
+			cat_tac(&($$->code), &($1->code));			
 		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);

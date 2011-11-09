@@ -531,10 +531,10 @@ static const yytype_uint16 yyrline[] =
 {
        0,   111,   111,   119,   140,   141,   144,   147,   151,   156,
      178,   201,   202,   205,   209,   213,   217,   222,   227,   232,
-     237,   243,   248,   255,   258,   262,   273,   276,   290,   296,
-     297,   301,   314,   326,   337,   348,   352,   356,   358,   360,
-     363,   369,   370,   376,   383,   390,   391,   396,   398,   400,
-     404,   407,   410,   413,   416,   419,   422,   425,   428
+     237,   243,   248,   255,   261,   268,   276,   279,   293,   299,
+     300,   304,   320,   332,   343,   354,   358,   362,   364,   366,
+     369,   375,   376,   382,   389,   396,   397,   402,   404,   406,
+     410,   413,   416,   419,   422,   425,   428,   431,   434
 };
 #endif
 
@@ -1555,11 +1555,11 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 111 "pico.y"
-    {  /* FILE * out;
-				    out = fopen ("teste.txt","w");
-				    
-				    //print_tac(out, $$->code);
-				    fclose(out); */
+    {  
+				FILE * out;
+				out = fopen ("teste.txt","w");
+				print_tac(out, (yyval.no)->code);
+				fclose(out);
 				}
     break;
 
@@ -1797,45 +1797,48 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 255 "pico.y"
     {	Node* filho2 = create_node( (yylsp[(2) - (2)]).first_line, semicolon_node, (yyvsp[(2) - (2)].cadeia), NULL, NULL);
-    			(yyval.no) = create_node( (yyloc).first_line, acoes_node, NULL, (yyvsp[(1) - (2)].no), filho2, NULL);  }
+    			(yyval.no) = create_node( (yyloc).first_line, acoes_node, NULL, (yyvsp[(1) - (2)].no), filho2, NULL);  
+			(yyval.no)->local = (yyvsp[(1) - (2)].no)->local;
+			cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (2)].no)->code));
+		    }
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 258 "pico.y"
+#line 261 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, semicolon_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-    			      (yyval.no) = create_node( (yyloc).first_line, acoes_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); }
+    			      (yyval.no) = create_node( (yyloc).first_line, acoes_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
+			     // $$->local = $1->local;
+		  	    cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));
+		    	   }
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 262 "pico.y"
+#line 268 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, attr_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 			     (yyval.no) = create_node( (yyloc).first_line, comando_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
 			      
-				printf("feito");
 			     struct tac* new_instruction = create_inst_tac((yyvsp[(1) - (3)].no)->local, (yyvsp[(3) - (3)].no)->local, NULL, NULL);
 			     append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction);
 			     
 			     cat_tac(&((yyval.no)->code), &((yyvsp[(3) - (3)].no)->code));
-				
-				
 			 }
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 273 "pico.y"
+#line 276 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no); }
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 276 "pico.y"
+#line 279 "pico.y"
     { 	(yyval.no) = create_node((yylsp[(1) - (1)]).first_line, idf_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL);
 		
 		entry_t * variable;
@@ -1854,7 +1857,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 290 "pico.y"
+#line 293 "pico.y"
     {  Node* filho1 = create_node( (yylsp[(1) - (4)]).first_line, idf_node, (yyvsp[(1) - (4)].cadeia), NULL, NULL);
 			             Node* filho2 = create_node( (yylsp[(2) - (4)]).first_line, rightbracket3_node, (yyvsp[(2) - (4)].cadeia), NULL, NULL);
 				     Node* filho4 = create_node( (yylsp[(4) - (4)]).first_line, leftbracket3_node, (yyvsp[(4) - (4)].cadeia), NULL, NULL);
@@ -1864,14 +1867,14 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 296 "pico.y"
+#line 299 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no); }
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 297 "pico.y"
+#line 300 "pico.y"
     {    Node* filho2 = create_node( (yylsp[(1) - (3)]).first_line, comma_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				     (yyval.no) = create_node( (yyloc).first_line, listaexpr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -1879,25 +1882,28 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 301 "pico.y"
+#line 304 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, plus_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
 
     			(yyval.no)->local = new_temp(t_counter++);
-			
+
+			printf("local: %s\n", (yyval.no)->local);
+
 			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "ADD", (yyvsp[(3) - (3)].no)->local);
 			append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction); 
 
+
 			cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
 			cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));
-		
+						
 		     }
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 314 "pico.y"
+#line 320 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, minus_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
     			
@@ -1914,7 +1920,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 326 "pico.y"
+#line 332 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, mul_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
     			(yyval.no)->local = new_temp(t_counter++);
@@ -1930,7 +1936,7 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 337 "pico.y"
+#line 343 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, div_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
     			(yyval.no)->local = new_temp(t_counter++);
@@ -1946,7 +1952,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 348 "pico.y"
+#line 354 "pico.y"
     {  Node* filho1 = create_node( (yylsp[(1) - (3)]).first_line, rightbracket_node, (yyvsp[(1) - (3)].cadeia), NULL, NULL);
 			Node* filho3 = create_node( (yylsp[(3) - (3)]).first_line, leftbracket_node, (yyvsp[(3) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, filho1, (yyvsp[(2) - (3)].no), filho3, NULL); }
@@ -1955,7 +1961,7 @@ yyreduce:
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 352 "pico.y"
+#line 358 "pico.y"
     { (yyval.no) = create_node((yyloc).first_line, int_lit_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); 
   		       (yyval.no)->local = (yyvsp[(1) - (1)].cadeia);
 		       (yyval.no)->code = NULL; }
@@ -1964,28 +1970,28 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 356 "pico.y"
+#line 362 "pico.y"
     { (yyval.no) = create_node((yyloc).first_line, f_lit_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 358 "pico.y"
+#line 364 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no); }
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 360 "pico.y"
+#line 366 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no); }
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 363 "pico.y"
+#line 369 "pico.y"
     {  Node* filho1 = create_node( (yylsp[(1) - (4)]).first_line, idf_node, (yyvsp[(1) - (4)].cadeia), NULL, NULL);
 				      Node* filho2 = create_node( (yylsp[(2) - (4)]).first_line, rightbracket_node, (yyvsp[(2) - (4)].cadeia), NULL, NULL);
 				      Node* filho4 = create_node( (yylsp[(4) - (4)]).first_line, leftbracket_node, (yyvsp[(4) - (4)].cadeia), NULL, NULL);
@@ -1995,14 +2001,14 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 369 "pico.y"
+#line 375 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no) ;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 370 "pico.y"
+#line 376 "pico.y"
     {   Node* filho1 = create_node( (yylsp[(1) - (7)]).first_line, if_node, (yyvsp[(1) - (7)].cadeia), NULL, NULL);
 								Node* filho2 = create_node( (yylsp[(2) - (7)]).first_line, rightbracket_node, (yyvsp[(2) - (7)].cadeia), NULL, NULL);
 								Node* filho4 = create_node( (yylsp[(4) - (7)]).first_line, leftbracket_node, (yyvsp[(4) - (7)].cadeia), NULL, NULL);
@@ -2013,7 +2019,7 @@ yyreduce:
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 376 "pico.y"
+#line 382 "pico.y"
     {   Node* filho1 = create_node( (yylsp[(1) - (7)]).first_line, while_node, (yyvsp[(1) - (7)].cadeia), NULL, NULL);
 						    Node* filho2 = create_node( (yylsp[(2) - (7)]).first_line, rightbracket_node, (yyvsp[(2) - (7)].cadeia), NULL, NULL);
  						    Node* filho4 = create_node( (yylsp[(4) - (7)]).first_line, leftbracket_node, (yyvsp[(4) - (7)].cadeia), NULL, NULL);
@@ -2025,7 +2031,7 @@ yyreduce:
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 383 "pico.y"
+#line 389 "pico.y"
     {   Node* filho1 = create_node( (yylsp[(1) - (4)]).first_line, print_node, (yyvsp[(1) - (4)].cadeia), NULL, NULL);
 				   Node* filho2 = create_node( (yylsp[(2) - (4)]).first_line, rightbracket_node, (yyvsp[(2) - (4)].cadeia), NULL, NULL);
 				   Node* filho4 = create_node( (yylsp[(4) - (4)]).first_line, leftbracket_node, (yyvsp[(4) - (4)].cadeia), NULL, NULL);
@@ -2035,14 +2041,14 @@ yyreduce:
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 390 "pico.y"
+#line 396 "pico.y"
     { (yyval.no) = create_node((yylsp[(1) - (1)]).first_line, end_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 391 "pico.y"
+#line 397 "pico.y"
     {   Node* filho1 = create_node( (yylsp[(1) - (3)]).first_line, else_node, (yyvsp[(1) - (3)].cadeia), NULL, NULL);
 				       Node* filho3 = create_node( (yylsp[(3) - (3)]).first_line, end_node, (yyvsp[(3) - (3)].cadeia), NULL, NULL);
     			    	       (yyval.no) = create_node( (yyloc).first_line, fiminstcontrole_node, NULL, filho1, (yyvsp[(2) - (3)].no), filho3, NULL);  }
@@ -2051,21 +2057,21 @@ yyreduce:
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 396 "pico.y"
+#line 402 "pico.y"
     { (yyval.no) = create_node((yylsp[(1) - (1)]).first_line, true_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 398 "pico.y"
+#line 404 "pico.y"
     { (yyval.no) = create_node((yylsp[(1) - (1)]).first_line, false_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 400 "pico.y"
+#line 406 "pico.y"
     {  Node* filho1 = create_node( (yylsp[(1) - (3)]).first_line, rightbracket_node, (yyvsp[(1) - (3)].cadeia), NULL, NULL);
        			      Node* filho3 = create_node( (yylsp[(3) - (3)]).first_line, leftbracket_node, (yyvsp[(3) - (3)].cadeia), NULL, NULL);  
     			      (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, filho1, (yyvsp[(2) - (3)].no), filho3, NULL); }
@@ -2074,7 +2080,7 @@ yyreduce:
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 404 "pico.y"
+#line 410 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, and_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2082,7 +2088,7 @@ yyreduce:
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 407 "pico.y"
+#line 413 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, or_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2090,7 +2096,7 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 410 "pico.y"
+#line 416 "pico.y"
     {   Node* filho1 = create_node( (yylsp[(1) - (2)]).first_line, not_node, (yyvsp[(1) - (2)].cadeia), NULL, NULL);
     			    	       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, filho1, (yyvsp[(2) - (2)].no), NULL);  }
     break;
@@ -2098,7 +2104,7 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 413 "pico.y"
+#line 419 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, greater_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2106,7 +2112,7 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 416 "pico.y"
+#line 422 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, lower_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2114,7 +2120,7 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 419 "pico.y"
+#line 425 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, le_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2122,7 +2128,7 @@ yyreduce:
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 422 "pico.y"
+#line 428 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, ge_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2130,7 +2136,7 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 425 "pico.y"
+#line 431 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, eq_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2138,7 +2144,7 @@ yyreduce:
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 428 "pico.y"
+#line 434 "pico.y"
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, ne_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
     break;
@@ -2146,7 +2152,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 2150 "y.tab.c"
+#line 2156 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2365,6 +2371,6 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 432 "pico.y"
+#line 438 "pico.y"
 
 
