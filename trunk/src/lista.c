@@ -91,10 +91,8 @@ void print_tac (FILE * out, struct node_tac * code)
 	printf("\n\nPrograma Compilado:\n");
 	printf("===============================================\n");
 	while(aux != NULL){
-		fprintf(out, "%03d:   %s := %s %s %s;\n", i, ((aux->inst->res)!=NULL?aux->inst->res:""), ((aux->inst->arg1)!=NULL?aux->inst->arg1:""), 
-((aux->inst->op)!=NULL?aux->inst->op:""), ((aux->inst->arg2)!=NULL?aux->inst->arg2:""));
-		fprintf(stdout, "%03d:   %s := %s %s %s;\n", i, ((aux->inst->res)!=NULL?aux->inst->res:""), ((aux->inst->arg1)!=NULL?aux->inst->arg1:""), 
-((aux->inst->op)!=NULL?aux->inst->op:""), ((aux->inst->arg2)!=NULL?aux->inst->arg2:""));
+		fprintf(out, "%03d:   %s := %s %s %s;\n", i, 	((aux->inst->res) != NULL? aux->inst->res: ""), ((aux->inst->arg1) != NULL? aux->inst->arg1: ""), 
+								((aux->inst->op) != NULL? aux->inst->op: ""), ((aux->inst->arg2) != NULL? aux->inst->arg2: ""));
 		aux = aux->next;
 		//printf("passei aqui");
 		i++;

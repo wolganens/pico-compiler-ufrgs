@@ -110,7 +110,6 @@
 
 %%
 inicio: inicializa code 	{ $$ = $2; 
-				print_tac(stdout, $$->code);
 				}
 	;
 
@@ -140,9 +139,11 @@ code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1
 			           syntax_tree = $$; 
 
 				   cat_tac(&($$->code), &($2->code));
+				   print_tac (stdout, $$->code);
 				 }
     | acoes			 { $$ = $1;
     				   syntax_tree = $$; 
+    				   print_tac (stdout, $$->code);
 				 }
     ;
 
@@ -231,6 +232,8 @@ acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node,
     			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);
 			
 			cat_tac(&($$->code), &($1->code));
+			
+			//print_tac (stdout, $$->code);
 		    }
 
      | comando ';' acoes   {  Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
@@ -238,7 +241,9 @@ acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node,
 
 			      cat_tac(&($1->code), &($3->code));
 			      cat_tac(&($$->code), &($1->code));
-
+			      
+			     //print_tac (stdout, $$->code);
+			      
 		    	   }
     ;
 
@@ -257,6 +262,9 @@ comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_nod
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
+			     
+			     //print_tac (stdout, $$->code);
+			     
 			 }
        | enunciado { $$ = $1; }
        ;
@@ -296,7 +304,9 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			append_inst_tac(&($3->code), new_instruction); 
 
 			cat_tac(&($1->code), &($3->code));
-			cat_tac(&($$->code), &($1->code));	
+			cat_tac(&($$->code), &($1->code));
+			
+			//print_tac (stdout, $$->code);	
 		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
@@ -309,6 +319,8 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
 			cat_tac(&($1->code), &($3->code));
 			cat_tac(&($$->code), &($1->code));
+			
+			//print_tac (stdout, $$->code);
 		     }
 
     | expr '*' expr  {  Node* filho2 = create_node( @2.first_line, mul_node, $2, NULL, NULL);
@@ -320,6 +332,8 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
 			cat_tac(&($1->code), &($3->code));
 			cat_tac(&($$->code), &($1->code));
+			
+			//print_tac (stdout, $$->code);
 		     }
 
     | expr '/' expr  {  Node* filho2 = create_node( @2.first_line, div_node, $2, NULL, NULL);
@@ -331,6 +345,8 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
 			cat_tac(&($1->code), &($3->code));
 			cat_tac(&($$->code), &($1->code));
+			
+			//print_tac (stdout, $$->code);
 		     }
 		     
     | '(' expr ')'   {  Node* filho1 = create_node( @1.first_line, rightbracket_node, $1, NULL, NULL);
@@ -339,6 +355,8 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
 			$$->local = $2->local;
 		        $$->code = $2->code;
+		        
+		       // print_tac (stdout, $$->code);
 			
 		     }
 
@@ -364,14 +382,16 @@ enunciado: expr { $$ = $1 ;}
 								Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
 								Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
 								Node* filho5 = create_node( @5.first_line, then_node, $5, NULL, NULL);
-    			  $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, $7, NULL);  }
+    			  $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, $7, NULL);  
+    			  cat_tac(&($$->code), &($6->code));}
 
          | WHILE '(' expbool ')' '{' acoes '}'  {   Node* filho1 = create_node( @1.first_line, while_node, $1, NULL, NULL);
 						    Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
  						    Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
          					    Node* filho5 = create_node( @5.first_line, rightbracket2_node, $5, NULL, NULL);
  						    Node* filho7 = create_node( @7.first_line, leftbracket2_node, $7, NULL, NULL);
-    	 $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, filho7, NULL);  }
+    	 $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, filho7, NULL);
+    	 cat_tac(&($$->code), &($6->code));  }
     	 
     	 | PRINTF '(' expr ')' {   Node* filho1 = create_node( @1.first_line, print_node, $1, NULL, NULL);
 				   Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
@@ -383,7 +403,9 @@ enunciado: expr { $$ = $1 ;}
 fiminstcontrole: END  { $$ = create_node(@1.first_line, end_node, $1, NULL, NULL); } 
                | ELSE acoes END    {   Node* filho1 = create_node( @1.first_line, else_node, $1, NULL, NULL);
 				       Node* filho3 = create_node( @3.first_line, end_node, $3, NULL, NULL);
-    			    	       $$ = create_node( @$.first_line, fiminstcontrole_node, NULL, filho1, $2, filho3, NULL);  } 
+    			    	       $$ = create_node( @$.first_line, fiminstcontrole_node, NULL, filho1, $2, filho3, NULL);  
+    			    	       cat_tac(&($$->code), &($2->code));
+    			    	   } 
                ;
 
 expbool: TRUE   { $$ = create_node(@1.first_line, true_node, $1, NULL, NULL); } 
