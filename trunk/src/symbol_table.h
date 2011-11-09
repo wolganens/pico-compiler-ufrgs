@@ -18,6 +18,7 @@
  */
 typedef struct {
    char* name;  /**< um string que representa o nome de uma variavel. */
+   char* name2;  /**< um string que representa o nome de uma variavel. */
    int type;    /**< representacao do tipo da variavel. */
    int size;    /**< numero de Bytes necessarios para armazenamento. */
    int desloc;  /**< Endereco da proxima variavel. */
