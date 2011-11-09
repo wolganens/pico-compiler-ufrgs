@@ -264,15 +264,16 @@ comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_nod
 
 lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		
-		entry_t ** variable;
+		entry_t * variable;
 		
-		if (((*variable) = lookup(symbol_table, $$->lexeme)) == NULL)
+		if ((variable = lookup(symbol_table, $$->lexeme)) == NULL)
 		{
 			printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 			exit(1);
 		}
 		
-		$$->local = (*variable)->name2;
+		$$->local = variable->name;
+		
 		$$->code  = NULL;
 	    }
 
