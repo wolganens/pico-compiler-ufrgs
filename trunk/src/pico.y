@@ -17,8 +17,6 @@
   int l_counter = 0;
   
   symbol_t symbol_table;
-  
-  Node * declaration;
 %}
 
 %error-verbose
@@ -254,6 +252,8 @@ comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_nod
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
+			     
+			     print_tac(stdout, $$->code);
 			 }
        | enunciado { $$ = $1; }
        ;
@@ -264,7 +264,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		
 		if ((variable = lookup(symbol_table, $$->lexeme)) == NULL)
 		{
-			printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
+			printf("Error (l %d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 			exit(1);
 		}
 		
