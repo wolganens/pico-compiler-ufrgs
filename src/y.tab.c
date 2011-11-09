@@ -1826,15 +1826,15 @@ yyreduce:
 #line 265 "pico.y"
     { 	(yyval.no) = create_node((yylsp[(1) - (1)]).first_line, idf_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL);
 		
-		entry_t * variable;
+		entry_t ** variable;
 		
-		if ((variable = lookup(symbol_table, (yyval.no)->lexeme)) == NULL)
+		if (((*variable) = lookup(symbol_table, (yyval.no)->lexeme)) == NULL)
 		{
 			printf("Error (%d). The variable %s was not declared.\n", (yyval.no)->num_line, (yyval.no)->lexeme);
 			exit(1);
 		}
 		
-		(yyval.no)->local = variable->name;
+		(yyval.no)->local = (*variable)->name2;
 		(yyval.no)->code  = NULL;
 	    }
     break;
