@@ -15,7 +15,7 @@
   int t_counter = 0;
   int l_counter = 0;
 
-  //Node * aux;
+  Node * aux;
   //Node* aux = (Node*) malloc(sizeof(Node));
 
   
@@ -154,9 +154,10 @@ declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semic
        	   ;
 
 declaracao: tipo ':' listadeclaracao {   Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
-					 $$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL);  
-					 aux->type = $1->type;
-					 aux->size = $1->size;
+					 $$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL); 
+					 //aux->type = $1->type;	//variavel global auxiliar
+					 //printf("Type: %d", aux->type);
+					 //aux->size = $1->size;
 				     }
 	   ;
 
@@ -165,16 +166,13 @@ listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL
 			   $$->type = $<no>-1->type;
 			   $$->size = $<no>-1->size;
 			   $$->desloc = $<no>-1->desloc;
-			   
 			   entry_t *variable = (entry_t *) malloc (sizeof(entry_t));
 			   variable->name = $$->lexeme;
 			   variable->type = $$->type;
 			   variable->size = $$->size;
 			   variable->desloc = desloc;
 			   desloc = desloc + $$->size;
-
 			   printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
-
 			   if(insert(&symbol_table, variable))
 			   {
 				printf("Error (%d). The variable %s was redeclared.\n", $$->num_line, $$->lexeme);
@@ -190,7 +188,8 @@ listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL
 				   
 			}			 
 
-               | IDF ',' listadeclaracao   {   Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
+               | IDF ',' listadeclaracao   {   printf("passei aqui");
+					       Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
 					       Node* filho2 = create_node( @2.first_line, comma_node, $2, NULL, NULL);
 					       $$ = create_node( @$.first_line, listadeclaracao_node, NULL, filho1, filho2, $3, NULL);
 					       
@@ -201,16 +200,16 @@ listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL
 					       /*$$->type = aux->type;	//outra alternativa: usar variavel global auxiliar
 					       $$->size = aux->size;*/
 
-					   
 					       entry_t *variable = (entry_t *) malloc (sizeof(entry_t));
 					       variable->name = $$->lexeme;
 					       variable->type = $$->type;
 					       variable->size = $$->size;
 					       variable->desloc = desloc;
 					       desloc = desloc + $$->size;
+					       printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
 
-						printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
-					   
+					       printf("passei aqui");
+
 					       if(insert(&symbol_table, variable))
 					       {
 					   	   printf("Error (%d). The variable %s was redeclared.\n", $$->num_line, $$->lexeme);
