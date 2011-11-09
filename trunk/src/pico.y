@@ -9,17 +9,16 @@
   #include "symbol_table.h"
   #include "labels.h"
   #include "lista.h"
+  #include "inherited.h"
 
   int desloc = 0;
 
   int t_counter = 0;
   int l_counter = 0;
-
-  Node * aux;
-  //Node* aux = (Node*) malloc(sizeof(Node));
-
   
   symbol_t symbol_table;
+  
+  Node * declaration;
 %}
 
 %error-verbose
@@ -113,11 +112,11 @@
 
 %%
 inicio: inicializa code 	{  $$ = $2; 
-				/*FILE * out;
+				FILE * out;
 				out = fopen ("teste.txt","a+");
 				print_tac(out, $$->code);
 				//print_tac(out, NULL);
-				fclose(out);*/
+				fclose(out);
 				}
 	;
 
@@ -127,18 +126,19 @@ inicializa:          	{
 			/*struct node_tac * teste = (struct node_tac *)malloc(sizeof(struct node_tac));
 			teste->inst = create_inst_tac("res", "arg1", "op", "arg2");
 			struct node_tac * teste2 = (struct node_tac *)malloc(sizeof(struct node_tac));
-			teste2->inst = create_inst_tac("res'", "arg1'", "op'", "arg2'");
+			teste2->inst = create_inst_tac("res'", "arg1'", "op'", "arg2'");*/
 
 			//append_inst_tac(&teste, teste2->inst); //NAO SEI EXATAMENTE PARA QUE SERVE, ATÉ AGORA ELA INSERE INST NO FINAL DA LISTA DO 1º ARGUMENTO.
-			cat_tac(&teste, &teste2);		
+			/*cat_tac(&teste, &teste2);		
 
 			FILE * out;
 			out = fopen ("teste.txt","a+");
 			//print_tac(out, syntax_tree->code);
 			print_tac(out, teste);
-			fclose(out);*/
+			fclose(out);
 			
-			init_table(&symbol_table); 
+
+			init_table(&symbol_table); */
 			}   
 	;
 
@@ -153,70 +153,23 @@ declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semic
     			    		    $$ = create_node( @1.first_line, declaracoes_node, NULL, $1, $2, filho3, NULL);  }
        	   ;
 
-declaracao: tipo ':' listadeclaracao {   Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
-					 $$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL); 
-					 //aux->type = $1->type;	//variavel global auxiliar
-					 //printf("Type: %d", aux->type);
-					 //aux->size = $1->size;
+declaracao: tipo ':' listadeclaracao {	Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
+					$$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL);
+
+					do_symbol_insertion ($$, &symbol_table, $1->type, $1->size);
+					
+					print_table(symbol_table);
 				     }
 	   ;
 
-listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
-			   
-			   $$->type = $<no>-1->type;
-			   $$->size = $<no>-1->size;
-			   $$->desloc = $<no>-1->desloc;
-			   entry_t *variable = (entry_t *) malloc (sizeof(entry_t));
-			   variable->name = $$->lexeme;
-			   variable->type = $$->type;
-			   variable->size = $$->size;
-			   variable->desloc = desloc;
-			   desloc = desloc + $$->size;
-			   printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
-			   if(insert(&symbol_table, variable))
-			   {
-				printf("Error (%d). The variable %s was redeclared.\n", $$->num_line, $$->lexeme);
-				exit(1);
-			   }	
-			
-				/*FILE * out;
-				out = fopen ("teste.txt","a+");
-				print_tac(out, $$->code);
-				//print_tac(out, NULL);
-				fclose(out); */
+listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);	}
+						 
 
-				   
-			}			 
-
-               | IDF ',' listadeclaracao   {   printf("passei aqui");
-					       Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
-					       Node* filho2 = create_node( @2.first_line, comma_node, $2, NULL, NULL);
-					       $$ = create_node( @$.first_line, listadeclaracao_node, NULL, filho1, filho2, $3, NULL);
-					       
-					       $$->type = $<no>-1->type;
-					       $$->size = $<no>-1->size;
-					       $$->desloc = $<no>-1->desloc;
-
-					       /*$$->type = aux->type;	//outra alternativa: usar variavel global auxiliar
-					       $$->size = aux->size;*/
-
-					       entry_t *variable = (entry_t *) malloc (sizeof(entry_t));
-					       variable->name = $$->lexeme;
-					       variable->type = $$->type;
-					       variable->size = $$->size;
-					       variable->desloc = desloc;
-					       desloc = desloc + $$->size;
-					       printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
-
-					       printf("passei aqui");
-
-					       if(insert(&symbol_table, variable))
-					       {
-					   	   printf("Error (%d). The variable %s was redeclared.\n", $$->num_line, $$->lexeme);
-						   exit(1);
-					       }	
-			   		   }
-               ;
+               | IDF ',' listadeclaracao {	Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);        					
+               					Node* filho2 = create_node( @2.first_line, comma_node, $2, NULL, NULL);               					
+						$$ = create_node( @$.first_line, listadeclaracao_node, NULL, filho1, filho2, $3, NULL);
+					 }
+		;
 
 tipo: tipounico { $$ = $1; }
     | tipolista { $$ = $1; }
@@ -312,11 +265,11 @@ comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_nod
 				/*cat_tac(&($1->code), &($3->code));
 				cat_tac(&($$->code), &($1->code)); */
 
-			FILE * out;
+			/*FILE * out;
 			out = fopen ("teste.txt","a+");
 			print_tac(out, $$->code);
 			//print_tac(out, NULL);
-			fclose(out);
+			fclose(out);*/
 
 
 			 }
