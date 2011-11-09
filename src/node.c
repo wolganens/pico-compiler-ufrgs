@@ -105,7 +105,7 @@ int nb_of_children(Node* n)
 {
 	Nodelist *backward = n->children;
 	
-	int i;
+	int i = 0;
 	
 	if (n == NULL)
 		exit(-1);

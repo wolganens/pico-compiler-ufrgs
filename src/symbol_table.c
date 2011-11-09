@@ -176,6 +176,7 @@ int print_table(symbol_t table) {
  * @return o numero de entradas na tabela.
  */
 int print_file_table(FILE* out, symbol_t table) {
+    printf("PRINTING SYMBOL TABLE\n\n");
     int entry_count = 0;
     // varre a tabela de símbolos
     int x = 0;
@@ -196,7 +197,7 @@ int print_file_table(FILE* out, symbol_t table) {
         }
     }
     
-    
+    printf("END OF PRINTING SYMBOL TABLE\n\n");
     return entry_count;
 }
 
