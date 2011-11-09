@@ -146,15 +146,17 @@ code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1
 				 }
     | acoes			 { $$ = $1; syntax_tree = $$; 
 
-				 cat_tac(&($$->code), &($2->code));
+				 cat_tac(&($$->code), &($1->code));
 				 }
     ;
 
 declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
-    			    	$$ = create_node( @$.first_line, declaracoes_node, NULL, $1, filho2, NULL);  }
+    			    	$$ = create_node( @$.first_line, declaracoes_node, NULL, $1, filho2, NULL);  
+			    }
     			    	
            | declaracoes declaracao ';' {   Node* filho3 = create_node( @3.first_line, semicolon_node, $3, NULL, NULL);
-    			    		    $$ = create_node( @1.first_line, declaracoes_node, NULL, $1, $2, filho3, NULL);  }
+    			    		    $$ = create_node( @1.first_line, declaracoes_node, NULL, $1, $2, filho3, NULL);  
+					}
        	   ;
 
 declaracao: tipo ':' listadeclaracao {	Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
@@ -231,7 +233,7 @@ listadupla: INT_LIT ':' INT_LIT		{  Node* filho1 = create_node( @1.first_line, i
 
 acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);
-
+			cat_tac(&($$->code), &($1->code));
 			cat_tac(&($$->code), &($1->code));
 
 		    }
@@ -248,7 +250,7 @@ acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node,
 comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_node, $2, NULL, NULL);
 			     $$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);
 			      
-			     struct tac* new_instruction = create_inst_tac($1->local, $3->local, "=", NULL);
+			     struct tac* new_instruction = create_inst_tac($1->local, $3->local, NULL, NULL);
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
@@ -297,7 +299,13 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			append_inst_tac(&($3->code), new_instruction); 
 
 			cat_tac(&($1->code), &($3->code));
-			cat_tac(&($$->code), &($1->code));		
+			cat_tac(&($$->code), &($1->code));	
+
+				FILE * out;
+				out = fopen ("teste.txt","w+");
+				print_tac(out, $$->code);
+				//print_tac(out, NULL);
+				fclose(out);
 		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);

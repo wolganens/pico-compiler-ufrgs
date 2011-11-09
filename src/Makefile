@@ -8,8 +8,8 @@ etapa3: pico
 doc: Doxyfile $(HEAD1)
 	doxygen Doxyfile
 
-pico: lex.yy.c y.tab.c tokens.h node.o lista.o symbol_table.o inherited.o labels.o main-pico.c inherited.o
-	$(CC) $(LDFLAGS) -o pico lex.yy.c y.tab.c main-pico.c node.o labels.o lista.o symbol_table.o inherited.o -lfl
+pico: lex.yy.c y.tab.c tokens.h node.o lista.o inherited.o symbol_table.o labels.o main-pico.c 
+	$(CC) $(LDFLAGS) -o pico lex.yy.c y.tab.c main-pico.c node.o inherited.o labels.o lista.o symbol_table.o -lfl
 
 lex.yy.c: scanner.l tokens.h
 	flex scanner.l;
@@ -19,11 +19,11 @@ tokens.h: y.tab.c
 y.tab.c: pico.y 
 	yacc -d pico.y ; mv y.tab.h tokens.h
 
-inherited.o: inherited.c inherited.h node.o lista.o symbol_table.o
-	$(CC) $(LDFLAGS) -c inherited.c
-
 node.o: node.c node.h
 	$(CC) $(LDFLAGS) -c node.c
+
+inherited.o: inherited.c inherited.h node.o lista.o symbol_table.o
+	$(CC) $(LDFLAGS) -c inherited.c
 
 lista.o: lista.c lista.h
 	$(CC) $(LDFLAGS) -c lista.c
