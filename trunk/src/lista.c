@@ -71,11 +71,11 @@ struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, c
 	return new_tac;
 }
 
-/*void print_inst_tac (FILE * out, struct tac i)
+void print_inst_tac (FILE * out, struct tac i)
 {
-	fprintf(out, "%d %s %s %s", i.res, i.op, i.arg1, i.arg2);
+	fprintf(out, "%s %s %s %s", i.res, i.op, i.arg1, i.arg2);
 }
-*/
+
 
 void print_tac (FILE * out, struct node_tac * code)
 {
@@ -85,9 +85,10 @@ void print_tac (FILE * out, struct node_tac * code)
 	printf("\n\nPrograma Compilado:\n");
 	printf("===============================================\n");
 	while(aux != NULL){
-		fprintf(out, "%03d: %s %s %s %s\n", i, aux->inst->res, aux->inst->op, aux->inst->arg1, aux->inst->arg2);
-		printf("%03d: %s %s %s %s\n", i, aux->inst->res, aux->inst->op, aux->inst->arg1, aux->inst->arg2);
+		fprintf(out, "%03d:   %s %s %s %s\n", i, aux->inst->res, aux->inst->op, aux->inst->arg1, aux->inst->arg2); //3 espaços em branco obrigatórios aqui
+		printf("%03d:   %s %s %s %s\n", i, aux->inst->res, aux->inst->op, aux->inst->arg1, aux->inst->arg2);
 		aux = aux->next;
+		//printf("passei aqui");
 		i++;
 	}
 	printf("===============================================\n\n");

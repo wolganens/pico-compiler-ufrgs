@@ -97,15 +97,15 @@ typedef struct _nodelist {
 } Nodelist;
 
 typedef struct _node {
-   int 		num_line;   	/**< numero de linha. */
-   char 	*lexeme;   	/**< o lexema retornado pelo analizador lexical. */
-   Node_type 	type; 		/**< Um dos valores definidos acima pelos # defines. */
-   char		*local;		
-   struct node_tac * code;
-   int 		size;
-   Nodelist 	*children;  	/**< Lista de filhos da arvore. */
-   int 		height;		/**< Altura do nó. */
-   int 		desloc;
+   int 			num_line;   	/**< numero de linha. */
+   char 		*lexeme;   	/**< o lexema retornado pelo analizador lexical. */
+   Node_type 		type; 		/**< Um dos valores definidos acima pelos # defines. */
+   char			*local;		
+   struct node_tac 	*code;
+   int 			size;
+   Nodelist 		*children;  	/**< Lista de filhos da arvore. */
+   int 			height;		/**< Altura do nó. */
+   int 			desloc;
 } Node;
 
 extern Node * syntax_tree;

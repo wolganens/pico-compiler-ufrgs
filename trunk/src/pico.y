@@ -108,30 +108,32 @@
  /* A completar com seus tokens - compilar com 'yacc -d' */
 
 %%
-inicio: inicializa code 	{  
-				FILE * out;
-				out = fopen ("teste.txt","w");
+inicio: inicializa code 	{  $$ = $2; 
+				/*FILE * out;
+				out = fopen ("teste.txt","a+");
 				print_tac(out, $$->code);
-				fclose(out);
+				//print_tac(out, NULL);
+				fclose(out);*/
 				}
 	;
 
 inicializa:          	{
-			/*FUNÇÕES DE TESTE DA LISTA.C
+			//FUNÇÕES DE TESTE DA LISTA.C
 
-			struct node_tac * teste = (struct node_tac *)malloc(sizeof(struct node_tac));
+			/*struct node_tac * teste = (struct node_tac *)malloc(sizeof(struct node_tac));
 			teste->inst = create_inst_tac("res", "arg1", "op", "arg2");
 			struct node_tac * teste2 = (struct node_tac *)malloc(sizeof(struct node_tac));
 			teste2->inst = create_inst_tac("res'", "arg1'", "op'", "arg2'");
 
 			//append_inst_tac(&teste, teste2->inst); //NAO SEI EXATAMENTE PARA QUE SERVE, ATÉ AGORA ELA INSERE INST NO FINAL DA LISTA DO 1º ARGUMENTO.
-			//cat_tac(&teste, &teste2);		
+			cat_tac(&teste, &teste2);		
 
 			FILE * out;
-			out = fopen ("teste.txt","w");
-			print_tac(out, syntax_tree->code);
-			fclose(out);
-			*/
+			out = fopen ("teste.txt","a+");
+			//print_tac(out, syntax_tree->code);
+			print_tac(out, teste);
+			fclose(out);*/
+			
 
 			init_table(&symbol_table); 
 			}   
@@ -166,13 +168,21 @@ listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL
 			   variable->desloc = desloc;
 			   desloc = desloc + $$->size;
 
-			//printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
+			   printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
 
 			   if(insert(&symbol_table, variable))
 			   {
 				printf("Error (%d). The variable %s was redeclared.\n", $$->num_line, $$->lexeme);
 				exit(1);
-			   }				   
+			   }	
+			
+				/*FILE * out;
+				out = fopen ("teste.txt","a+");
+				print_tac(out, $$->code);
+				//print_tac(out, NULL);
+				fclose(out); */
+
+				   
 			}			 
 
                | IDF ',' listadeclaracao   {   Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
@@ -189,6 +199,8 @@ listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL
 					       variable->size = $$->size;
 					       variable->desloc = desloc;
 					       desloc = desloc + $$->size;
+
+						printf("%03d: lexema:%s. tamanho:%d. desloc:%d.\n", $$->num_line, $$->lexeme, $$->size, desloc);
 					   
 					       if(insert(&symbol_table, variable))
 					       {
@@ -253,21 +265,52 @@ listadupla: INT_LIT ':' INT_LIT		{  Node* filho1 = create_node( @1.first_line, i
           ;
 
 acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
-    			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);  
+    			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);
+ 
+			//cat_tac(&($$->code), &($1->code));
+
+			/*FILE * out;
+			out = fopen ("teste.txt","a+");
+			print_tac(out, $$->code);
+			//print_tac(out, NULL);
+			fclose(out);*/
+
 		    }
 
      | comando ';' acoes   {  Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			      $$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); 
+
+				//cat_tac(&($1->code), &($3->code));
+				//cat_tac(&($$->code), &($1->code));
+
+				/*FILE * out;
+				out = fopen ("teste.txt","a+");
+				print_tac(out, $$->code);
+				//print_tac(out, NULL);
+				fclose(out);*/
+
+
 		    	   }
     ;
 
 comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_node, $2, NULL, NULL);
 			     $$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);
 			      
-			     struct tac* new_instruction = create_inst_tac($1->local, $3->local, NULL, NULL);
+			     struct tac* new_instruction = create_inst_tac($1->local, $3->local, "=", NULL);
 			     append_inst_tac(&($3->code), new_instruction);
-			     
+			
 			     cat_tac(&($$->code), &($3->code));
+			
+				/*cat_tac(&($1->code), &($3->code));
+				cat_tac(&($$->code), &($1->code)); */
+
+			FILE * out;
+			out = fopen ("teste.txt","a+");
+			print_tac(out, $$->code);
+			//print_tac(out, NULL);
+			fclose(out);
+
+
 			 }
        | enunciado { $$ = $1; }
        ;
@@ -284,7 +327,18 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		
 		$$->local = variable->name;
 		$$->code = NULL;
+
+		$$->type = variable->type;
+		$$->size = variable->size;
+		$$->desloc = variable->desloc;
 	    }
+
+			  		/*print_table(symbol_table);	//TESTANDO TABELA HASH
+			  		entry_t *search;
+			  		search = lookup(symbol_table, "variavel1");
+			  		printf("Nome: %s\n\n", search->name);
+					*/
+				   	//} 
 
       | IDF '[' listaexpr ']'     {  Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
 			             Node* filho2 = create_node( @2.first_line, rightbracket3_node, $2, NULL, NULL);
@@ -306,7 +360,13 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			append_inst_tac(&($3->code), new_instruction); 
 
 			cat_tac(&($1->code), &($3->code));
-			cat_tac(&($$->code), &($1->code));			
+			cat_tac(&($$->code), &($1->code));	
+			
+			/*FILE * out;
+			out = fopen ("teste.txt","a+");
+			print_tac(out, $$->code);
+			//print_tac(out, NULL);
+			fclose(out); */		
 		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
@@ -345,7 +405,12 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 		     
     | '(' expr ')'   {  Node* filho1 = create_node( @1.first_line, rightbracket_node, $1, NULL, NULL);
 			Node* filho3 = create_node( @3.first_line, leftbracket_node, $3, NULL, NULL);
-    			$$ = create_node( @$.first_line, expr_node, NULL, filho1, $2, filho3, NULL); }
+    			$$ = create_node( @$.first_line, expr_node, NULL, filho1, $2, filho3, NULL); 
+
+			$$->local = $2->local;
+		        $$->code = $2->code;
+			
+		     }
 
     | INT_LIT        { $$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); 
   		       $$->local = $1;
