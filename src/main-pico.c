@@ -9,19 +9,27 @@ FILE *file;
 
 int main(int argc, char* argv[]) 
 {
-	if (argc != 2)
+	if (argc != 4)
 	{
-		printf("Try: %s <input_file>. Try again!\n", argv[0]);
+		printf("Try: %s -0  <input_file>.'tac' <input_file>'pico'. Try again!\n", argv[0]);
 		exit(-1);
 	}
+	if (argv[1] == "-o")
+	{
+		printf("Try: %s -0  <input_file>.'tac' <input_file>'pico'. Try again!\n", argv[0]);
+		exit(-1);
+	} 
 	
-	yyin = fopen(argv[1], "r");
+	yyin = fopen(argv[3], "r");
+	
 	
 	if (!yyin)
 	{
-		printf("Error: Could not find %s. Try again!\n", argv[1]);
+		printf("Error: Could not find %s. Try again!\n", argv[3]);
 		exit(-1);
 	}
+
+
 
 	progname = argv[0];
 	
@@ -29,6 +37,10 @@ int main(int argc, char* argv[])
 		printf("OKAY.\n");
 	else 
 		printf("ERROR.\n");
+	
+	//FILE * out = fopen(argv[3], "w");
+	
+	//print_tac(out, syntax_tree->code);
 	
 	file = fopen("uncompiled.txt", "w+");
 
