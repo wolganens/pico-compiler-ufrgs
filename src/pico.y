@@ -14,6 +14,10 @@
 
   int t_counter = 0;
   int l_counter = 0;
+
+  //Node * aux;
+  //Node* aux = (Node*) malloc(sizeof(Node));
+
   
   symbol_t symbol_table;
 %}
@@ -134,7 +138,6 @@ inicializa:          	{
 			print_tac(out, teste);
 			fclose(out);*/
 			
-
 			init_table(&symbol_table); 
 			}   
 	;
@@ -152,6 +155,8 @@ declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semic
 
 declaracao: tipo ':' listadeclaracao {   Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
 					 $$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL);  
+					 aux->type = $1->type;
+					 aux->size = $1->size;
 				     }
 	   ;
 
@@ -192,6 +197,10 @@ listadeclaracao: IDF	{  $$ = create_node(@1.first_line, idf_node, $1, NULL, NULL
 					       $$->type = $<no>-1->type;
 					       $$->size = $<no>-1->size;
 					       $$->desloc = $<no>-1->desloc;
+
+					       /*$$->type = aux->type;	//outra alternativa: usar variavel global auxiliar
+					       $$->size = aux->size;*/
+
 					   
 					       entry_t *variable = (entry_t *) malloc (sizeof(entry_t));
 					       variable->name = $$->lexeme;
