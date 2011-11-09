@@ -12,6 +12,7 @@
   #include "inherited.h"
 
   int desloc = 0;
+  int desloc_temp = 0;
 
   int t_counter = 0;
   int l_counter = 0;
@@ -290,7 +291,9 @@ listaexpr: expr   { $$ = $1; }
 expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
 
-    			$$->local = new_temp(t_counter++);
+    			$$->local = new_temp(desloc_temp);
+			desloc_temp = desloc_temp + 4;
+			t_counter++;
 
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "ADD", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
@@ -302,7 +305,9 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
     			
-    			$$->local = new_temp(t_counter++);
+    			$$->local = new_temp(desloc_temp);
+			desloc_temp = desloc_temp + 4;
+			t_counter++;
 			
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "SUB", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
@@ -313,7 +318,10 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
     | expr '*' expr  {  Node* filho2 = create_node( @2.first_line, mul_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
-    			$$->local = new_temp(t_counter++);
+
+    			$$->local = new_temp(desloc_temp);
+			desloc_temp = desloc_temp + 4;
+			t_counter++;
 			
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "MUL", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
@@ -324,7 +332,10 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
     | expr '/' expr  {  Node* filho2 = create_node( @2.first_line, div_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
-    			$$->local = new_temp(t_counter++);
+
+    			$$->local = new_temp(desloc_temp);
+			desloc_temp = desloc_temp + 4;
+			t_counter++;
 			
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "DIV", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 

@@ -38,9 +38,9 @@ int main(int argc, char* argv[])
 	else 
 		printf("ERROR.\n");
 	
-	//FILE * out = fopen(argv[3], "w");
+	FILE * out = fopen(argv[2], "w");
 	
-	//print_tac(out, syntax_tree->code);
+	print_tac(out, syntax_tree->code);
 	
 	file = fopen("uncompiled.txt", "w+");
 
