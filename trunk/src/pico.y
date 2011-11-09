@@ -110,11 +110,7 @@
 
 %%
 inicio: inicializa code 	{ $$ = $2; 
-				FILE * out;
-				out = fopen ("teste.txt","w+");
-				print_tac(out, $$->code);
-				//print_tac(out, NULL);
-				fclose(out);
+				print_tac(stdout, $$->code);
 				}
 	;
 
@@ -140,13 +136,13 @@ inicializa:          	{
 			}   
 	;
 
-code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);  syntax_tree = $$; 
+code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);
+			           syntax_tree = $$; 
 
-				  cat_tac(&($$->code), &($2->code));
+				   cat_tac(&($$->code), &($2->code));
 				 }
-    | acoes			 { $$ = $1; syntax_tree = $$; 
-
-				 cat_tac(&($$->code), &($1->code));
+    | acoes			 { $$ = $1;
+    				   syntax_tree = $$; 
 				 }
     ;
 
@@ -233,29 +229,34 @@ listadupla: INT_LIT ':' INT_LIT		{  Node* filho1 = create_node( @1.first_line, i
 
 acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);
+			
 			cat_tac(&($$->code), &($1->code));
-			cat_tac(&($$->code), &($1->code));
-
 		    }
 
      | comando ';' acoes   {  Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
     			      $$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); 
 
-			cat_tac(&($1->code), &($3->code));
-			cat_tac(&($$->code), &($1->code));
+			      cat_tac(&($1->code), &($3->code));
+			      cat_tac(&($$->code), &($1->code));
 
 		    	   }
     ;
 
 comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_node, $2, NULL, NULL);
 			     $$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);
-			      
+			     
+			     entry_t * variable;
+		
+			     if ((variable = lookup(symbol_table, $1->local)) == NULL)
+			     { 
+				printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
+				exit(1);
+			     }		     
+			     
 			     struct tac* new_instruction = create_inst_tac($1->local, $3->local, NULL, NULL);
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
-			     
-			     print_tac(stdout, $$->code);
 			 }
        | enunciado { $$ = $1; }
        ;
@@ -266,16 +267,12 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		
 		if ((variable = lookup(symbol_table, $$->lexeme)) == NULL)
 		{
-			printf("Error (l %d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
+			printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 			exit(1);
 		}
 		
 		$$->local = variable->name;
-		$$->code = NULL;
-
-		$$->type = variable->type;
-		$$->size = variable->size;
-		$$->desloc = variable->desloc;
+		$$->code  = NULL;
 	    }
 
 
@@ -288,7 +285,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 listaexpr: expr   { $$ = $1; }    
 	 | expr ',' listaexpr   {    Node* filho2 = create_node( @1.first_line, comma_node, $2, NULL, NULL);
 				     $$ = create_node( @$.first_line, listaexpr_node, NULL, $1, filho2, $3, NULL);  }
-	   ;
+	 ;
 
 expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
@@ -300,12 +297,6 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
 			cat_tac(&($1->code), &($3->code));
 			cat_tac(&($$->code), &($1->code));	
-
-				FILE * out;
-				out = fopen ("teste.txt","w+");
-				print_tac(out, $$->code);
-				//print_tac(out, NULL);
-				fclose(out);
 		     }
 
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
