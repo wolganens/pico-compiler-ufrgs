@@ -1798,15 +1798,15 @@ yyreduce:
     {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, attr_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 			     (yyval.no) = create_node( (yyloc).first_line, comando_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
 			     
-			     entry_t * variable;
+			     entry_t ** variable;
 		
-			     if ((variable = lookup(symbol_table, (yyvsp[(1) - (3)].no)->local)) == NULL)
+			     if (((*variable) = lookup(symbol_table, (yyvsp[(1) - (3)].no)->local)) == NULL)
 			     { 
 				printf("Error (%d). The variable %s was not declared.\n", (yyval.no)->num_line, (yyval.no)->lexeme);
 				exit(1);
 			     }		     
 			     
-			     struct tac* new_instruction = create_inst_tac((yyvsp[(1) - (3)].no)->local, (yyvsp[(3) - (3)].no)->local, NULL, NULL);
+			     struct tac* new_instruction = create_inst_tac((*variable)->name2, (yyvsp[(3) - (3)].no)->local, NULL, NULL);
 			     append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction);
 			
 			     cat_tac(&((yyval.no)->code), &((yyvsp[(3) - (3)].no)->code));

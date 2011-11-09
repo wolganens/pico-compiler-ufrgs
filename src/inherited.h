@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "node.h"
 #include "symbol_table.h"
 #include "lista.h"
