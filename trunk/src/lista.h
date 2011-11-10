@@ -33,13 +33,6 @@ struct tac {
  */
 struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2);
 
-/** \brief Funcao que imprime o conteudo de uma instrucao TAC 
- *
- * @param out um ponteiro sobre um arquivo (aberto) aonde ira ser escrita a instrucao.
- * @param i a instrucao a ser impressa.
- */
-void print_inst_tac(FILE* out, struct tac i);
-
 /** Um elemento basico da lista. O campo 'inst' aponta para a informacao a ser
  * armazenada em um elemento da lista. O campo 'number' serve para numerar
  * as entradas: a primeira da lista deve valer 1, a segunda 2, etc. 
@@ -52,6 +45,14 @@ struct node_tac {
    struct node_tac* next;
    struct node_tac* prev;
 };
+
+/** \brief Funcao que imprime o conteudo de uma instrucao TAC 
+ *
+ * @param out um ponteiro sobre um arquivo (aberto) aonde ira ser escrita a instrucao.
+ * @param i a instrucao a ser impressa.
+ */
+void print_inst_tac (FILE * out, struct node_tac *code);
+
 
 /** \brief Imprime no arquivo apontado por 'out' o conteudo da lista apontada
  * por 'code'.

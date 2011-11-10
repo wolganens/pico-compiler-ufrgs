@@ -3,7 +3,7 @@
 char * new_temp (int temp_counter)
 {
 	char * temp_string = (char *) malloc(7*sizeof(char));
-	sprintf(temp_string, "%03d(Rx)", temp_counter);	
+	sprintf(temp_string, "TEMP%03d", temp_counter);	
 	return temp_string;	
 }
 

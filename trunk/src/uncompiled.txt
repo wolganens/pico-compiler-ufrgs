@@ -1,1 +1,1 @@
-int : a , b , c , d ; double : e , f , g ; char : h , i ; real : j , l , teste ; a = 10 ; b = 9 ; c = 5 ; e = 5.6 ; h = c ; j = 4 ; a = b + c ; b = c - a ; f = e ; c = a * b - 10 ; g = e / f ; e = ( ( ( a ) * ( b + c ) ) / ( d + c ) ) + 5 ; teste = ( 5 ) * a ; 
+int : a , b , c , d , i , n ; double : x , y ; x = 1 ; y = 1 ; a = 10 ; b = 100 ; c = 105 ; d = 103 ; a = a + b ; b = a - c ; c = 5 * 4 ; d = d / d ; a = ( ( a + b + c ) * a ) / b ; while ( i <= n ) { x = x * 2 ; i = i + 1 ; } ; 
