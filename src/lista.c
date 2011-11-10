@@ -77,29 +77,19 @@ struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, c
 	return new_tac;
 }
 
-void print_inst_tac (FILE * out, struct tac i)
+void print_inst_tac (FILE * out, struct node_tac *code)
 {
-	fprintf(out, "%s %s %s %s", i.res, i.op, i.arg1, i.arg2);
+	fprintf(out, "%03d:   %s := %s %s %s\n", code->number, code->inst->res, code->inst->arg1, code->inst->op, code->inst->arg2);
 }
 
 
 void print_tac (FILE * out, struct node_tac * code)
 {
-	int a;
-	int i = 1;
-	struct node_tac *aux = code;
-
-
-	fprintf(out, "%d\n%d\n", desloc, desloc_temp);	
-	
 	printf("\n\nPrograma Compilado:\n");
 	printf("===============================================\n");
-	while(aux != NULL){
-		fprintf(out, "%03d:   %s := %s %s %s\n", i, 	((aux->inst->res) != NULL? aux->inst->res: ""), ((aux->inst->arg1) != NULL? aux->inst->arg1: ""), 
-								((aux->inst->op) != NULL? aux->inst->op: ""), ((aux->inst->arg2) != NULL? aux->inst->arg2: ""));
-		aux = aux->next;
-		//printf("passei aqui");
-		i++;
+	while(code != NULL){
+		print_inst_tac (out, code);
+		code = code->next;
 	}
 	printf("===============================================\n\n");
 }

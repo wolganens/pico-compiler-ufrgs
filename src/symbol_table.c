@@ -9,6 +9,16 @@
 #include "symbol_table.h"
 #define EOS '\0'
 
+entry_t * new_variable (char * name, int type, int size, int desloc, void *extra)
+{
+	entry_t *new_variable = (entry_t *) malloc (sizeof(entry_t));
+	new_variable->name = name;
+	new_variable->type = type;
+	new_variable->size = size;
+	new_variable->desloc = desloc;
+	new_variable->extra = extra;
+}
+
 int hashpjw(s)
 char *s;
 {

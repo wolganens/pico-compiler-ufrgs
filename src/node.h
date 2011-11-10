@@ -108,9 +108,7 @@ typedef struct _node {
    int 			desloc;
 } Node;
 
-extern Node * syntax_tree;
-//extern Node * aux;			//Node* aux = (Node*) malloc(sizeof(Node));
-
+Node *syntax_tree;
 
 /**
  *  * Node constructor.

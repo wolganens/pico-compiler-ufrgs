@@ -11,13 +11,14 @@
   #include "lista.h"
   #include "inherited.h"
 
-  int desloc = 0;
-  int desloc_temp = 0;
+  int variable_desloc = 0;
+  int temp_desloc = 0;
 
   int t_counter = 0;
   int l_counter = 0;
   
-  symbol_t symbol_table;
+  extern symbol_t variable_table;
+  extern symbol_t temp_table;
 %}
 
 %error-verbose
@@ -102,40 +103,11 @@
 %type<no> fiminstcontrole
 %type<no> expbool
 
-%type<no> inicio
-%type<no> inicializa
-
-%start inicio
+%start code
 
  /* A completar com seus tokens - compilar com 'yacc -d' */
 
 %%
-inicio: inicializa code 	{ $$ = $2; 
-				}
-	;
-
-inicializa:          	{
-			//FUNÇÕES DE TESTE DA LISTA.C
-
-			/*struct node_tac * teste = (struct node_tac *)malloc(sizeof(struct node_tac));
-			teste->inst = create_inst_tac("res", "arg1", "op", "arg2");
-			struct node_tac * teste2 = (struct node_tac *)malloc(sizeof(struct node_tac));
-			teste2->inst = create_inst_tac("res'", "arg1'", "op'", "arg2'");*/
-
-			//append_inst_tac(&teste, teste2->inst); //NAO SEI EXATAMENTE PARA QUE SERVE, ATÉ AGORA ELA INSERE INST NO FINAL DA LISTA DO 1º ARGUMENTO.
-			/*cat_tac(&teste, &teste2);		
-
-			FILE * out;
-			out = fopen ("teste.txt","a+");
-			//print_tac(out, syntax_tree->code);
-			print_tac(out, teste);
-			fclose(out);
-			
-*/
-			init_table(&symbol_table); 
-			}   
-	;
-
 code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);
 			           syntax_tree = $$; 
 
@@ -160,10 +132,11 @@ declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semic
 declaracao: tipo ':' listadeclaracao {	Node* filho2 = create_node( @2.first_line, colon_node, $2, NULL, NULL);
 					$$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL);
 
-					do_symbol_insertion ($$, &symbol_table, $1->type, $1->size);
+					do_symbol_insertion ($$, &variable_table, $1->type, $1->size);
 					
-					print_table(symbol_table);
-printf("oi\n");
+					//print_table(variable_table);
+					//print_table(variable_table);
+
 				     }
 	   ;
 
@@ -249,13 +222,16 @@ comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_nod
 			     
 			     entry_t * variable;
 		
-			     if (((variable) = lookup(symbol_table, $1->local)) == NULL)
+			     if (((variable) = lookup(variable_table, $1->local)) == NULL)
 			     { 
 				printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 				exit(1);
-			     }		     
+			     }
 			     
-			     struct tac* new_instruction = create_inst_tac((variable)->name2, $3->local, NULL, NULL);
+			     char *blank_space = (char *) malloc(sizeof(char));
+			     strcpy(blank_space, "");
+			     
+			     struct tac* new_instruction = create_inst_tac(variable->name, $3->local, blank_space, blank_space);
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
@@ -267,7 +243,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		
 		entry_t * variable;
 		
-		if ((variable = lookup(symbol_table, $$->lexeme)) == NULL)
+		if ((variable = lookup(variable_table, $$->lexeme)) == NULL)
 		{
 			printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 			exit(1);
@@ -293,10 +269,14 @@ listaexpr: expr   { $$ = $1; }
 expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
 
-    			$$->local = new_temp(desloc_temp);
-			desloc_temp = desloc_temp + 4;
-			t_counter++;
-
+    			$$->local = new_temp(t_counter++);
+    			
+    			entry_t * temp_variable = new_variable ($$->local, int_node, INT_SIZE, temp_desloc, NULL);
+    			
+    			temp_desloc = temp_desloc + INT_SIZE;
+    			
+    			insert(&temp_table, temp_variable);
+    			
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "ADD", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
 
@@ -307,9 +287,13 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     | expr '-' expr  {  Node* filho2 = create_node( @2.first_line, minus_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
     			
-    			$$->local = new_temp(desloc_temp);
-			desloc_temp = desloc_temp + 4;
-			t_counter++;
+    			$$->local = new_temp(t_counter++);
+    			
+    			entry_t * temp_variable = new_variable ($$->local, int_node, INT_SIZE, temp_desloc, NULL);
+    			
+    			temp_desloc = temp_desloc + INT_SIZE;
+    			
+    			insert(&temp_table, temp_variable);			
 			
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "SUB", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
@@ -321,9 +305,13 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     | expr '*' expr  {  Node* filho2 = create_node( @2.first_line, mul_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
 
-    			$$->local = new_temp(desloc_temp);
-			desloc_temp = desloc_temp + 4;
-			t_counter++;
+    			$$->local = new_temp(t_counter++);
+    			
+    			entry_t * temp_variable = new_variable ($$->local, int_node, INT_SIZE, temp_desloc, NULL);
+    			
+    			temp_desloc = temp_desloc + INT_SIZE;
+    			
+    			insert(&temp_table, temp_variable);			
 			
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "MUL", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
@@ -335,10 +323,14 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     | expr '/' expr  {  Node* filho2 = create_node( @2.first_line, div_node, $2, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, $1, filho2, $3, NULL); 
 
-    			$$->local = new_temp(desloc_temp);
-			desloc_temp = desloc_temp + 4;
-			t_counter++;
-			
+    			$$->local = new_temp(t_counter++);
+    			
+    			entry_t * temp_variable = new_variable ($$->local, int_node, INT_SIZE, temp_desloc, NULL);
+    			
+    			temp_desloc = temp_desloc + INT_SIZE;
+    			
+    			insert(&temp_table, temp_variable);
+    			
 			struct tac* new_instruction = create_inst_tac($$->local, $1->local, "DIV", $3->local);
 			append_inst_tac(&($3->code), new_instruction); 
 

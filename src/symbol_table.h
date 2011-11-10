@@ -18,12 +18,13 @@
  */
 typedef struct {
    char* name;  /**< um string que representa o nome de uma variavel. */
-   char* name2;  /**< um string que representa o nome de uma variavel. */
    int type;    /**< representacao do tipo da variavel. */
    int size;    /**< numero de Bytes necessarios para armazenamento. */
    int desloc;  /**< Endereco da proxima variavel. */
    void* extra; /**< qualquer informacao extra. */
 } entry_t ;
+
+entry_t * new_variable (char * name, int type, int size, int desloc, void *extra);
 
 /** \brief Nodo da lista encadeada de entradas da tabela de simbolos
  *
@@ -45,6 +46,9 @@ struct table_node_entry {
 typedef struct {
     struct table_node_entry * entries[PRIME];
 } symbol_t ;
+
+symbol_t variable_table;
+symbol_t temp_table;
 
 /** \brief Inicializar a tabela de Hash.
  *
