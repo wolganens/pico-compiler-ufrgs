@@ -35,7 +35,7 @@ void cat_tac(struct node_tac ** code_a, struct node_tac ** code_b)
 		*code_a = *code_b;
 	}
 	else
-	{
+	{	
 		if(*code_b == NULL)
 		{
 			*code_b = *code_a;

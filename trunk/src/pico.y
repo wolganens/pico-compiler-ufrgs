@@ -131,8 +131,8 @@ inicializa:          	{
 			print_tac(out, teste);
 			fclose(out);
 			
-
-			init_table(&symbol_table); */
+*/
+			init_table(&symbol_table); 
 			}   
 	;
 
@@ -163,6 +163,7 @@ declaracao: tipo ':' listadeclaracao {	Node* filho2 = create_node( @2.first_line
 					do_symbol_insertion ($$, &symbol_table, $1->type, $1->size);
 					
 					print_table(symbol_table);
+printf("oi\n");
 				     }
 	   ;
 
@@ -246,15 +247,15 @@ acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node,
 comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_node, $2, NULL, NULL);
 			     $$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);
 			     
-			     entry_t ** variable;
+			     entry_t * variable;
 		
-			     if (((*variable) = lookup(symbol_table, $1->local)) == NULL)
+			     if (((variable) = lookup(symbol_table, $1->local)) == NULL)
 			     { 
 				printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 				exit(1);
 			     }		     
 			     
-			     struct tac* new_instruction = create_inst_tac((*variable)->name2, $3->local, NULL, NULL);
+			     struct tac* new_instruction = create_inst_tac((variable)->name2, $3->local, NULL, NULL);
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
