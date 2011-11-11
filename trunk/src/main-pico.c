@@ -6,9 +6,11 @@
 char* progname;
 int lineno;
 extern FILE* yyin;
-FILE *file;
+FILE *tacoutput;
 extern symbol_t variable_table;
 extern symbol_t temp_table;
+extern int variable_desloc;
+extern int temp_desloc;
 
 void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 {
@@ -19,26 +21,23 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 	int i;
 	
 	entry_t *variable;
-	
+
 	if (sscanf(code->inst->res, "TEMP%03d", &i) == 1)
 	{
-		//printf("RES1 = TEMP\n");
 		variable = lookup(temp_table, code->inst->res);
-		//printf("%s\n", code->inst->res);
-		//printf("%s\n", variable->name);
 		sprintf(res, "%03d(Rx)", variable->desloc);
 	}
 	else
 	{
-		//printf("RES1 = VAR\n");
-		variable = lookup(variable_table, code->inst->res);
-		sprintf(res, "%03d(SP)", variable->desloc);
+		if((variable = lookup(variable_table, code->inst->res)) != NULL)
+		{
+			sprintf(res, "%03d(SP)", variable->desloc);
+		}
 
 	}
 
 	if (sscanf(code->inst->arg1, "TEMP%03d", &i) == 1)
 	{
-		//printf("ARG1 = TEMP\n");
 		variable = lookup(temp_table, code->inst->arg1);
 		sprintf(arg1, "%03d(Rx)", variable->desloc);
 	}
@@ -46,12 +45,10 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 	{
 		if((variable = lookup(variable_table, code->inst->arg1)) != NULL)
 		{
-			//printf("ARG1 = VAR\n");
 			sprintf(arg1, "%03d(SP)", variable->desloc);
 		}
 		else
 		{
-			//printf("ARG1 = NUM\n");
 			strcpy(arg1, code->inst->arg1);
 		}
 	}
@@ -66,35 +63,38 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 	{
 		if((variable = lookup(variable_table, code->inst->arg2)) != NULL)
 		{
-			//printf("ARG2 = VAR\n");
 			sprintf(arg2, "%03d(SP)", variable->desloc);
 		}
 		else
 		{
-			//printf("ARG2 = NUM\n");
 			strcpy(arg2, code->inst->arg2);
 		}
 	}
-		
-	fprintf(out, "%03d:   %s := %s %s %s\n", code->number, res, arg1, code->inst->op, arg2);
+	
+	if(!strcmp(code->inst->res, "PRINT"))
+	{		
+		fprintf(out, "%03d:   %s %s\n", code->number, code->inst->res, arg1);
+	}
+	else
+	{
+		fprintf(out, "%03d:   %s := %s %s %s\n", code->number, res, arg1, code->inst->op, arg2);
+	}
 }
 
 
 void print_tac_low_level (FILE * out, struct node_tac * code)
 {
+	fprintf(out, "%d\n%d\n", variable_desloc, temp_desloc);
 	while(code != NULL)
-	{
+	{ 
 		print_inst_tac_low_level (out, code);
 		code = code->next;
 	}
 }
 
-
-
 int main(int argc, char* argv[]) 
 {
-	
-	
+		
 	if (argc != 4)
 	{
 		printf("Try: %s -0  <input_file>.'tac' <input_file>'pico'. Try again!\n", argv[0]);
@@ -121,19 +121,15 @@ int main(int argc, char* argv[])
 	progname = argv[0];
 	
 	if (!yyparse()) 
-		printf("OKAY.\n");
+		printf("Successfull compilation!.\n");
 	else 
-		printf("ERROR.\n");
+		printf("Error on compilation!.\n");
 	
 	
-	//uncompile(stdout, syntax_tree);
-	
-	print_table(variable_table);
-	print_table(temp_table);
-	print_tac_low_level (stdout, syntax_tree->code);
+	tacoutput = fopen(argv[2], "w+");
+	print_tac_low_level (tacoutput, syntax_tree->code);
+	fclose(tacoutput);
 		
-	
-	
 	return 0;
 }
 

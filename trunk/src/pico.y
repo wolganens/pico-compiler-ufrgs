@@ -110,14 +110,11 @@
 %%
 code: declaracoes acoes		 { $$ = create_node( @$.first_line, code_node, NULL, $1, $2, NULL);
 			           syntax_tree = $$; 
-
 				   cat_tac(&($$->code), &($2->code));
-				   print_tac (stdout, $$->code);
 				 }
     | acoes			 { $$ = $1;
     				   syntax_tree = $$; 
-    				   print_tac (stdout, $$->code);
-				 }
+    				 }
     ;
 
 declaracoes: declaracao ';' {   Node *filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
@@ -133,10 +130,6 @@ declaracao: tipo ':' listadeclaracao {	Node* filho2 = create_node( @2.first_line
 					$$ = create_node( @$.first_line, declaracao_node, NULL, $1, filho2, $3, NULL);
 
 					do_symbol_insertion ($$, &variable_table, $1->type, $1->size);
-					
-					//print_table(variable_table);
-					//print_table(variable_table);
-
 				     }
 	   ;
 
@@ -171,23 +164,23 @@ tipounico: INT      { $$ = create_node(@1.first_line, int_node, $1, NULL, NULL);
          ;
 
 tipolista: INT '(' listadupla ')'     {  Node* filho1 = create_node( @1.first_line, int_node, $1, NULL, NULL);
-					 Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
-					 Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
+					 Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+					 Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
     			    		 $$ = create_node( @$.first_line, tipolista_node, NULL, filho1, filho2, $3, filho4, NULL);  }
 
          | DOUBLE '(' listadupla ')'  {  Node* filho1 = create_node( @1.first_line, double_node, $1, NULL, NULL);
-					 Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
-					 Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
+					 Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+					 Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
     			    		 $$ = create_node( @$.first_line, tipolista_node, NULL, filho1, filho2, $3, filho4, NULL);  }
 
          | REAL '(' listadupla ')'    {  Node* filho1 = create_node( @1.first_line, real_node, $1, NULL, NULL);
-					 Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
-					 Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
+					 Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+					 Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
     			    		 $$ = create_node( @$.first_line, tipolista_node, NULL, filho1, filho2, $3, filho4, NULL);  }
 
          | CHAR '(' listadupla ')'    {  Node* filho1 = create_node( @1.first_line, char_node, $1, NULL, NULL);
-					 Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
-					 Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
+					 Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+					 Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
     			    		 $$ = create_node( @$.first_line, tipolista_node, NULL, filho1, filho2, $3, filho4, NULL);  }
          ;
 
@@ -224,14 +217,11 @@ comando: lvalue '=' expr {   Node* filho2 = create_node( @2.first_line, attr_nod
 		
 			     if (((variable) = lookup(variable_table, $1->local)) == NULL)
 			     { 
-				printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
+				printf("ERROR(%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 				exit(1);
 			     }
-			     
-			     char *blank_space = (char *) malloc(sizeof(char));
-			     strcpy(blank_space, "");
-			     
-			     struct tac* new_instruction = create_inst_tac(variable->name, $3->local, blank_space, blank_space);
+			          
+			     struct tac* new_instruction = create_inst_tac(variable->name, $3->local, "", "");
 			     append_inst_tac(&($3->code), new_instruction);
 			
 			     cat_tac(&($$->code), &($3->code));
@@ -245,7 +235,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		
 		if ((variable = lookup(variable_table, $$->lexeme)) == NULL)
 		{
-			printf("Error (%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
+			printf("ERROR(%d). The variable %s was not declared.\n", $$->num_line, $$->lexeme);
 			exit(1);
 		}
 		
@@ -256,8 +246,8 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 
 
       | IDF '[' listaexpr ']'     {  Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
-			             Node* filho2 = create_node( @2.first_line, rightbracket3_node, $2, NULL, NULL);
-				     Node* filho4 = create_node( @4.first_line, leftbracket3_node, $4, NULL, NULL);
+			             Node* filho2 = create_node( @2.first_line, leftbracket3_node, $2, NULL, NULL);
+				     Node* filho4 = create_node( @4.first_line, rightbracket3_node, $4, NULL, NULL);
     			    	     $$ = create_node( @$.first_line, lvalue_node, NULL, filho1, filho2, $3, filho4, NULL);  }
       ;
 
@@ -338,8 +328,8 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			cat_tac(&($$->code), &($1->code));
 		     }
 		     
-    | '(' expr ')'   {  Node* filho1 = create_node( @1.first_line, rightbracket_node, $1, NULL, NULL);
-			Node* filho3 = create_node( @3.first_line, leftbracket_node, $3, NULL, NULL);
+    | '(' expr ')'   {  Node* filho1 = create_node( @1.first_line, leftbracket_node, $1, NULL, NULL);
+			Node* filho3 = create_node( @3.first_line, rightbracket_node, $3, NULL, NULL);
     			$$ = create_node( @$.first_line, expr_node, NULL, filho1, $2, filho3, NULL); 
 
 			$$->local = $2->local;
@@ -358,31 +348,34 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     ;
 
 chamaproc: IDF '(' listaexpr ')'   {  Node* filho1 = create_node( @1.first_line, idf_node, $1, NULL, NULL);
-				      Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
-				      Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
+				      Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+				      Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
     			    	      $$ = create_node( @$.first_line, chamaproc_node, NULL, filho1, filho2, $3, filho4, NULL);  }
          ;
 
 enunciado: expr { $$ = $1 ;}
          | IF '(' expbool ')' THEN acoes fiminstcontrole    {   Node* filho1 = create_node( @1.first_line, if_node, $1, NULL, NULL);
-								Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
-								Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
+								Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+								Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
 								Node* filho5 = create_node( @5.first_line, then_node, $5, NULL, NULL);
     			  $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, $7, NULL);  
     			  cat_tac(&($$->code), &($6->code));}
 
          | WHILE '(' expbool ')' '{' acoes '}'  {   Node* filho1 = create_node( @1.first_line, while_node, $1, NULL, NULL);
-						    Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
- 						    Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
-         					    Node* filho5 = create_node( @5.first_line, rightbracket2_node, $5, NULL, NULL);
- 						    Node* filho7 = create_node( @7.first_line, leftbracket2_node, $7, NULL, NULL);
+						    Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+ 						    Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
+         					    Node* filho5 = create_node( @5.first_line, leftbracket2_node, $5, NULL, NULL);
+ 						    Node* filho7 = create_node( @7.first_line, rightbracket2_node, $7, NULL, NULL);
     	 $$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, filho7, NULL);
     	 cat_tac(&($$->code), &($6->code));  }
     	 
     	 | PRINTF '(' expr ')' {   Node* filho1 = create_node( @1.first_line, print_node, $1, NULL, NULL);
-				   Node* filho2 = create_node( @2.first_line, rightbracket_node, $2, NULL, NULL);
-				   Node* filho4 = create_node( @4.first_line, leftbracket_node, $4, NULL, NULL);
-    			$$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, NULL);  }
+				   Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
+				   Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
+    			$$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, NULL);
+			struct tac* new_instruction = create_inst_tac("PRINT", $3->local, "", "");
+			append_inst_tac(&($$->code), new_instruction); 
+			  }
  
          ;
 
@@ -398,8 +391,8 @@ expbool: TRUE   { $$ = create_node(@1.first_line, true_node, $1, NULL, NULL); }
 
        | FALSE  { $$ = create_node(@1.first_line, false_node, $1, NULL, NULL); } 
 
-       | '(' expbool ')'   {  Node* filho1 = create_node( @1.first_line, rightbracket_node, $1, NULL, NULL);
-       			      Node* filho3 = create_node( @3.first_line, leftbracket_node, $3, NULL, NULL);  
+       | '(' expbool ')'   {  Node* filho1 = create_node( @1.first_line, leftbracket_node, $1, NULL, NULL);
+       			      Node* filho3 = create_node( @3.first_line, rightbracket_node, $3, NULL, NULL);  
     			      $$ = create_node( @$.first_line, expbool_node, NULL, filho1, $2, filho3, NULL); } 
 
        | expbool AND expbool       {   Node* filho2 = create_node( @2.first_line, and_node, $2, NULL, NULL);

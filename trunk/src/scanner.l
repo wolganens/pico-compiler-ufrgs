@@ -6,7 +6,6 @@
     #include <stdlib.h>
     #include <string.h>
   
-    /* este include eh importante... */
     #include "tokens.h"
     
     int VAL_INT;
