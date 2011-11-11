@@ -17,7 +17,7 @@ void do_symbol_insertion(Node *root, symbol_t *table, int type, int size)
 			
 			if(insert(table, variable))
 			{
-				printf("Redeclared symbol: %s\n", variable->name);
+				printf("ERROR(%d). The variable %s was already declared.\n", node->num_line, variable->name);
 				exit(1);
 			}
 

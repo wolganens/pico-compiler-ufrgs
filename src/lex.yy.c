@@ -590,15 +590,14 @@ char *yytext;
     #include <stdlib.h>
     #include <string.h>
   
-    /* este include eh importante... */
     #include "tokens.h"
     
     int VAL_INT;
     double VAL_DOUBLE;
-#line 18 "scanner.l"
+#line 17 "scanner.l"
 #define YY_USER_ACTION yylloc.first_line = yylineno;
 /* Definicoes regulares (A COMPLETAR conforme a especificacao) */
-#line 602 "lex.yy.c"
+#line 601 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -785,7 +784,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 28 "scanner.l"
+#line 27 "scanner.l"
 
 
 
@@ -795,7 +794,7 @@ YY_DECL
   * Ver tambem "tokens.h".
   */
   
-#line 799 "lex.yy.c"
+#line 798 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -890,228 +889,228 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 37 "scanner.l"
+#line 36 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(INT); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 38 "scanner.l"
+#line 37 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(DOUBLE); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 39 "scanner.l"
+#line 38 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(REAL);   }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 40 "scanner.l"
+#line 39 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(CHAR);   }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 41 "scanner.l"
+#line 40 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(STRING); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 42 "scanner.l"
+#line 41 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('*');    }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 43 "scanner.l"
+#line 42 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('+');    }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 44 "scanner.l"
+#line 43 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('-');    }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 45 "scanner.l"
+#line 44 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('/');    }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 46 "scanner.l"
+#line 45 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(',');    }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 47 "scanner.l"
+#line 46 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(';');    }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 48 "scanner.l"
+#line 47 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(':');    }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 49 "scanner.l"
+#line 48 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(QUOTE);  }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 50 "scanner.l"
+#line 49 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('(');    }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 51 "scanner.l"
+#line 50 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(')');    }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 52 "scanner.l"
+#line 51 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('[');    }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 53 "scanner.l"
+#line 52 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(']');    }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 54 "scanner.l"
+#line 53 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('{');    }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 55 "scanner.l"
+#line 54 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('}');    }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 56 "scanner.l"
+#line 55 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('<');    }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 57 "scanner.l"
+#line 56 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('>');    }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 58 "scanner.l"
+#line 57 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return('=');    }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 59 "scanner.l"
+#line 58 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(LE);     }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 60 "scanner.l"
+#line 59 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(GE);     }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 61 "scanner.l"
+#line 60 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(EQ);     }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 62 "scanner.l"
+#line 61 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(NE);     }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 63 "scanner.l"
+#line 62 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(AND);    }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 64 "scanner.l"
+#line 63 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(OR);     }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 65 "scanner.l"
+#line 64 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(NOT);    }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 66 "scanner.l"
+#line 65 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(IF);     }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 67 "scanner.l"
+#line 66 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(THEN);   }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 68 "scanner.l"
+#line 67 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(ELSE);   }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 69 "scanner.l"
+#line 68 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(FOR);    }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 70 "scanner.l"
+#line 69 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(NEXT);   }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 71 "scanner.l"
+#line 70 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(WHILE);  }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 72 "scanner.l"
+#line 71 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(END);    }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 73 "scanner.l"
+#line 72 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(TRUE);   }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 74 "scanner.l"
+#line 73 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(FALSE);  }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 75 "scanner.l"
+#line 74 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return(PRINTF); }
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 77 "scanner.l"
+#line 76 "scanner.l"
 
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 78 "scanner.l"
+#line 77 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return( IDF ); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 79 "scanner.l"
+#line 78 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext);  return( CONST ); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 80 "scanner.l"
+#line 79 "scanner.l"
 { yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext);  return( STR_LIT ); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 81 "scanner.l"
+#line 80 "scanner.l"
 { VAL_INT = atoi(yytext); yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return( INT_LIT ); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 82 "scanner.l"
+#line 81 "scanner.l"
 { VAL_DOUBLE = atof(yytext); yylval.cadeia = (char*) malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return( F_LIT ); }
 	YY_BREAK
 /* Tratamento dos erros lexicais: a regra seguinte pega tudo o que nao
@@ -1119,16 +1118,16 @@ YY_RULE_SETUP
    */
 case 46:
 YY_RULE_SETUP
-#line 87 "scanner.l"
+#line 86 "scanner.l"
 { printf("Erro lexical - caractere nao reconhecido: %c.\n", yytext[0]);
     exit(-1); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 89 "scanner.l"
+#line 88 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1132 "lex.yy.c"
+#line 1131 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2138,7 +2137,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 89 "scanner.l"
+#line 88 "scanner.l"
 
 
  /* Secao dos  Procedimentos auxiliares  */

@@ -1,6 +1,16 @@
-int: i, b, c, n ;
-double: x, y ;
-x = 2.0; i=0 ; n=10;
-while (i <= n) {
-x = x*2 ; i = i+1;
+int: i, b, c, n, x, y;
+double: a, z;
+char: casa;
+
+x = (2*2) + i;
+
+i=0;
+
+n=10;
+
+while (i <= n)
+{
+	x = x*2;
+	i = i+1;
+	print(casa);
 };

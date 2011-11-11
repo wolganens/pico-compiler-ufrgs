@@ -79,7 +79,14 @@ struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, c
 
 void print_inst_tac (FILE * out, struct node_tac *code)
 {
-	fprintf(out, "%03d:   %s := %s %s %s\n", code->number, code->inst->res, code->inst->arg1, code->inst->op, code->inst->arg2);
+	if(!strcmp(code->inst->res, "PRINT"))
+	{
+		fprintf(out, "%03d:   %s %s\n", code->number, code->inst->res, code->inst->arg1);
+	}
+	else
+	{		
+		fprintf(out, "%03d:   %s := %s %s %s\n", code->number, code->inst->res, code->inst->arg1, code->inst->op, code->inst->arg2);
+	}
 }
 
 
