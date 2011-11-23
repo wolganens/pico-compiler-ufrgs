@@ -120,15 +120,16 @@ int main(int argc, char* argv[])
 
 	progname = argv[0];
 	
-	if (!yyparse()) 
+	if (!yyparse())
 		printf("Successfull compilation!.\n");
 	else 
 		printf("Error on compilation!.\n");
-	
-	
+
 	tacoutput = fopen(argv[2], "w+");
-	print_tac_low_level (tacoutput, syntax_tree->code);
+	print_tac (tacoutput, syntax_tree->code);
 	fclose(tacoutput);
+	
+	print_table(variable_table);
 		
 	return 0;
 }

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "lista.h"
+#include "symbol_table.h"
 
 #ifdef __GNUC__
     /* If using gcc, warn about missing NULLs */
@@ -97,15 +98,17 @@ typedef struct _nodelist {
 } Nodelist;
 
 typedef struct _node {
-   int 			num_line;   	/**< numero de linha. */
+   int 			num_line;   /**< numero de linha. */
    char 		*lexeme;   	/**< o lexema retornado pelo analizador lexical. */
    Node_type 		type; 		/**< Um dos valores definidos acima pelos # defines. */
-   char			*local;		
+   char			*local;
+   char			*array;
+   char			*desloc;
+   int 			ndim;
    struct node_tac 	*code;
-   int 			size;
-   Nodelist 		*children;  	/**< Lista de filhos da arvore. */
+   Nodelist 		*children;  /**< Lista de filhos da arvore. */
    int 			height;		/**< Altura do nó. */
-   int 			desloc;
+   entry_t		*variable;   
 } Node;
 
 Node *syntax_tree;
