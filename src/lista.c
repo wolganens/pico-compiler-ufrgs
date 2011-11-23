@@ -12,7 +12,7 @@ void append_inst_tac (struct node_tac ** code, struct tac * inst)
 	}
 	else 
 	{
-		int i = 2;
+		int i = 1;
 		struct node_tac *forward = (*code);
 
 		while(forward->next != NULL) //percorre-se a lista
@@ -92,11 +92,8 @@ void print_inst_tac (FILE * out, struct node_tac *code)
 
 void print_tac (FILE * out, struct node_tac * code)
 {
-	printf("\n\nPrograma Compilado:\n");
-	printf("===============================================\n");
 	while(code != NULL){
 		print_inst_tac (out, code);
 		code = code->next;
 	}
-	printf("===============================================\n\n");
 }

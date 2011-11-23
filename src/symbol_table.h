@@ -6,8 +6,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define PRIME 211 // 9901
+
+#define int_node      501
+#define double_node   502
+#define real_node     503
+#define char_node     504
+#define INT_SIZE      4
+#define REAL_SIZE     4
+#define DOUBLE_SIZE   8
+#define CHAR_SIZE     1
 
 /**
  * Tipo abstrato das entradas na tabela de Hash. (Obs.: futuramente, os campos
@@ -16,12 +26,26 @@
  * Sempre vao ser inseridos na tabela, e recuperado dela, ponteiros sobre tais
  * estruturas de dados abstratas.
  */
+
+typedef struct _limNode
+{	
+	int inf_lim;
+	int sup_lim;
+	struct _limNode *next;
+} limNode;
+
+typedef struct
+{
+	int ndim;
+	limNode *limits;
+} vector_info;
+ 
 typedef struct {
    char* name;  /**< um string que representa o nome de uma variavel. */
    int type;    /**< representacao do tipo da variavel. */
    int size;    /**< numero de Bytes necessarios para armazenamento. */
    int desloc;  /**< Endereco da proxima variavel. */
-   void* extra; /**< qualquer informacao extra. */
+   vector_info *extra; /**< qualquer informacao extra. */
 } entry_t ;
 
 entry_t * new_variable (char * name, int type, int size, int desloc, void *extra);
@@ -112,5 +136,9 @@ int print_table(symbol_t table);
  * @return o numero de entradas na tabela.
  */
 int print_file_table(FILE* out, symbol_t table);
+
+int array_limit(char * name, int dimension, symbol_t table);
+
+int array_constant(char *name, symbol_t table);
 
 #endif

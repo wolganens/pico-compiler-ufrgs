@@ -193,7 +193,7 @@ int print_file_table(FILE* out, symbol_t table) {
     for(x = 0; x < PRIME; x++) {
     // onde houver ponteiro, imprime o conteúdo da entrada
         if(table.entries[x] != NULL) {
-            char tmp_string[500];
+            char tmp_string[1000];
 
             struct table_node_entry * atual = table.entries[x]; // inicia com o primeiro nodo da lista encadeada
 
@@ -212,8 +212,112 @@ int print_file_table(FILE* out, symbol_t table) {
 }
 
 char * str_entry(char * retbuffer, entry_t* entry) {
-    sprintf(retbuffer, "ENTRY: %s;\n\tType: %d;\n\tSize: %d;\n\tDesloc: %d.\n\n",
-                       entry->name, entry->type, entry->size, entry->desloc);
+    sprintf(retbuffer, "ENTRY: %s;\n\tType: %d;\n\tSize: %d;\n\tDesloc: %d.",entry->name, entry->type, entry->size, entry->desloc);
+    
+    char extra[500];
+    char limits[500];
+              
+    if (entry->extra != NULL)
+    {
+    	sprintf(extra, "\n\tNdim: %d\n\t", entry->extra->ndim);
+	int i = 0;
+  	while(entry->extra->limits != NULL)
+    	{
+    		sprintf(limits, "Limit %d: [%d : %d]\n\t", i++, entry->extra->limits->inf_lim, entry->extra->limits->sup_lim);
+    		strcat(extra, limits);
+    		entry->extra->limits = entry->extra->limits->next;
+    	}
+    	strcat(retbuffer, extra);
+    }    	
+    strcat(retbuffer, "\n\n");
     return retbuffer;
 }
 
+int array_limit(char *name, int dimension, symbol_t table)
+{
+	entry_t *array;
+	
+	if ((array = lookup(table, name)) == NULL)
+	{
+		printf("array_limit: Varible %s doesnt exist\n", name);
+		exit(1);
+	}
+		
+	if (dimension > array->extra->ndim)
+	{
+		printf("array_limit: Ilegal array dimension. Dimension %d is larger than array dimension %d\n", dimension, array->extra->ndim);
+		exit(1);
+	}
+
+	int i = 1;
+	
+	limNode *limitNode = array->extra->limits;
+		
+	while(i < dimension)
+	{
+		limitNode = limitNode->next;
+		i++;
+	}
+	
+	return limitNode->sup_lim - limitNode->inf_lim + 1;
+}
+
+int array_constant(char *name, symbol_t table)
+{
+	int i = 1;
+	int soma = 0;
+	
+	entry_t *array;
+		
+	if ((array = lookup(table, name)) == NULL)
+	{
+		printf("array_constant: Varible %s doesnt exist\n", name);
+		exit(1);
+	}
+	
+	limNode *currentDimension = array->extra->limits;
+	
+	if (array->extra->ndim == 1)
+	{
+		soma = currentDimension->inf_lim;
+	}	
+	else
+	{	
+		while(i < array->extra->ndim)
+		{
+			if (i == 1)
+			{
+				soma = (currentDimension->inf_lim * array_limit(name, i + 1, table)) + currentDimension->next->inf_lim;
+			}
+			else
+			{
+				soma *= array_limit(name, i + 1, table);
+				soma += currentDimension->next->inf_lim;
+			}
+			currentDimension = currentDimension->next;
+			i++;
+		}
+	}	
+	switch(array->type)
+	{
+		case int_node:
+			soma *= INT_SIZE;
+			break;
+			
+		case double_node:
+			soma *= DOUBLE_SIZE;
+			break;
+			
+		case real_node:
+			soma *= REAL_SIZE;
+			break;
+			
+		case char_node:
+			soma *= CHAR_SIZE;
+			break;
+	}
+	
+	soma = array->desloc - soma;
+	
+	return soma;
+}

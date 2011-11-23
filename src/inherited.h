@@ -8,4 +8,6 @@
 
 extern int variable_desloc;
 
-void do_symbol_insertion(Node *root, symbol_t *table, int type, int size);
+void do_variable_insertion(Node *root, symbol_t *table, entry_t *variable);
+
+void do_vector_insertion(Node *root, symbol_t *table, entry_t *variable);
