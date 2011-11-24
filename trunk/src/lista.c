@@ -38,11 +38,11 @@ void cat_tac(struct node_tac ** code_a, struct node_tac ** code_b)
 	{	
 		if(*code_b == NULL)
 		{
-			*code_b = *code_a;
+			return;
 		}
 		else
 		{
-			int i=1;
+			int i = 1;
 			
 			struct node_tac *backward = *code_a;
 		
@@ -90,7 +90,7 @@ void print_inst_tac (FILE * out, struct node_tac *code)
 }
 
 
-void print_tac (FILE * out, struct node_tac * code)
+void print_tac (FILE *out, struct node_tac *code)
 {
 	while(code != NULL){
 		print_inst_tac (out, code);

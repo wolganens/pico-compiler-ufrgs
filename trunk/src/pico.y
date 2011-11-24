@@ -278,18 +278,13 @@ listadupla: INT_LIT ':' INT_LIT		{  	Node* filho1 = create_node( @1.first_line, 
 
 acoes: comando ';'  {	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
 			$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, NULL);
-			fprintf(stdout, "Reducao6\n");
 			cat_tac(&($$->code), &($1->code));
 		    }
 
      | comando ';' acoes   { 	Node* filho2 = create_node( @2.first_line, semicolon_node, $2, NULL, NULL);
 	      		  	$$ = create_node( @$.first_line, acoes_node, NULL, $1, filho2, $3, NULL); 
-				fprintf(stdout, "Reducao7\n");
 	     			cat_tac(&($1->code), &($3->code));
-				cat_tac(&($$->code), &($1->code));
-				
-				
-				
+				cat_tac(&($$->code), &($1->code));				
 		    	   }
     ;
 
@@ -313,9 +308,6 @@ comando: lvalue '=' expr {	Node* filho2 = create_node( @2.first_line, attr_node,
 				}
 				else
 				{
-					fprintf(stdout, "Reducao5\n");
-					cat_tac(&($1->code), &($3->code));
-					
 					entry_t * variable;
 					
 					if (((variable) = lookup(temp_table, $1->local)) == NULL)
@@ -328,9 +320,11 @@ comando: lvalue '=' expr {	Node* filho2 = create_node( @2.first_line, attr_node,
 					sprintf(constant, "%s(%s)", $1->local, $1->desloc);
 					
 					struct tac* new_instruction = create_inst_tac(constant, $3->local, "", "");
-					append_inst_tac(&($1->code), new_instruction);
-
+					append_inst_tac(&($3->code), new_instruction);		//REVISAR
+					cat_tac(&($1->code), &($3->code));
 					cat_tac(&($$->code), &($1->code));
+					
+					print_tac(stdout, $$->code);
 			 	}
 			 }
        | enunciado { $$ = $1; }
@@ -353,9 +347,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 
 	| listaexpr ']'	{	Node* filho2 = create_node(@2.first_line, rightbracket3_node, $2, NULL, NULL);
 				$$ = create_node(@$.first_line, lvalue_node, NULL, $1, filho2, NULL, NULL);
-				
-				fprintf(stdout, "Reducao\n");
-				
+								
 				$$->local = new_temp(t_counter++);				
 				entry_t * temp_variable = new_variable ($$->local, int_node, INT_SIZE, temp_desloc, NULL);    			
 		    		temp_desloc = temp_desloc + INT_SIZE;    			
@@ -366,8 +358,13 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 		    		temp_desloc = temp_desloc + INT_SIZE;    			
     				insert(&temp_table, temp_variable1);
     				
-    				cat_tac(&($$->code), &($1->code));
-    				
+				int offset = array_constant($1->array, variable_table);
+				char constant[50];
+				sprintf(constant, "%d", offset);		//DUVIDA
+							
+				struct tac *instruction1 = create_inst_tac($$->local, constant, "", "");
+				append_inst_tac(&($1->code), instruction1);
+				    				
    				entry_t *array;
     				if ((array = lookup(variable_table, $1->array)) == NULL)
 				{
@@ -375,15 +372,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 					exit(1);
 				}
 				
-				char constant[15];
-				
-				int offset = array_constant($1->array, variable_table);
-				sprintf(constant, "%d(%s)", offset, $1->array);				
-				
-				struct tac *instruction1 = create_inst_tac($$->local, constant, "", "");
-				append_inst_tac(&($$->code), instruction1); 
-    				
-    				char weight[15];    				
+				char weight[15];    				
     				switch(array->type)
 				{
 					case int_node:
@@ -401,50 +390,49 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 					case char_node:
 						sprintf(weight, "%d", CHAR_SIZE);
 						break;
-				}
-				
-				puts($$->desloc);
-				puts($$->local);
-				puts("MUL");
-				puts(weight);
+				}	
 				
 				struct tac *instruction2 = create_inst_tac($$->desloc, $1->local, "MUL", weight);				
+				append_inst_tac(&($1->code), instruction2);
 				
-				append_inst_tac(&($$->code), instruction2);
-				
-				print_tac(stdout, $$->code);
-				
-				fprintf(stdout, "Reducao4\n");
-
-			}
+    				cat_tac(&($$->code), &($1->code));
+    				print_tac(stdout, $$->code);
+    				fprintf(stdout, "AQUI 2\n");		
+		}
       	;
 
 listaexpr: listaexpr ',' expr   {	Node* filho2 = create_node(@2.first_line, comma_node, $2, NULL, NULL);
 					$$ = create_node(@$.first_line, listaexpr_node, NULL, $1, filho2, $3, NULL, NULL);
-					
-					fprintf(stdout, "Reducao1\n");
 						
-					char *temp = new_temp(t_counter++);					
+					char *temp = new_temp(t_counter++);
 					entry_t *temp_variable = new_variable (temp, int_node, INT_SIZE, temp_desloc, NULL);    			
-		    			temp_desloc = temp_desloc + INT_SIZE;    			
+		    			temp_desloc = temp_desloc + INT_SIZE;
     					insert(&temp_table, temp_variable);
 
 					int m = $1->ndim + 1;
 					
 					char limit[500];
 					sprintf(limit, "%d", array_limit($1->array, m, variable_table));				
-					struct tac *instruction1 = create_inst_tac(temp, $1->local, "MUL", limit);					
-					struct tac *instruction2 = create_inst_tac(temp, temp, "ADD", $3->local);
-				
-					cat_tac(&($$->code), &($3->code));
-					cat_tac(&($$->code), &($1->code));
+					struct tac *instruction1 = create_inst_tac(temp, $1->local, "MUL", limit);
+					append_inst_tac(&($1->code), instruction1);
 					
-					append_inst_tac(&($$->code), instruction1);
-					append_inst_tac(&($$->code), instruction2);
-										
+					
+					char *temp2 = new_temp(t_counter++);
+					entry_t *temp_variable2 = new_variable (temp2, int_node, INT_SIZE, temp_desloc, NULL);    			
+		    			temp_desloc = temp_desloc + INT_SIZE;
+    					insert(&temp_table, temp_variable2);
+									
+					struct tac *instruction2 = create_inst_tac(temp2, temp, "ADD", $3->local);
+					append_inst_tac(&($1->code), instruction2);
+				
+					cat_tac(&($3->code), &($1->code));	//REVISAR AQUI!
+					cat_tac(&($$->code), &($3->code));	//REVISAR AQUI!	
+
 					$$->array = $1->array;
-					$$->local = temp;
+					$$->local = temp2;
 					$$->ndim = m;
+					
+					print_tac(stdout, $$->code);
 					
 				}
 				
@@ -452,12 +440,13 @@ listaexpr: listaexpr ',' expr   {	Node* filho2 = create_node(@2.first_line, comm
 	 			     Node* filho2 = create_node( @2.first_line, leftbracket3_node, $2, NULL, NULL);
 				     $$ = create_node(@$.first_line, listaexpr_node, NULL, filho1, filho2, $3, NULL);
 				     
-				     fprintf(stdout, "Reducao2\n");
-
-				     $$->array = filho1->lexeme;
+				     $$->array = $1;
 				     $$->local = $3->local;
 				     $$->ndim = 1;
-				     cat_tac(&($$->code), &($3->code));		     
+				     cat_tac(&($$->code), &($3->code));
+				     
+				     print_tac(stdout, $$->code);
+				     fprintf(stdout, "AQUI 1\n");
 			     	     
 				}
 	 ;
@@ -539,7 +528,7 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 			$$ = create_node( @$.first_line, expr_node, NULL, filho1, $2, filho3, NULL); 
 
 			$$->local = $2->local;
-			$$->code = $2->code;
+			cat_tac(&($$->code), &($2->code));
 		     }
 
     | INT_LIT        { 	$$ = create_node(@$.first_line, int_lit_node, $1, NULL, NULL); 
@@ -548,7 +537,9 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
 
     | F_LIT          { $$ = create_node(@$.first_line, f_lit_node, $1, NULL, NULL); }
 
-    | lvalue         {	if ($1->desloc == NULL)
+    | lvalue         {	fprintf(stdout, "AQUI 3");
+    
+    			if ($1->desloc == NULL)
     			{
     				$$->local = $1->local;
     			}
@@ -562,10 +553,12 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     				char array[100];
     				sprintf(array, "%s(%s)", $1->local, $1->desloc);
     				
-    				struct tac* new_instruction = create_inst_tac($$->local, array, "", "");    				
+    				struct tac* new_instruction = create_inst_tac($$->local, array, "", ""); 
+    				append_inst_tac(&($1->code), new_instruction);		
+    				   				
 				cat_tac(&($$->code), &($1->code));
-    				append_inst_tac(&($1->code), new_instruction);
 				
+				print_tac(stdout, $$->code);	     		
 			}
 		}
 
@@ -584,7 +577,8 @@ enunciado: expr { $$ = $1 ;}
 								Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
 								Node* filho5 = create_node( @5.first_line, then_node, $5, NULL, NULL);
 								$$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, filho5, $6, $7, NULL);  
-								cat_tac(&($$->code), &($6->code));}
+								cat_tac(&($$->code), &($6->code));
+								cat_tac(&($$->code), &($7->code));}
 
 	 | WHILE '(' expbool ')' '{' acoes '}'  {  	Node* filho1 = create_node( @1.first_line, while_node, $1, NULL, NULL);
 						    	Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
@@ -597,6 +591,7 @@ enunciado: expr { $$ = $1 ;}
     	 | PRINTF '(' expr ')' {   	Node* filho1 = create_node( @1.first_line, print_node, $1, NULL, NULL);
 				  	Node* filho2 = create_node( @2.first_line, leftbracket_node, $2, NULL, NULL);
 				  	Node* filho4 = create_node( @4.first_line, rightbracket_node, $4, NULL, NULL);
+
 		    			$$ = create_node( @$.first_line, enunciado_node, NULL, filho1, filho2, $3, filho4, NULL);
 					struct tac* new_instruction = create_inst_tac("PRINT", $3->local, "", "");
 					append_inst_tac(&($$->code), new_instruction); 
