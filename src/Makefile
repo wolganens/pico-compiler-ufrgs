@@ -28,7 +28,7 @@ inherited.o: inherited.c inherited.h node.o lista.o symbol_table.o
 lista.o: lista.c lista.h
 	$(CC) $(LDFLAGS) -c lista.c
 
-symbol_table.o: symbol_table.c symbol_table.h node.h
+symbol_table.o: symbol_table.c symbol_table.h
 	$(CC) $(LDFLAGS) -c symbol_table.c
 	
 labels.o: labels.c labels.h
