@@ -103,7 +103,6 @@ typedef struct _node {
    Node_type 		type; 		/**< Um dos valores definidos acima pelos # defines. */
    char			*local;
    char			*array;
-   char			*desloc;
    int 			ndim;
    struct node_tac 	*code;
    Nodelist 		*children;  /**< Lista de filhos da arvore. */

@@ -13,23 +13,29 @@ void append_inst_tac (struct node_tac ** code, struct tac * inst)
 	else 
 	{
 		int i = 1;
-		struct node_tac *forward = (*code);
+		struct node_tac *node = (*code);
 
-		while(forward->next != NULL) //percorre-se a lista
+		while(node->next != NULL) //percorre-se a lista
 		{
-			forward = forward->next;
+			node = node->next;
 			i++;
 		}
-		forward->next = (struct node_tac *) malloc (sizeof(struct node_tac));
-		forward->next->number = ++i;
-		forward->next->inst = inst;
-		forward->next->next = NULL;
-		forward->next->prev = forward;
+		node->next = (struct node_tac *) malloc (sizeof(struct node_tac));
+		node->next->number = ++i;
+		node->next->inst = inst;
+		node->next->next = NULL;
+		node->next->prev = node;
 	}
 }
 
 void cat_tac(struct node_tac ** code_a, struct node_tac ** code_b)
 {
+	if (code_a == code_b)
+	{
+		printf("ERROR: cat_tac: same lists received as parameters\n");
+		exit(1);
+	}
+	
 	if(*code_a == NULL) //lista a vazia
 	{
 		*code_a = *code_b;
@@ -44,20 +50,20 @@ void cat_tac(struct node_tac ** code_a, struct node_tac ** code_b)
 		{
 			int i = 1;
 			
-			struct node_tac *backward = *code_a;
+			struct node_tac *node = *code_a;
 		
-			while(backward->next != NULL) //percorre-se a lista
+			while(node->next != NULL) //percorre-se a lista
 			{
-				backward = backward->next;
+				node = node->next;
 				i++;
 			}
 		
-			backward->next = (*code_b);
-			(*code_b)->prev = backward;
+			node->next = (*code_b);
+			(*code_b)->prev = node;
 		
-			while((backward = backward->next) != NULL) //atualiza-se os indices da lista_b
+			while((node = node->next) != NULL) //atualiza-se os indices da lista_b
 			{
-				backward->number = ++i;
+				node->number = ++i;
 			}
 		}
 	}

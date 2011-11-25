@@ -37,6 +37,7 @@ typedef struct _limNode
 typedef struct
 {
 	int ndim;
+	int offset;
 	limNode *limits;
 } vector_info;
  
