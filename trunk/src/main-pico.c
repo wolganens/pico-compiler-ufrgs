@@ -14,18 +14,25 @@ extern int temp_desloc;
 
 void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 {
-	char res[15];
-	char arg1[15];
-	char arg2[15];
+	static int i = 1;
+	char res[20];
+	char arg1[20];
+	char arg2[20];
 	
-	int i;
+	int ntemp1, ntemp2;
+	char temp1[15], temp2[15];
 	
-	entry_t *variable;
 
-	if (sscanf(code->inst->res, "TEMP%03d", &i) == 1)
+	entry_t *variable;
+	entry_t *temp_variable1;
+	entry_t *temp_variable2;
+	
+	
+	//verifica res
+	if (sscanf(code->inst->res, "TEMP%03d", &ntemp1) == 1)
 	{
-		variable = lookup(temp_table, code->inst->res);
-		sprintf(res, "%03d(Rx)", variable->desloc);
+		temp_variable1 = lookup(temp_table, code->inst->res);
+		sprintf(res, "%03d(Rx)", temp_variable1->desloc);
 	}
 	else
 	{
@@ -34,13 +41,24 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 			sprintf(res, "%03d(SP)", variable->desloc);
 		}
 
+	}	
+	
+	//verifica arg1
+	if (sscanf(code->inst->arg1, "TEMP%03d(TEMP%03d)", &ntemp1, &ntemp2) == 2)
+	{		
+		printf("AQUI2\n");
+		sprintf(temp1, "TEMP%03d", ntemp1);
+		sprintf(temp2, "TEMP%03d", ntemp2);
+		temp_variable1 = lookup(temp_table, temp1);
+		temp_variable2 = lookup(temp_table, temp2);
+		sprintf(arg1, "%03d(Rx)(%03d(Rx))", temp_variable1->desloc, temp_variable2->desloc);
 	}
-
-	if (sscanf(code->inst->arg1, "TEMP%03d", &i) == 1)
+	else if (sscanf(code->inst->arg1, "TEMP%03d", &ntemp1) == 1)
 	{
+		printf("AQUI1\n");
 		variable = lookup(temp_table, code->inst->arg1);
 		sprintf(arg1, "%03d(Rx)", variable->desloc);
-	}
+	}	
 	else
 	{
 		if((variable = lookup(variable_table, code->inst->arg1)) != NULL)
@@ -53,7 +71,8 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 		}
 	}
 	
-	if (sscanf(code->inst->arg2, "TEMP%03d", &i) == 1)
+	//verifica arg2	
+	if (sscanf(code->inst->arg2, "TEMP%03d", &ntemp1) == 1)
 	{
 		printf("ARG2 = TEMP\n");
 		variable = lookup(temp_table, code->inst->arg2);
@@ -71,8 +90,10 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 		}
 	}
 	
+
+	
 	if(!strcmp(code->inst->res, "PRINT"))
-	{		
+	{				
 		fprintf(out, "%03d:   %s %s\n", code->number, code->inst->res, arg1);
 	}
 	else
@@ -126,10 +147,13 @@ int main(int argc, char* argv[])
 		printf("Error on compilation!.\n");
 
 	tacoutput = fopen(argv[2], "w+");
+	print_tac (stdout, syntax_tree->code);
 	print_tac (tacoutput, syntax_tree->code);
 	fclose(tacoutput);
 	
 	print_table(variable_table);
+	
+	print_table(temp_table);
 		
 	return 0;
 }
