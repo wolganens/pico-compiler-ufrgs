@@ -380,7 +380,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 				char *constant = (char *) malloc(sizeof(char)*35);
 				sprintf(constant, "%d", offset, $1->array);
 							
-				struct tac *instruction2 = create_inst_tac(temp2, constant, "", "");
+				struct tac *instruction2 = create_inst_tac(temp2, temp1, "ADD", constant);
 				append_inst_tac(&($1->code), instruction2);				
 					
 				char *temp3 = new_temp(t_counter++);				
@@ -389,7 +389,7 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
     				insert(&temp_table, temp_variable3);
     				
     				char *indirect_access = (char *) malloc(sizeof(char)*30);
-    				sprintf(indirect_access, "%s(%s)", temp2, temp1);
+    				sprintf(indirect_access, "%s(%s)", temp2, array->name);
     				struct tac *instruction3 = create_inst_tac(temp3, indirect_access, "", "");
 				append_inst_tac(&($1->code), instruction3);				
 				

@@ -14,25 +14,21 @@ extern int temp_desloc;
 
 void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 {
-	static int i = 1;
-	char res[20];
-	char arg1[20];
-	char arg2[20];
+	char res[21];
+	char arg1[22];
+	char arg2[23];
 	
-	int ntemp1, ntemp2;
-	char temp1[15], temp2[15];
-	
+	int ntemp;
+	char temp[24], var[25];	
 
 	entry_t *variable;
-	entry_t *temp_variable1;
-	entry_t *temp_variable2;
-	
-	
+	entry_t *temp_variable;
+
 	//verifica res
-	if (sscanf(code->inst->res, "TEMP%03d", &ntemp1) == 1)
+	if (sscanf(code->inst->res, "TEMP%03d", &ntemp) == 1)
 	{
-		temp_variable1 = lookup(temp_table, code->inst->res);
-		sprintf(res, "%03d(Rx)", temp_variable1->desloc);
+		temp_variable = lookup(temp_table, code->inst->res);
+		sprintf(res, "%03d(Rx)", temp_variable->desloc);
 	}
 	else
 	{
@@ -44,18 +40,16 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 	}	
 	
 	//verifica arg1
-	if (sscanf(code->inst->arg1, "TEMP%03d(TEMP%03d)", &ntemp1, &ntemp2) == 2)
-	{		
-		printf("AQUI2\n");
-		sprintf(temp1, "TEMP%03d", ntemp1);
-		sprintf(temp2, "TEMP%03d", ntemp2);
-		temp_variable1 = lookup(temp_table, temp1);
-		temp_variable2 = lookup(temp_table, temp2);
-		sprintf(arg1, "%03d(Rx)(%03d(Rx))", temp_variable1->desloc, temp_variable2->desloc);
+	if (sscanf(code->inst->arg1, "TEMP%03d(%s)", &ntemp, var) == 2)
+	{	
+		sprintf(temp, "TEMP%03d", ntemp);
+		temp_variable = lookup(temp_table, temp);
+		var[strlen(var)-1] = '\0';
+		variable = lookup(variable_table, var);
+		sprintf(arg1, "%03d(Rx)(%03d(SP))", temp_variable->desloc, variable->desloc);
 	}
-	else if (sscanf(code->inst->arg1, "TEMP%03d", &ntemp1) == 1)
+	else if (sscanf(code->inst->arg1, "TEMP%03d", &ntemp) == 1)
 	{
-		printf("AQUI1\n");
 		variable = lookup(temp_table, code->inst->arg1);
 		sprintf(arg1, "%03d(Rx)", variable->desloc);
 	}	
@@ -72,7 +66,7 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 	}
 	
 	//verifica arg2	
-	if (sscanf(code->inst->arg2, "TEMP%03d", &ntemp1) == 1)
+	if (sscanf(code->inst->arg2, "TEMP%03d", &ntemp) == 1)
 	{
 		printf("ARG2 = TEMP\n");
 		variable = lookup(temp_table, code->inst->arg2);
@@ -145,15 +139,10 @@ int main(int argc, char* argv[])
 		printf("Successfull compilation!.\n");
 	else 
 		printf("Error on compilation!.\n");
-
+		
 	tacoutput = fopen(argv[2], "w+");
-	print_tac (stdout, syntax_tree->code);
-	print_tac (tacoutput, syntax_tree->code);
+	print_tac_low_level (tacoutput, syntax_tree->code);
 	fclose(tacoutput);
-	
-	print_table(variable_table);
-	
-	print_table(temp_table);
 		
 	return 0;
 }

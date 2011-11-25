@@ -1938,7 +1938,7 @@ yyreduce:
 				char *constant = (char *) malloc(sizeof(char)*35);
 				sprintf(constant, "%d", offset, (yyvsp[(1) - (2)].no)->array);
 							
-				struct tac *instruction2 = create_inst_tac(temp2, constant, "", "");
+				struct tac *instruction2 = create_inst_tac(temp2, temp1, "ADD", constant);
 				append_inst_tac(&((yyvsp[(1) - (2)].no)->code), instruction2);				
 					
 				char *temp3 = new_temp(t_counter++);				
@@ -1947,7 +1947,7 @@ yyreduce:
     				insert(&temp_table, temp_variable3);
     				
     				char *indirect_access = (char *) malloc(sizeof(char)*30);
-    				sprintf(indirect_access, "%s(%s)", temp2, temp1);
+    				sprintf(indirect_access, "%s(%s)", temp2, array->name);
     				struct tac *instruction3 = create_inst_tac(temp3, indirect_access, "", "");
 				append_inst_tac(&((yyvsp[(1) - (2)].no)->code), instruction3);				
 				
