@@ -239,7 +239,7 @@ listadupla: INT_LIT ':' INT_LIT		{  	Node* filho1 = create_node( @1.first_line, 
 	    		  			
 	    		  			$$->variable->size += sup_lim - inf_lim + 1;
 				  			
-			  			if (sup_lim <= inf_lim)
+			  			if (sup_lim < inf_lim)
 			  			{
 							printf("ERROR(%d). Ilegal array limits.\n", $$->num_line);
 							exit(1);
@@ -268,7 +268,7 @@ listadupla: INT_LIT ':' INT_LIT		{  	Node* filho1 = create_node( @1.first_line, 
 				  			
 				  			$$->variable->size *= sup_lim - inf_lim + 1;
 				  			
-				  			if (sup_lim <= inf_lim)
+				  			if (sup_lim < inf_lim)
 				  			{
 								printf("ERROR(%d). Ilegal array limits.\n", $$->num_line);
 								exit(1);
@@ -308,8 +308,11 @@ comando: lvalue '=' expr {	Node* filho2 = create_node( @2.first_line, attr_node,
 				}
 				else
 				{
-					struct tac *new_instruction = create_inst_tac($1->local, $3->local, "", "");
-					append_inst_tac(&($3->code), new_instruction);
+					char *indirect_access = (char *) malloc(sizeof(char)*30);
+					sprintf(indirect_access, "%s(%s)", $1->local, $1->array);
+					
+					struct tac *instruction1 = create_inst_tac(indirect_access, $3->local, "", "");
+					append_inst_tac(&($3->code), instruction1);
 
 					cat_tac(&($1->code), &($3->code));
 					cat_tac(&($$->code), &($1->code));				
@@ -381,21 +384,11 @@ lvalue: IDF { 	$$ = create_node(@1.first_line, idf_node, $1, NULL, NULL);
 				sprintf(constant, "%d", offset, $1->array);
 							
 				struct tac *instruction2 = create_inst_tac(temp2, temp1, "ADD", constant);
-				append_inst_tac(&($1->code), instruction2);				
-					
-				char *temp3 = new_temp(t_counter++);				
-				entry_t * temp_variable3 = new_variable(temp3, int_node, INT_SIZE, temp_desloc, NULL);    			
-		    		temp_desloc = temp_desloc + INT_SIZE;    			
-    				insert(&temp_table, temp_variable3);
-    				
-    				char *indirect_access = (char *) malloc(sizeof(char)*30);
-    				sprintf(indirect_access, "%s(%s)", temp2, array->name);
-    				struct tac *instruction3 = create_inst_tac(temp3, indirect_access, "", "");
-				append_inst_tac(&($1->code), instruction3);				
+				append_inst_tac(&($1->code), instruction2);		
 				
-    				cat_tac(&($$->code), &($1->code));    				
+				cat_tac(&($$->code), &($1->code));						
     				
-    				$$->local = temp3;
+    				$$->local = temp2;
     				$$->array = $1->array;
 		}
       	;
@@ -533,10 +526,22 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     | F_LIT          { $$ = create_node(@$.first_line, f_lit_node, $1, NULL, NULL); }
 
     | lvalue         {	
-    			$$ = create_node(@$.first_line, expr_node, NULL, $1, NULL, NULL);    			
+    			$$ = create_node(@$.first_line, expr_node, NULL, $1, NULL, NULL);
+    			
+    			char *temp = new_temp(t_counter++);
+			entry_t *temp_variable = new_variable (temp, int_node, INT_SIZE, temp_desloc, NULL);    			
+			temp_desloc = temp_desloc + INT_SIZE;
+			insert(&temp_table, temp_variable);
+    						
+			char *indirect_access = (char *) malloc(sizeof(char)*30);
+			sprintf(indirect_access, "%s(%s)", $1->local, $1->array);
+					
+			struct tac *instruction1 = create_inst_tac(temp, indirect_access, "", "");
+			append_inst_tac(&($1->code), instruction1);
+			   						
 			cat_tac(&($$->code), &($1->code));			
 			$$->array = $1->array;			
-			$$->local = $1->local;
+			$$->local = temp;
 			}
 		
 

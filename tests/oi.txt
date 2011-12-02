@@ -1,5 +1,7 @@
-int : z, j, i	;
-int (1:10, 1:20) : vetor;
+int(1:2): vec;
 
-z = vetor[i, j];
-print(z);
+vec[1] = 2;
+vec[2] = 3;
+
+print(vec[1]);
+print(vec[2]);
