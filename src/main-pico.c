@@ -156,8 +156,9 @@ int main(int argc, char* argv[])
 		printf("Error on compilation!.\n");
 		
 	tacoutput = fopen(argv[2], "w+");
-	//print_tac (stdout, syntax_tree->code);
+	print_tac (stdout, syntax_tree->code);
 	print_tac_low_level (tacoutput, syntax_tree->code);
+	print_table(variable_table);
 	fclose(tacoutput);
 		
 	return 0;
