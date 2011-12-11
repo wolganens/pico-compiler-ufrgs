@@ -292,7 +292,8 @@ comando: lvalue '=' expr {	Node* filho2 = create_node( @2.first_line, attr_node,
 			     	$$ = create_node( @$.first_line, comando_node, NULL, $1, filho2, $3, NULL);
 
 				if ($1->array == NULL)
-				{		     				     
+				{		     
+					printf("AQUI");				     
 				     entry_t * variable;
 
 				     if (((variable) = lookup(variable_table, $1->local)) == NULL)
@@ -528,22 +529,30 @@ expr: expr '+' expr  {  Node* filho2 = create_node( @2.first_line, plus_node, $2
     | lvalue         {	
     			$$ = create_node(@$.first_line, expr_node, NULL, $1, NULL, NULL);
     			
-    			char *temp = new_temp(t_counter++);
-			entry_t *temp_variable = new_variable (temp, int_node, INT_SIZE, temp_desloc, NULL);    			
-			temp_desloc = temp_desloc + INT_SIZE;
-			insert(&temp_table, temp_variable);
-    						
-			char *indirect_access = (char *) malloc(sizeof(char)*30);
-			sprintf(indirect_access, "%s(%s)", $1->local, $1->array);
+    			
+    			if ($1->array != NULL)
+    			{
+	    			char *temp = new_temp(t_counter++);
+				entry_t *temp_variable = new_variable (temp, int_node, INT_SIZE, temp_desloc, NULL);    			
+				temp_desloc = temp_desloc + INT_SIZE;
+				insert(&temp_table, temp_variable);
+	    						
+				char *indirect_access = (char *) malloc(sizeof(char)*30);
+				sprintf(indirect_access, "%s(%s)", $1->local, $1->array);
 					
-			struct tac *instruction1 = create_inst_tac(temp, indirect_access, "", "");
-			append_inst_tac(&($1->code), instruction1);
-			   						
-			cat_tac(&($$->code), &($1->code));			
-			$$->array = $1->array;			
-			$$->local = temp;
+				struct tac *instruction1 = create_inst_tac(temp, indirect_access, "", "");
+				append_inst_tac(&($1->code), instruction1);
+				   						
+				cat_tac(&($$->code), &($1->code));			
+				$$->array = $1->array;			
+				$$->local = temp;
 			}
-		
+			
+			else
+			{
+				$$->local = $1->local;
+			}
+		}
 
     | chamaproc      { $$ = $1; }
     ;
