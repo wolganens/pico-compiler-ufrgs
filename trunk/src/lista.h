@@ -20,6 +20,8 @@ struct tac {
    char* res;  /* "TMP100" */
    char* arg1; /* "TMP0"   */
    char* arg2; /* "TMP1"   */
+   int  **label;
+   char *comp;   
 };
 
 /** \brief  Construtor de Instrucao TAC 
@@ -31,7 +33,7 @@ struct tac {
  * @param arg2 um char*.
  * @ return um ponteiro sobre uma 'struct tac'.
  */
-struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2);
+struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2, int **label, const char *comp);
 
 /** Um elemento basico da lista. O campo 'inst' aponta para a informacao a ser
  * armazenada em um elemento da lista. O campo 'number' serve para numerar

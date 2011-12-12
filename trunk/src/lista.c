@@ -69,28 +69,39 @@ void cat_tac(struct node_tac ** code_a, struct node_tac ** code_b)
 	}
 }
 
-struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2)
+struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2, int **label, const char *comp)
 {
 	struct tac * new_tac;
 	
 	new_tac = (struct tac *) malloc(sizeof(struct tac));
-
+	
 	new_tac->res  = (char*) res;
 	new_tac->arg1 = (char*) arg1;
 	new_tac->op   = (char*) op;
 	new_tac->arg2 = (char*) arg2;
+		
+	new_tac->label = label;
+	new_tac->comp = (char*) comp;
 
 	return new_tac;
 }
 
 void print_inst_tac (FILE * out, struct node_tac *code)
 {
-	if(!strcmp(code->inst->res, "PRINT"))
+	if(strcmp(code->inst->res, "PRINT") == 0)
 	{
 		fprintf(out, "%03d:   %s %s\n", code->number, code->inst->res, code->inst->arg1);
 	}
+	else if (strcmp(code->inst->op, "IF") == 0)
+	{
+		fprintf(out, "%03d:   IF %s %s %s GOTO _%03d\n", code->number, code->inst->arg1, code->inst->comp, code->inst->arg2, **(code->inst->label));
+	}
+	else if (strcmp(code->inst->op, "GOTO") == 0)
+	{
+		fprintf(out, "%03d:   %s _%03d\n", code->number, code->inst->op, **(code->inst->label) + 1);
+	}
 	else
-	{		
+	{
 		fprintf(out, "%03d:   %s := %s %s %s\n", code->number, code->inst->res, code->inst->arg1, code->inst->op, code->inst->arg2);
 	}
 }

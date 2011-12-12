@@ -533,10 +533,10 @@ static const yytype_uint16 yyrline[] =
 {
        0,   111,   111,   115,   121,   125,   130,   140,   143,   149,
      150,   153,   160,   167,   174,   182,   192,   202,   212,   223,
-     250,   279,   284,   291,   322,   325,   339,   397,   429,   440,
-     458,   476,   494,   512,   521,   527,   529,   557,   560,   568,
-     570,   580,   590,   603,   605,   613,   615,   617,   621,   624,
-     627,   630,   633,   636,   639,   642,   645
+     250,   279,   284,   291,   321,   324,   338,   396,   428,   439,
+     457,   475,   493,   511,   520,   526,   528,   556,   559,   567,
+     569,   583,   611,   624,   633,   660,   664,   668,   676,   693,
+     708,   717,   730,   744,   758,   772,   786
 };
 #endif
 
@@ -1836,7 +1836,6 @@ yyreduce:
 
 				if ((yyvsp[(1) - (3)].no)->array == NULL)
 				{		     
-					printf("AQUI");				     
 				     entry_t * variable;
 
 				     if (((variable) = lookup(variable_table, (yyvsp[(1) - (3)].no)->local)) == NULL)
@@ -1845,7 +1844,7 @@ yyreduce:
 						exit(1);
 				     }
 					  
-				     struct tac* new_instruction = create_inst_tac(variable->name, (yyvsp[(3) - (3)].no)->local, "", "");
+				     struct tac* new_instruction = create_inst_tac(variable->name, (yyvsp[(3) - (3)].no)->local, "", "", NULL, "");
 				     append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction);
 
 				     cat_tac(&((yyval.no)->code), &((yyvsp[(3) - (3)].no)->code));				     
@@ -1855,7 +1854,7 @@ yyreduce:
 					char *indirect_access = (char *) malloc(sizeof(char)*30);
 					sprintf(indirect_access, "%s(%s)", (yyvsp[(1) - (3)].no)->local, (yyvsp[(1) - (3)].no)->array);
 					
-					struct tac *instruction1 = create_inst_tac(indirect_access, (yyvsp[(3) - (3)].no)->local, "", "");
+					struct tac *instruction1 = create_inst_tac(indirect_access, (yyvsp[(3) - (3)].no)->local, "", "", NULL, "");
 					append_inst_tac(&((yyvsp[(3) - (3)].no)->code), instruction1);
 
 					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
@@ -1867,14 +1866,14 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 322 "pico.y"
+#line 321 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no); }
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 325 "pico.y"
+#line 324 "pico.y"
     { 	(yyval.no) = create_node((yylsp[(1) - (1)]).first_line, idf_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL);
 		
 		entry_t * variable;
@@ -1893,7 +1892,7 @@ yyreduce:
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 339 "pico.y"
+#line 338 "pico.y"
     {	Node* filho2 = create_node((yylsp[(2) - (2)]).first_line, rightbracket3_node, (yyvsp[(2) - (2)].cadeia), NULL, NULL);
 				(yyval.no) = create_node((yyloc).first_line, lvalue_node, NULL, (yyvsp[(1) - (2)].no), filho2, NULL, NULL);
 						
@@ -1929,7 +1928,7 @@ yyreduce:
 						break;
 				}	
 				
-				struct tac *instruction1 = create_inst_tac(temp1, (yyvsp[(1) - (2)].no)->local, "MUL", weight);				
+				struct tac *instruction1 = create_inst_tac(temp1, (yyvsp[(1) - (2)].no)->local, "MUL", weight, NULL, "");				
 				append_inst_tac(&((yyvsp[(1) - (2)].no)->code), instruction1);
 				
 				char *temp2 = new_temp(t_counter++);				
@@ -1942,7 +1941,7 @@ yyreduce:
 				char *constant = (char *) malloc(sizeof(char)*35);
 				sprintf(constant, "%d", offset, (yyvsp[(1) - (2)].no)->array);
 							
-				struct tac *instruction2 = create_inst_tac(temp2, temp1, "ADD", constant);
+				struct tac *instruction2 = create_inst_tac(temp2, temp1, "ADD", constant, NULL, "");
 				append_inst_tac(&((yyvsp[(1) - (2)].no)->code), instruction2);		
 				
 				cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (2)].no)->code));						
@@ -1955,7 +1954,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 397 "pico.y"
+#line 396 "pico.y"
     {	Node* filho2 = create_node((yylsp[(2) - (3)]).first_line, comma_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 					(yyval.no) = create_node((yyloc).first_line, listaexpr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL, NULL);
 						
@@ -1969,7 +1968,7 @@ yyreduce:
 					char *limit = (char *) malloc(sizeof(char)*22);
 					sprintf(limit, "%d", array_limit((yyvsp[(1) - (3)].no)->array, m, variable_table));
 					
-					struct tac *instruction1 = create_inst_tac(temp, (yyvsp[(1) - (3)].no)->local, "MUL", limit);
+					struct tac *instruction1 = create_inst_tac(temp, (yyvsp[(1) - (3)].no)->local, "MUL", limit, NULL, "");
 					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction1);					
 					
 					char *temp2 = new_temp(t_counter++);
@@ -1977,7 +1976,7 @@ yyreduce:
 		    			temp_desloc = temp_desloc + INT_SIZE;
     					insert(&temp_table, temp_variable2);
 									
-					struct tac *instruction2 = create_inst_tac(temp2, temp, "ADD", (yyvsp[(3) - (3)].no)->local);
+					struct tac *instruction2 = create_inst_tac(temp2, temp, "ADD", (yyvsp[(3) - (3)].no)->local, NULL, "");
 					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction2);
 					
 					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
@@ -1992,7 +1991,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 429 "pico.y"
+#line 428 "pico.y"
     {    Node* filho1 = create_node( (yylsp[(1) - (3)]).first_line, idf_node, (yyvsp[(1) - (3)].cadeia), NULL, NULL);
 	 			     Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, leftbracket3_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
 				     (yyval.no) = create_node((yyloc).first_line, listaexpr_node, NULL, filho1, filho2, (yyvsp[(3) - (3)].no), NULL);
@@ -2007,7 +2006,7 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 440 "pico.y"
+#line 439 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, plus_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
 
@@ -2019,7 +2018,7 @@ yyreduce:
     			
     			insert(&temp_table, temp_variable);
     			
-			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "ADD", (yyvsp[(3) - (3)].no)->local);
+			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "ADD", (yyvsp[(3) - (3)].no)->local, NULL, "");
 			append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction); 
 
 			cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
@@ -2030,7 +2029,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 458 "pico.y"
+#line 457 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, minus_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
     			
@@ -2042,7 +2041,7 @@ yyreduce:
     			
     			insert(&temp_table, temp_variable);			
 			
-			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "SUB", (yyvsp[(3) - (3)].no)->local);
+			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "SUB", (yyvsp[(3) - (3)].no)->local, NULL, "");
 			append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction); 
 
 			cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
@@ -2053,7 +2052,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 476 "pico.y"
+#line 475 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, mul_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
 
@@ -2065,7 +2064,7 @@ yyreduce:
     			
     			insert(&temp_table, temp_variable);			
 			
-			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "MUL", (yyvsp[(3) - (3)].no)->local);
+			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "MUL", (yyvsp[(3) - (3)].no)->local, NULL, "");
 			append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction); 
 
 			cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
@@ -2076,7 +2075,7 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 494 "pico.y"
+#line 493 "pico.y"
     {  Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, div_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
     			(yyval.no) = create_node( (yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
 
@@ -2088,7 +2087,7 @@ yyreduce:
     			
     			insert(&temp_table, temp_variable);
     			
-			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "DIV", (yyvsp[(3) - (3)].no)->local);
+			struct tac* new_instruction = create_inst_tac((yyval.no)->local, (yyvsp[(1) - (3)].no)->local, "DIV", (yyvsp[(3) - (3)].no)->local, NULL, "");
 			append_inst_tac(&((yyvsp[(3) - (3)].no)->code), new_instruction); 
 
 			cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
@@ -2099,7 +2098,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 512 "pico.y"
+#line 511 "pico.y"
     {  
     			Node* filho1 = create_node( (yylsp[(1) - (3)]).first_line, leftbracket_node, (yyvsp[(1) - (3)].cadeia), NULL, NULL);
 			Node* filho3 = create_node( (yylsp[(3) - (3)]).first_line, rightbracket_node, (yyvsp[(3) - (3)].cadeia), NULL, NULL);
@@ -2113,7 +2112,7 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 521 "pico.y"
+#line 520 "pico.y"
     { 	
     			(yyval.no) = create_node((yyloc).first_line, int_lit_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); 
   		       	(yyval.no)->local = (yyvsp[(1) - (1)].cadeia);
@@ -2124,14 +2123,14 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 527 "pico.y"
+#line 526 "pico.y"
     { (yyval.no) = create_node((yyloc).first_line, f_lit_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 529 "pico.y"
+#line 528 "pico.y"
     {	
     			(yyval.no) = create_node((yyloc).first_line, expr_node, NULL, (yyvsp[(1) - (1)].no), NULL, NULL);
     			
@@ -2146,7 +2145,7 @@ yyreduce:
 				char *indirect_access = (char *) malloc(sizeof(char)*30);
 				sprintf(indirect_access, "%s(%s)", (yyvsp[(1) - (1)].no)->local, (yyvsp[(1) - (1)].no)->array);
 					
-				struct tac *instruction1 = create_inst_tac(temp, indirect_access, "", "");
+				struct tac *instruction1 = create_inst_tac(temp, indirect_access, "", "", NULL, "");
 				append_inst_tac(&((yyvsp[(1) - (1)].no)->code), instruction1);
 				   						
 				cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (1)].no)->code));			
@@ -2164,14 +2163,14 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 557 "pico.y"
+#line 556 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no); }
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 560 "pico.y"
+#line 559 "pico.y"
     {  
 					Node* filho1 = create_node( (yylsp[(1) - (4)]).first_line, idf_node, (yyvsp[(1) - (4)].cadeia), NULL, NULL);
 					Node* filho2 = create_node( (yylsp[(2) - (4)]).first_line, leftbracket_node, (yyvsp[(2) - (4)].cadeia), NULL, NULL);
@@ -2183,20 +2182,24 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 568 "pico.y"
+#line 567 "pico.y"
     { (yyval.no) = (yyvsp[(1) - (1)].no) ;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 570 "pico.y"
+#line 569 "pico.y"
     {   
          							Node* filho1 = create_node( (yylsp[(1) - (7)]).first_line, if_node, (yyvsp[(1) - (7)].cadeia), NULL, NULL);
 								Node* filho2 = create_node( (yylsp[(2) - (7)]).first_line, leftbracket_node, (yyvsp[(2) - (7)].cadeia), NULL, NULL);
 								Node* filho4 = create_node( (yylsp[(4) - (7)]).first_line, rightbracket_node, (yyvsp[(4) - (7)].cadeia), NULL, NULL);
 								Node* filho5 = create_node( (yylsp[(5) - (7)]).first_line, then_node, (yyvsp[(5) - (7)].cadeia), NULL, NULL);
-								(yyval.no) = create_node( (yyloc).first_line, enunciado_node, NULL, filho1, filho2, (yyvsp[(3) - (7)].no), filho4, filho5, (yyvsp[(6) - (7)].no), (yyvsp[(7) - (7)].no), NULL);  
+								(yyval.no) = create_node( (yyloc).first_line, enunciado_node, NULL, filho1, filho2, (yyvsp[(3) - (7)].no), filho4, filho5, (yyvsp[(6) - (7)].no), (yyvsp[(7) - (7)].no), NULL);
+								
+								(yyvsp[(3) - (7)].no)->t = &((yyvsp[(6) - (7)].no)->code->number);
+								
+								cat_tac(&((yyval.no)->code), &((yyvsp[(3) - (7)].no)->code));
 								cat_tac(&((yyval.no)->code), &((yyvsp[(6) - (7)].no)->code));
 								cat_tac(&((yyval.no)->code), &((yyvsp[(7) - (7)].no)->code));
 								}
@@ -2205,7 +2208,7 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 580 "pico.y"
+#line 583 "pico.y"
     {  	
 	 						Node* filho1 = create_node( (yylsp[(1) - (7)]).first_line, while_node, (yyvsp[(1) - (7)].cadeia), NULL, NULL);
 						    	Node* filho2 = create_node( (yylsp[(2) - (7)]).first_line, leftbracket_node, (yyvsp[(2) - (7)].cadeia), NULL, NULL);
@@ -2213,21 +2216,39 @@ yyreduce:
 	 					    	Node* filho5 = create_node( (yylsp[(5) - (7)]).first_line, leftbracket2_node, (yyvsp[(5) - (7)].cadeia), NULL, NULL);
  						    	Node* filho7 = create_node( (yylsp[(7) - (7)]).first_line, rightbracket2_node, (yyvsp[(7) - (7)].cadeia), NULL, NULL);
 						    	(yyval.no) = create_node( (yyloc).first_line, enunciado_node, NULL, filho1, filho2, (yyvsp[(3) - (7)].no), filho4, filho5, (yyvsp[(6) - (7)].no), filho7, NULL);
-						    	cat_tac(&((yyval.no)->code), &((yyvsp[(6) - (7)].no)->code));  
+						    	
+						    	(yyvsp[(3) - (7)].no)->t = &((yyvsp[(6) - (7)].no)->code->number);
+						    	
+						    	int *return_line = &((yyvsp[(3) - (7)].no)->code->number);
+						    					    	  	
+						    	struct tac *instruction = create_inst_tac("", "", "GOTO", "", &return_line, "");
+						    	append_inst_tac(&((yyvsp[(6) - (7)].no)->code), instruction);
+						    						    	
+						    	struct node_tac *instructions = (yyvsp[(6) - (7)].no)->code;
+						    	while (instructions->next != NULL)
+						    		instructions = instructions->next;
+						    	
+						    	(yyvsp[(3) - (7)].no)->f = &(instructions->number);
+						    						    	
+						    	cat_tac(&((yyvsp[(3) - (7)].no)->code), &((yyvsp[(6) - (7)].no)->code));
+						    							    	
+						    	cat_tac(&((yyval.no)->code), &((yyvsp[(3) - (7)].no)->code));
+						
+
 						 }
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 590 "pico.y"
+#line 611 "pico.y"
     {   	
     	 				Node* filho1 = create_node( (yylsp[(1) - (4)]).first_line, print_node, (yyvsp[(1) - (4)].cadeia), NULL, NULL);
 				  	Node* filho2 = create_node( (yylsp[(2) - (4)]).first_line, leftbracket_node, (yyvsp[(2) - (4)].cadeia), NULL, NULL);
 				  	Node* filho4 = create_node( (yylsp[(4) - (4)]).first_line, rightbracket_node, (yyvsp[(4) - (4)].cadeia), NULL, NULL);
 
 		    			(yyval.no) = create_node( (yyloc).first_line, enunciado_node, NULL, filho1, filho2, (yyvsp[(3) - (4)].no), filho4, NULL);
-					struct tac* new_instruction = create_inst_tac("PRINT", (yyvsp[(3) - (4)].no)->local, "", "");
+					struct tac* new_instruction = create_inst_tac("PRINT", (yyvsp[(3) - (4)].no)->local, "", "", NULL, "");
 					append_inst_tac(&((yyvsp[(3) - (4)].no)->code), new_instruction);
 					cat_tac(&((yyval.no)->code), &((yyvsp[(3) - (4)].no)->code));
 			  	}
@@ -2236,121 +2257,247 @@ yyreduce:
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 603 "pico.y"
-    { (yyval.no) = create_node((yylsp[(1) - (1)]).first_line, end_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
+#line 624 "pico.y"
+    { 	(yyval.no) = create_node((yylsp[(1) - (1)]).first_line, end_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL);
+				
+				struct node_tac *instructions = ((yyvsp[(0) - (1)].no))->code;
+			    	while (instructions->next != NULL)
+			    		instructions = instructions->next;
+			    		
+			    	((yyvsp[(-3) - (1)].no))->f = &(instructions->number);
+			}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 605 "pico.y"
+#line 633 "pico.y"
     {   
                				Node* filho1 = create_node( (yylsp[(1) - (3)]).first_line, else_node, (yyvsp[(1) - (3)].cadeia), NULL, NULL);
 					Node* filho3 = create_node( (yylsp[(3) - (3)]).first_line, end_node, (yyvsp[(3) - (3)].cadeia), NULL, NULL);
     			    	      	(yyval.no) = create_node( (yyloc).first_line, fiminstcontrole_node, NULL, filho1, (yyvsp[(2) - (3)].no), filho3, NULL);  
+    			    	      	
+    			    	      	struct node_tac *instructions = (yyvsp[(2) - (3)].no)->code;
+			    		while (instructions->next != NULL)
+			    			instructions = instructions->next;
+    			    	      	
+    			    	      	int *skip_line = &(instructions->number);
+    			    	      	
+    			    	      	struct tac *instruction = create_inst_tac("", "", "GOTO", "", &(skip_line), "");
+					
+					printf("TIPO: %d\n", (yyvsp[(-3) - (3)].no)->type);
+					append_inst_tac(&(((yyvsp[(0) - (3)].no))->code), instruction);
+    			    	      	
+			    		while (instructions->next != NULL)
+			    			instructions = instructions->next;
+			    			
+			    		((yyvsp[(-3) - (3)].no))->f = &(instructions->number);
+    			    	      	    			    	      	
     			    	       	cat_tac(&((yyval.no)->code), &((yyvsp[(2) - (3)].no)->code));
+    			    	       	
+    			    	       		
     			    	   }
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 613 "pico.y"
-    { (yyval.no) = create_node((yylsp[(1) - (1)]).first_line, true_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
+#line 660 "pico.y"
+    { 	(yyval.no) = create_node((yylsp[(1) - (1)]).first_line, true_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL);
+			struct tac *instruction = create_inst_tac("", "", "GOTO", "", &((yyval.no)->t), "");
+			append_inst_tac(&((yyval.no)->code), instruction); }
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 615 "pico.y"
-    { (yyval.no) = create_node((yylsp[(1) - (1)]).first_line, false_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL); }
+#line 664 "pico.y"
+    { 	(yyval.no) = create_node((yylsp[(1) - (1)]).first_line, false_node, (yyvsp[(1) - (1)].cadeia), NULL, NULL);
+       			struct tac *instruction = create_inst_tac("", "", "GOTO", "", &((yyval.no)->f), "");
+			append_inst_tac(&((yyval.no)->code), instruction); }
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 617 "pico.y"
+#line 668 "pico.y"
     {  Node* filho1 = create_node( (yylsp[(1) - (3)]).first_line, leftbracket_node, (yyvsp[(1) - (3)].cadeia), NULL, NULL);
        			      Node* filho3 = create_node( (yylsp[(3) - (3)]).first_line, rightbracket_node, (yyvsp[(3) - (3)].cadeia), NULL, NULL);  
-    			      (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, filho1, (yyvsp[(2) - (3)].no), filho3, NULL); }
+    			      (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, filho1, (yyvsp[(2) - (3)].no), filho3, NULL);
+    			      
+    			      cat_tac(&((yyval.no)->code), &((yyvsp[(2) - (3)].no)->code));
+    			      (yyval.no)->t = (yyvsp[(2) - (3)].no)->t;
+    			      (yyval.no)->f = (yyvsp[(2) - (3)].no)->f; }
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 621 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, and_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 676 "pico.y"
+    {   	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, and_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+				       	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
+				       
+				      	struct node_tac *instructions = (yyvsp[(1) - (3)].no)->code;
+					while (instructions->next != NULL)
+						instructions = instructions->next;
+						
+					(yyvsp[(1) - (3)].no)->t = &(instructions->number);
+					(yyvsp[(1) - (3)].no)->f = (yyval.no)->f;
+				       
+				       	(yyvsp[(3) - (3)].no)->t = (yyval.no)->t;
+				       	(yyvsp[(3) - (3)].no)->f = (yyval.no)->f;
+				       
+				       	cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
+				       	cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));		       
+				    	}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 624 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, or_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 693 "pico.y"
+    {  	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, or_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+				       	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
+				       
+				       	(yyvsp[(1) - (3)].no)->t = (yyval.no)->t;
+					
+					struct node_tac *instructions = (yyvsp[(1) - (3)].no)->code;
+					while (instructions->next != NULL)
+						instructions = instructions->next;
+					
+					
+				       
+				       	(yyvsp[(3) - (3)].no)->t = (yyval.no)->t;
+				       	(yyvsp[(3) - (3)].no)->f = (yyval.no)->f;
+					}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 627 "pico.y"
-    {   Node* filho1 = create_node( (yylsp[(1) - (2)]).first_line, not_node, (yyvsp[(1) - (2)].cadeia), NULL, NULL);
-    			    	       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, filho1, (yyvsp[(2) - (2)].no), NULL);  }
+#line 708 "pico.y"
+    {   	Node* filho1 = create_node( (yylsp[(1) - (2)]).first_line, not_node, (yyvsp[(1) - (2)].cadeia), NULL, NULL);
+    			    	      	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, filho1, (yyvsp[(2) - (2)].no), NULL);
+    			    	       	
+    			    	       	(yyvsp[(2) - (2)].no)->t = (yyval.no)->f;
+    			    	       	(yyvsp[(2) - (2)].no)->f = (yyval.no)->t;
+    			    	       	
+    			    	       	cat_tac(&((yyval.no)->code), &((yyvsp[(2) - (2)].no)->code));
+    			    		}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 630 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, greater_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 717 "pico.y"
+    {   	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, greater_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+					(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
+									       
+				        struct tac* instruction1 = create_inst_tac("", (yyvsp[(1) - (3)].no)->local, "IF", (yyvsp[(3) - (3)].no)->local, &((yyval.no)->t), (yyvsp[(2) - (3)].cadeia));
+					append_inst_tac(&((yyvsp[(3) - (3)].no)->code), instruction1);
+					
+					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
+					
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", &((yyval.no)->f)	, "");
+					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction2);
+					
+					cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));  }
     break;
 
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 633 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, lower_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 730 "pico.y"
+    {   	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, lower_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+				       	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
+				       				       
+				        struct tac* instruction1 = create_inst_tac("", (yyvsp[(1) - (3)].no)->local, "IF", (yyvsp[(3) - (3)].no)->local, &((yyval.no)->t), (yyvsp[(2) - (3)].cadeia));
+					append_inst_tac(&((yyvsp[(3) - (3)].no)->code), instruction1);
+					
+					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
+					
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", &((yyval.no)->f)	, "");
+					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction2);
+					
+					cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));  }
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 636 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, le_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 744 "pico.y"
+    {   	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, le_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+				       	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
+				       
+				        struct tac* instruction1 = create_inst_tac("", (yyvsp[(1) - (3)].no)->local, "IF", (yyvsp[(3) - (3)].no)->local, &((yyval.no)->t), (yyvsp[(2) - (3)].cadeia));
+					append_inst_tac(&((yyvsp[(3) - (3)].no)->code), instruction1);
+					
+					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
+					
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", &((yyval.no)->f)	, "");
+					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction2);
+					
+					cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));  }
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 639 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, ge_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 758 "pico.y"
+    {   	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, ge_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+				       	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);
+				       
+				        struct tac* instruction1 = create_inst_tac("", (yyvsp[(1) - (3)].no)->local, "IF", (yyvsp[(3) - (3)].no)->local, &((yyval.no)->t), (yyvsp[(2) - (3)].cadeia));
+					append_inst_tac(&((yyvsp[(3) - (3)].no)->code), instruction1);
+					
+					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
+					
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", &((yyval.no)->f)	, "");
+					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction2);
+					
+					cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));  }
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 642 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, eq_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 772 "pico.y"
+    {   	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, eq_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+				       	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
+				       
+				        struct tac* instruction1 = create_inst_tac("", (yyvsp[(1) - (3)].no)->local, "IF", (yyvsp[(3) - (3)].no)->local, &((yyval.no)->t), (yyvsp[(2) - (3)].cadeia));
+					append_inst_tac(&((yyvsp[(3) - (3)].no)->code), instruction1);
+					
+					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
+					
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", &((yyval.no)->f)	, "");
+					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction2);
+					
+					cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));  }
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 645 "pico.y"
-    {   Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, ne_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
-				       (yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL);  }
+#line 786 "pico.y"
+    {   	Node* filho2 = create_node( (yylsp[(2) - (3)]).first_line, ne_node, (yyvsp[(2) - (3)].cadeia), NULL, NULL);
+				       	(yyval.no) = create_node( (yyloc).first_line, expbool_node, NULL, (yyvsp[(1) - (3)].no), filho2, (yyvsp[(3) - (3)].no), NULL); 
+				       
+				        struct tac* instruction1 = create_inst_tac("", (yyvsp[(1) - (3)].no)->local, "IF", (yyvsp[(3) - (3)].no)->local, &((yyval.no)->t), (yyvsp[(2) - (3)].cadeia));
+					append_inst_tac(&((yyvsp[(3) - (3)].no)->code), instruction1);
+					
+					cat_tac(&((yyvsp[(1) - (3)].no)->code), &((yyvsp[(3) - (3)].no)->code));
+					
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", &((yyval.no)->f)	, "");
+					append_inst_tac(&((yyvsp[(1) - (3)].no)->code), instruction2);
+					
+					cat_tac(&((yyval.no)->code), &((yyvsp[(1) - (3)].no)->code));  }
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2354 "y.tab.c"
+#line 2501 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2569,6 +2716,6 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 648 "pico.y"
+#line 800 "pico.y"
 
 

@@ -107,7 +107,10 @@ typedef struct _node {
    struct node_tac 	*code;
    Nodelist 		*children;  /**< Lista de filhos da arvore. */
    int 			height;		/**< Altura do nó. */
-   entry_t		*variable;   
+   entry_t		*variable;
+   int			*t;
+   int			*f;
+   int			next;
 } Node;
 
 Node *syntax_tree;
