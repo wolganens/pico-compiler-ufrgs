@@ -108,8 +108,8 @@ typedef struct _node {
    Nodelist 		*children;  /**< Lista de filhos da arvore. */
    int 			height;		/**< Altura do nó. */
    entry_t		*variable;
-   int			*t;
-   int			*f;
+   int			**t;
+   int			**f;
    int			next;
 } Node;
 
