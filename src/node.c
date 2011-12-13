@@ -68,6 +68,8 @@ Node* create_node(int nl, Node_type t, char* lexeme, Node* child0, ...)
 	new_node->lexeme = lexeme;
 	new_node->type = t;
 	new_node->children = NULL;
+	new_node->t = (int **) malloc(sizeof(int *));
+	new_node->f = (int **) malloc(sizeof(int *));
 	
 	Node* child;
 	
