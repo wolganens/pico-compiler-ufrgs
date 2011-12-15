@@ -107,11 +107,11 @@ void print_inst_tac_low_level (FILE * out, struct node_tac *code)
 	}
 	else if (strcmp(code->inst->op, "IF") == 0)
 	{
-		fprintf(out, "%03d:   IF %s %s %s GOTO _%03d\n", code->number, arg1, code->inst->comp, arg2, **(code->inst->label));
+		fprintf(out, "%03d:   IF %s %s %s GOTO _%03d\n", code->number, arg1, code->inst->comp, arg2, ***(code->inst->label));
 	}
 	else if (strcmp(code->inst->op, "GOTO") == 0)
 	{
-		fprintf(out, "%03d:   %s _%03d\n", code->number, code->inst->op, **(code->inst->label)+1);
+		fprintf(out, "%03d:   %s _%03d\n", code->number, code->inst->op, ***(code->inst->label));
 	}
 	else
 	{

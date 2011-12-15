@@ -4,9 +4,14 @@ int: c;
 b = 2;
 a = 1;
 
-while(!(a < b)){
+if ((a < b) | (b == a)) then
 	a = a + 1;
+end;
+
+while(a < b){
+a = a + 1;
 };
+
 
 
 print(a);
