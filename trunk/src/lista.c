@@ -98,7 +98,7 @@ void print_inst_tac (FILE * out, struct node_tac *code)
 	}
 	else if (strcmp(code->inst->op, "GOTO") == 0)
 	{
-		fprintf(out, "%03d:   %s _%03d\n", code->number, code->inst->op, **(code->inst->label)+1);
+		fprintf(out, "%03d:   %s _%03d\n", code->number, code->inst->op, **(code->inst->label));
 	}
 	else
 	{
