@@ -69,7 +69,7 @@ void cat_tac(struct node_tac ** code_a, struct node_tac ** code_b)
 	}
 }
 
-struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2, int **label, const char *comp)
+struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2, int ***label, const char *comp)
 {
 	struct tac * new_tac;
 	
@@ -94,11 +94,11 @@ void print_inst_tac (FILE * out, struct node_tac *code)
 	}
 	else if (strcmp(code->inst->op, "IF") == 0)
 	{
-		fprintf(out, "%03d:   IF %s %s %s GOTO _%03d\n", code->number, code->inst->arg1, code->inst->comp, code->inst->arg2, **(code->inst->label));
+		fprintf(out, "%03d:   IF %s %s %s GOTO _%03d\n", code->number, code->inst->arg1, code->inst->comp, code->inst->arg2, ***(code->inst->label));
 	}
 	else if (strcmp(code->inst->op, "GOTO") == 0)
 	{
-		fprintf(out, "%03d:   %s _%03d\n", code->number, code->inst->op, **(code->inst->label));
+		fprintf(out, "%03d:   %s _%03d\n", code->number, code->inst->op, ***(code->inst->label));
 	}
 	else
 	{

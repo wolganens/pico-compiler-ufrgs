@@ -590,8 +590,9 @@ enunciado: expr { $$ = $1 ;}
 						    	
 						    	**$3->t = &($6->code->number);						    	
 						    	
-						    	int **return_line = (int **)malloc(sizeof(int *));
-						    	*return_line = &($3->code->number);
+						    	int ***return_line = (int ***)malloc(sizeof(int **));
+						    	*return_line = (int **)malloc(sizeof(int *));
+						    	**return_line = &($3->code->number);
 						    				    	  	
 						    	struct tac *instruction = create_inst_tac("", "", "GOTO", "", return_line, "");
 						    	append_inst_tac(&($6->code), instruction);
@@ -609,13 +610,7 @@ enunciado: expr { $$ = $1 ;}
 						    		instructions = instructions->next;
 						    							    	
 						    	**$3->f = &(instructions->number);
-						    	
-					    		printf("'WHILE' T: %p\n", *$$->t);
-							printf("'WHILE' F: %p\n\n", *$$->f);
-					
-							printf("'$1' T: %p\n", *$3->t);
-							printf("'$1' F: %p\n\n", *$3->f);
-										       	
+						    									       	
 						    						    	
 						    	cat_tac(&($3->code), &($6->code));
 						    							    	
@@ -669,9 +664,9 @@ fiminstcontrole: END  { 	$$ = create_node(@1.first_line, end_node, $1, NULL, NUL
 				    	while (instructions->next != NULL)
 				    		instructions = instructions->next;
     			    	      	
-    			    	      	//int *skip_line = &(instructions->number);
-    			    	      	int **skip_line = (int **)malloc(sizeof(int *));
-    			    	      	*skip_line = &(instructions->number);
+    			    	      	int ***skip_line = (int ***)malloc(sizeof(int **));
+    			    	      	*skip_line = (int **)malloc(sizeof(int *));
+    			    	      	**skip_line = &(instructions->number);
     			    	      	    			    	      	
     			    	      	struct tac *instruction = create_inst_tac("", "", "GOTO", "", skip_line, "");
 					
@@ -685,11 +680,11 @@ fiminstcontrole: END  { 	$$ = create_node(@1.first_line, end_node, $1, NULL, NUL
                ;
 
 expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
-			struct tac *instruction = create_inst_tac("", "", "GOTO", "", *$$->t, "");
+			struct tac *instruction = create_inst_tac("", "", "GOTO", "", $$->t, "");
 			append_inst_tac(&($$->code), instruction); } 
 
        | FALSE  { 	$$ = create_node(@1.first_line, false_node, $1, NULL, NULL);
-       			struct tac *instruction = create_inst_tac("", "", "GOTO", "", *$$->f, "");
+       			struct tac *instruction = create_inst_tac("", "", "GOTO", "", $$->f, "");
 			append_inst_tac(&($$->code), instruction); } 
 
        | '(' expbool ')'   {  Node* filho1 = create_node( @1.first_line, leftbracket_node, $1, NULL, NULL);
@@ -702,46 +697,25 @@ expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
 
        | expbool AND expbool       {   	Node* filho2 = create_node( @2.first_line, and_node, $2, NULL, NULL);
 				       	$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL);
-				       	
-				       	struct node_tac *instructions = $1->code;
-				    	while (instructions->next != NULL)
-				    		instructions = instructions->next;
-				    		
-				       	*$$->t = *$1->t;
+				       					    	
+				    	**$1->t = &($3->code->number);
 				       	*$$->f = *$1->f;
-					**$1->f = &(instructions->number);
-					
-					
-					//printf("PRINT: %d\n", **$1->f);		       
-				       	**$3->t = **$$->t;
-				       	**$3->f = **$$->f;
-				       	
-				       	printf("'AND' T: %p\n", *$$->t);
-					printf("'AND' F: %p\n\n", *$$->f);
-					
-					printf("'$1' T: %p\n", *$1->t);
-					printf("'$1' F: %p\n\n", *$1->f);
-					
-					printf("'$2' T: %p\n", *$3->t);
-					printf("'$2' F: %p\n\n", *$3->f);
-				       	
+				       					
+				       	*$$->t = *$3->t;
+				       	*$3->f = *$$->f;
+				       					       	
 				       	cat_tac(&($1->code), &($3->code));
 				       	cat_tac(&($$->code), &($1->code));		       
 				    	}
 
        | expbool OR expbool        {  	Node* filho2 = create_node( @2.first_line, or_node, $2, NULL, NULL);
 				       	$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL);
-				       	
-				       	struct node_tac *instructions = $1->code;
-				    	while (instructions->next != NULL)
-				    		instructions = instructions->next;
-				    		
-				       	$1->t = $$->t;
-					**$1->f = &(instructions->number);
-					
-					//printf("PRINT: %d\n", **$1->f);		       
-				       	$3->t = $$->t;
-				       	$3->f = $$->f;
+				       	   		
+				       	*$$->t = *$1->t;
+				       	**$1->f = &($3->code->number);
+				       					
+				       	*$$->f = *$3->f;
+				       	*$3->t = *$$->t;
 				       	
 				       	cat_tac(&($1->code), &($3->code));
 				       	cat_tac(&($$->code), &($1->code));
@@ -759,12 +733,12 @@ expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
        | expr '>' expr             {   	Node* filho2 = create_node( @2.first_line, greater_node, $2, NULL, NULL);
 					$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL);
 									       
-				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, *$$->t, $2);
+				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, $$->t, $2);
 					append_inst_tac(&($3->code), instruction1);
 					
 					cat_tac(&($1->code), &($3->code));
 					
-					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", *$$->f, "");
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", $$->f, "");
 					append_inst_tac(&($1->code), instruction2);
 					
 					cat_tac(&($$->code), &($1->code));  } 
@@ -772,16 +746,12 @@ expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
        | expr '<' expr		   {   	Node* filho2 = create_node( @2.first_line, lower_node, $2, NULL, NULL);
 				       	$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL);
 				       				       
-				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, *$$->t, $2);
+				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, $$->t, $2);
 					append_inst_tac(&($3->code), instruction1);
 					
 					cat_tac(&($1->code), &($3->code));
 					
-					printf("'<' T: %p\n", *$$->t);
-					printf("'<' F: %p\n\n", *$$->f);
-					
-					
-					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", *$$->f, "");
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", $$->f, "");
 					append_inst_tac(&($1->code), instruction2);
 					
 					cat_tac(&($$->code), &($1->code));  } 
@@ -790,12 +760,12 @@ expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
        | expr LE expr		   {   	Node* filho2 = create_node( @2.first_line, le_node, $2, NULL, NULL);
 				       	$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL);
 				       
-				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, *$$->t, $2);
+				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, $$->t, $2);
 					append_inst_tac(&($3->code), instruction1);
 					
 					cat_tac(&($1->code), &($3->code));
 					
-					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", *$$->f, "");
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", $$->f, "");
 					append_inst_tac(&($1->code), instruction2);
 					
 					cat_tac(&($$->code), &($1->code));  } 
@@ -804,12 +774,12 @@ expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
        | expr GE expr		   {   	Node* filho2 = create_node( @2.first_line, ge_node, $2, NULL, NULL);
 				       	$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL);
 				       
-				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, *$$->t, $2);
+				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, $$->t, $2);
 					append_inst_tac(&($3->code), instruction1);
 					
 					cat_tac(&($1->code), &($3->code));
 					
-					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", *$$->f, "");
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", $$->f, "");
 					append_inst_tac(&($1->code), instruction2);
 					
 					cat_tac(&($$->code), &($1->code));  } 
@@ -818,12 +788,12 @@ expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
        | expr EQ expr		   {   	Node* filho2 = create_node( @2.first_line, eq_node, $2, NULL, NULL);
 				       	$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL); 
 				       
-				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, *$$->t, $2);
+				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, $$->t, $2);
 					append_inst_tac(&($3->code), instruction1);
 					
 					cat_tac(&($1->code), &($3->code));
 					
-					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", *$$->f, "");
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", $$->f, "");
 					append_inst_tac(&($1->code), instruction2);
 					
 					cat_tac(&($$->code), &($1->code));  } 
@@ -832,12 +802,12 @@ expbool: TRUE   { 	$$ = create_node(@1.first_line, true_node, $1, NULL, NULL);
        | expr NE expr    	   {   	Node* filho2 = create_node( @2.first_line, ne_node, $2, NULL, NULL);
 				       	$$ = create_node( @$.first_line, expbool_node, NULL, $1, filho2, $3, NULL); 
 				       
-				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, *$$->t, $2);
+				        struct tac* instruction1 = create_inst_tac("", $1->local, "IF", $3->local, $$->t, $2);
 					append_inst_tac(&($3->code), instruction1);
 					
 					cat_tac(&($1->code), &($3->code));
 					
-					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", *$$->f, "");
+					struct tac* instruction2 = create_inst_tac("", "", "GOTO", "", $$->f, "");
 					append_inst_tac(&($1->code), instruction2);
 					
 					cat_tac(&($$->code), &($1->code));  } 
