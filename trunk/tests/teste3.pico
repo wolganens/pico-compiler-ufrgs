@@ -1,0 +1,15 @@
+int: a,b,c,d;
+a = 2;
+b = 1;
+c = 1;
+d = 1;
+
+while(c < 5){
+	if ((!(!(a>b) & !true)) & !false) then
+	   c = c+1;
+	else
+	   d = d-1;
+	end;
+};
+
+print(c);
