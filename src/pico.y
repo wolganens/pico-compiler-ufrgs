@@ -595,11 +595,19 @@ enunciado: expr { $$ = $1 ;}
 						    				    	  	
 						    	struct tac *instruction = create_inst_tac("", "", "GOTO", "", return_line, "");
 						    	append_inst_tac(&($6->code), instruction);
-						    						    	
-						    	struct node_tac *instructions = $6->code;
+						    						    	    	
+						    	char *temp = new_temp(t_counter++);
+							entry_t *temp_variable = new_variable (temp, int_node, INT_SIZE, temp_desloc, NULL);    			
+							temp_desloc = temp_desloc + INT_SIZE;
+							insert(&temp_table, temp_variable);
+				    										
+							struct tac *instruction1 = create_inst_tac(temp, "0", "", "", NULL, "");
+							append_inst_tac(&($6->code), instruction1);
+							
+							struct node_tac *instructions = $6->code;
 						    	while (instructions->next != NULL)
 						    		instructions = instructions->next;
-						    	
+						    							    	
 						    	**$3->f = &(instructions->number);
 						    	
 					    		printf("'WHILE' T: %p\n", *$$->t);
@@ -628,6 +636,14 @@ enunciado: expr { $$ = $1 ;}
          ;
 
 fiminstcontrole: END  { 	$$ = create_node(@1.first_line, end_node, $1, NULL, NULL);
+
+				char *temp = new_temp(t_counter++);
+				entry_t *temp_variable = new_variable (temp, int_node, INT_SIZE, temp_desloc, NULL);    			
+				temp_desloc = temp_desloc + INT_SIZE;
+				insert(&temp_table, temp_variable);
+	    										
+				struct tac *instruction1 = create_inst_tac(temp, "0", "", "", NULL, "");
+				append_inst_tac(&($<no>0->code), instruction1);
 				
 				struct node_tac *instructions = ($<no>0)->code;
 			    	while (instructions->next != NULL)
@@ -640,10 +656,18 @@ fiminstcontrole: END  { 	$$ = create_node(@1.first_line, end_node, $1, NULL, NUL
                				Node* filho1 = create_node( @1.first_line, else_node, $1, NULL, NULL);
 					Node* filho3 = create_node( @3.first_line, end_node, $3, NULL, NULL);
     			    	      	$$ = create_node( @$.first_line, fiminstcontrole_node, NULL, filho1, $2, filho3, NULL);  
-    			    	      	
-    			    	      	struct node_tac *instructions = $2->code;
-			    		while (instructions->next != NULL)
-			    			instructions = instructions->next;
+    			    	      			    			
+			    		char *temp = new_temp(t_counter++);
+					entry_t *temp_variable = new_variable (temp, int_node, INT_SIZE, temp_desloc, NULL);    			
+					temp_desloc = temp_desloc + INT_SIZE;
+					insert(&temp_table, temp_variable);
+		    										
+					struct tac *instruction1 = create_inst_tac(temp, "0", "", "", NULL, "");
+					append_inst_tac(&($2->code), instruction1);
+					
+					struct node_tac *instructions = $2->code;
+				    	while (instructions->next != NULL)
+				    		instructions = instructions->next;
     			    	      	
     			    	      	//int *skip_line = &(instructions->number);
     			    	      	int **skip_line = (int **)malloc(sizeof(int *));
@@ -651,13 +675,9 @@ fiminstcontrole: END  { 	$$ = create_node(@1.first_line, end_node, $1, NULL, NUL
     			    	      	    			    	      	
     			    	      	struct tac *instruction = create_inst_tac("", "", "GOTO", "", skip_line, "");
 					
-					append_inst_tac(&(($<no>-0)->code), instruction);
-    			    	      	
-    			    	      	instructions = ($<no>0)->code;
-			    		while (instructions->next != NULL)
-			    			instructions = instructions->next;
+					append_inst_tac(&(($<no>-0)->code), instruction);   			    	      
 			    		
-			    		**($<no>-3)->f = &(instructions->number);
+			    		**($<no>-3)->f = &($2->code->number);
     			    	      	    			    	      	
     			    	       	cat_tac(&($$->code), &($2->code));
     			    	       	    			    	       		
