@@ -1,0 +1,13 @@
+int: a,b;
+
+int(0:2,0:3,2:4): vetor1;
+int(2:4,3:5,8:9): vetor2;
+
+b = 1;
+
+vetor1[1,1,3] = 5+b;
+vetor2[3,4,7] = 5-b;
+
+a = vetor1[1,1,3] + vetor2[3,4,7];
+
+print(a);

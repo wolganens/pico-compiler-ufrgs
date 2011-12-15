@@ -1,0 +1,43 @@
+echo
+echo "Digite uma tecla para rodar o primeiro teste."
+read tecla
+
+./Script_teste1
+
+echo "Gabarito do Teste 1 = 10"
+echo
+
+echo "Digite uma tecla para rodar o segundo teste."
+read tecla
+
+./Script_teste2
+
+echo "Gabarito do Teste 2 = 1 / 0"
+echo
+
+echo "Digite uma tecla para rodar o terceiro teste."
+read tecla
+
+./Script_teste3
+
+echo "Gabarito do Teste 3 = 5"
+echo
+
+echo "Digite uma tecla para rodar o quarto teste."
+read tecla
+
+./Script_teste4
+
+echo "Gabarito do Teste 4 = 53 / 8 / 5"
+echo
+
+echo "Digite uma tecla para rodar o quinto teste."
+read tecla
+
+./Script_teste5
+
+echo "Gabarito do Teste 5 = 1"
+echo
+
+echo "Fim dos Testes."
+echo

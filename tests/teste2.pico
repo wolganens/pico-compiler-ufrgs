@@ -1,0 +1,21 @@
+int: a,b,c,d;
+a = 1;
+b = 2;
+c = 3;
+d = 4;
+
+if (((a<b) | (c>d)) & (!(c>d))) then
+  a = 1;
+else
+  a = 0;
+end;
+
+print(a);
+
+if (((c>d) | (a<b)) & !(c<d)) then
+  a = 1;
+else
+  a = 0;
+end;
+
+print(a);

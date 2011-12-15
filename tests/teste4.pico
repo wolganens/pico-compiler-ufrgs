@@ -1,0 +1,38 @@
+int: a,b,c,d;
+double: x, y;
+real: w;
+int(0:10, 3:12, 4:9, 6:8): vetor;
+
+a = 1;
+b = 2;
+c = 3;
+d = a+b-c;
+
+vetor[0,4,8,7] = 5*9+8;
+a = vetor[0,4,8,7];
+print(a);
+
+a = 0;
+x = (45-a)+((2 + 3) * x / b);
+
+if (!(a>b)) then
+   c = 2;
+   d = 1;
+   a = c+d+5;
+else
+   c = 1;
+   d = 0;
+   a = c+d+5;
+end;
+print(a);
+
+b = 5;
+a = 0;
+while(d < 5){
+   a = a+1;
+   if (a > b) then
+       d = d + 1;
+   end;
+};
+
+print(d);

@@ -1,0 +1,15 @@
+nome_arquivo="teste3"
+echo ------------------------------------------------------
+echo ${nome_arquivo}
+echo -----------------
+
+../src/pico -o ../tests/$nome_arquivo.tac ../tests/$nome_arquivo.pico
+cd tac2x6
+python  tac2x86.py  ../$nome_arquivo.tac
+cd ..
+as $nome_arquivo.s -o $nome_arquivo.o
+ld -dynamic-linker /lib/ld-linux.so.2 -o $nome_arquivo -lc $nome_arquivo.o
+
+echo Resultado do Programa:
+./$nome_arquivo
+echo
